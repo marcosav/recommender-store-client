@@ -31,6 +31,7 @@ const NavigationBar = () => {
     const history = useHistory()
 
     const [logged, setLogged] = React.useState(true)
+    const [cartItems, setCartItems] = React.useState(4)
     const [showSearchBar, setShowSearchBar] = React.useState(true)
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [searched, setSearched] = React.useState('')
@@ -173,10 +174,9 @@ const NavigationBar = () => {
 
                     <IconButton
                         onClick={() => redirect('/cart')}
-                        aria-label="show 4 new mails"
                         color="inherit"
                     >
-                        <Badge badgeContent={4} color="secondary">
+                        <Badge badgeContent={cartItems} color="secondary">
                             <ShoppingBasket />
                         </Badge>
                     </IconButton>

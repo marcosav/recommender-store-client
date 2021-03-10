@@ -1,12 +1,18 @@
-import BaseAPI from './BaseAPI'
+import BaseAPI, { RPromise } from './BaseAPI'
 
-import { Product, User } from './types'
+import { Product, User } from '../types'
+
+export interface FavoriteService {
+    getForUser: (product: boolean) => RPromise<Product[] | User[]>
+    add: (id: number, product: boolean) => RPromise
+    remove: (id: number, product: boolean) => RPromise
+}
 
 const FAVORITES_PATH = '/favorites'
 const FAV_PRODUCTS_PATH = '/products'
 const FAV_VENDORS_PATH = '/vendors'
 
-export default class FavoritesAPI extends BaseAPI {
+export default class FavoritesAPI extends BaseAPI implements FavoriteService {
     getForUser = (product: boolean = true) =>
         this.get<Product[] | User[]>(this.u(product))
 

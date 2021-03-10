@@ -1,6 +1,14 @@
-import BaseAPI from './BaseAPI'
+import BaseAPI, { RPromise } from './BaseAPI'
 
-import { User } from './types'
+import { User } from '../types'
+
+export interface UserService {
+    login: (form: LoginForm) => RPromise<LoginResponse>
+    signup: (form: SignupForm) => RPromise<LoginResponse>
+    edit: (form: SignupForm) => RPromise
+    getUser: (id: number) => RPromise<User>
+    searchUsers: (search: SearchUser) => RPromise<User[]>
+}
 
 const USER_PATH = '/user'
 
@@ -30,15 +38,20 @@ interface SignupForm {
     profileImageExt?: string
 }
 
-export default class UserAPI extends BaseAPI {
-    login = (form: LoginForm) => this.post<string>('/login', form)
+interface LoginResponse {
+    token: string
+    user: User
+}
 
-    signup = (form: SignupForm) => this.post('/signup', form)
+export default class UserAPI extends BaseAPI implements UserService {
+    login = (form: LoginForm) => this.post<LoginResponse>('/login', form)
+
+    signup = (form: SignupForm) => this.post<LoginResponse>('/signup', form)
 
     edit = (form: SignupForm) => this.put('/profile/edit', form)
 
     getUser = (id: number) => this.get<User>(`${USER_PATH}/${id}`)
 
-    searchUesrs = (search: SearchUser) =>
+    searchUsers = (search: SearchUser) =>
         this.get<User[]>(`${USER_PATH}/list`, search)
 }

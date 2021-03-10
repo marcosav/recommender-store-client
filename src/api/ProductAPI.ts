@@ -1,6 +1,18 @@
-import BaseAPI from './BaseAPI'
+import BaseAPI, { RPromise, StatusHandler } from './BaseAPI'
 
-import { Product } from './types'
+import { Product } from '../types'
+
+export interface ProductService {
+    getProduct: (id: number, handler: StatusHandler) => RPromise<Product>
+    getVendorProducts: (
+        id: number,
+        shown: boolean,
+        page: number
+    ) => RPromise<Product[]>
+    searchProducts: (search: SearchProduct) => RPromise<Product[]>
+    publishProduct: (product: ProductForm, update: boolean) => RPromise<Product>
+    deleteProduct: (id: number) => RPromise
+}
 
 const PRODUCT_PATH = '/product'
 const VENDOR_PATH = '/vendor'
@@ -24,8 +36,9 @@ interface SearchProduct {
     order?: number
 }
 
-export default class ProductAPI extends BaseAPI {
-    getProduct = (id: number) => this.get<Product>(`${PRODUCT_PATH}/${id}`)
+export default class ProductAPI extends BaseAPI implements ProductService {
+    getProduct = (id: number, handler: StatusHandler) =>
+        this.get<Product>(`${PRODUCT_PATH}/${id}`, null, handler)
 
     getVendorProducts = (id: number, shown: boolean, page: number) =>
         this.get<Product[]>(`${VENDOR_PATH}/${id}`, { shown, page })
