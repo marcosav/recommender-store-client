@@ -1,6 +1,6 @@
 import { AuthAPI } from '../../api'
 
-import { SessionStorage } from './SessionStorage'
+import { SessionStorageImpl } from './SessionStorage'
 
 import { AuthRequestInterceptor } from '../../utils'
 
@@ -19,13 +19,14 @@ export class AuthServiceImpl implements AuthService {
 
     private sessionStorage
 
-    constructor(sessionStorage: SessionStorage) {
+    constructor(sessionStorage: SessionStorageImpl) {
         this.sessionStorage = sessionStorage
     }
 
     auth = async () => {
         console.debug('auth start')
         let token = this.sessionStorage.storedToken()
+
         if (!token) {
             const res = await this.api.auth()
 
@@ -34,9 +35,10 @@ export class AuthServiceImpl implements AuthService {
 
         if (token) {
             this.isAuth = true
-            this.interceptor.setup(token)
+            this.interceptor.setup(token, this.onToken)
             this.sessionStorage.update(token)
         }
+        console.debug('auth end')
     }
 
     logout = async () => {
@@ -44,5 +46,10 @@ export class AuthServiceImpl implements AuthService {
         this.sessionStorage.clear()
 
         await this.auth()
+    }
+
+    private onToken = (token: string) => {
+        console.debug('withtoken ' + token)
+        this.sessionStorage.update(token)
     }
 }

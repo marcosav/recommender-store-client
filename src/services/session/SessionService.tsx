@@ -13,6 +13,6 @@ export const SessionContext = React.createContext<SessionContextType>({
     ...sessionStorage,
 })
 
-const useSession = () => React.useContext(SessionContext)
+const useSessionService = () => React.useContext(SessionContext)
 
-export default useSession
+export default useSessionService

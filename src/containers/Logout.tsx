@@ -1,11 +1,11 @@
 import React from 'react'
 
 import { Redirect } from 'react-router'
-import { useSession } from '../services'
+import { useSessionService } from '../services'
 
 const Logout = () => {
-    const session = useSession()
-    session.logout()
+    const sessionService = useSessionService()
+    sessionService.logout()
     return <Redirect to="/" />
 }
 

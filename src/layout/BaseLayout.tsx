@@ -1,12 +1,13 @@
 import React from 'react'
 
-import { Redirect, Route, Switch } from 'react-router'
+import { Route, Switch } from 'react-router'
 import { NavigationBar } from '../components'
 
 import styled from 'styled-components'
 
 import { NavRoute } from '../routes'
-import { useSession } from '../services'
+import { useSessionService } from '../services'
+import { Session } from '../services/session'
 
 const Container = styled.div`
     display: flex;
@@ -21,29 +22,43 @@ interface BaseLayoutProps {
 }
 
 const BaseLayout: React.FC<BaseLayoutProps> = ({ routes }) => {
-    const session = useSession()
+    const sessionService = useSessionService()
 
-    console.debug("base")
-    if (!session.isAuth)
-        session.auth()
+    const [session, setSession] = React.useState<Session>()
 
-    return (
+    console.debug('base')
+
+    React.useEffect(() => {
+        const getSession = async () => {
+            if (!sessionService.isAuth) await sessionService.auth()
+        }
+
+        sessionService.setCallback((s) => {
+            console.debug(s)
+            setSession(s)
+        })
+        getSession()
+    }, [sessionService, setSession])
+
+    return session ? (
         <Container>
-            <NavigationBar />
+            <NavigationBar session={session} />
             <Switch>
                 {routes.map((route) => {
+                    const RouteComponent = route.component
                     return (
                         <Route
                             key={route.id}
                             path={route.path}
-                            component={route.component}
+                            render={() => <RouteComponent {...{ session }} />}
                             exact
                         />
                     )
                 })}
-                <Redirect to="/404" />
             </Switch>
         </Container>
+    ) : (
+        <></>
     )
 }
 

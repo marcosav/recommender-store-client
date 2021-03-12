@@ -26,12 +26,20 @@ import ArrowForward from '@material-ui/icons/ArrowForward'
 import { useStyles } from './NavigationBar.style'
 import { useHistory } from 'react-router'
 
-const NavigationBar = () => {
+import { Session } from '../../services'
+
+interface NavigationBarProps {
+    session: Session
+}
+
+const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
     const classes = useStyles()
     const history = useHistory()
 
-    const [logged, setLogged] = React.useState(true)
-    const [cartItems, setCartItems] = React.useState(4)
+    const cartItems = session.cart.length
+    const username = session.username
+    const logged = username !== undefined
+
     const [showSearchBar, setShowSearchBar] = React.useState(true)
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [searched, setSearched] = React.useState('')
@@ -82,10 +90,10 @@ const NavigationBar = () => {
         <div>
             <MenuItem onClick={() => redirect('/profile')}>
                 <ListItemIcon aria-controls={menuId} color="inherit">
-                    <AccountCircle />
+                    <AccountCircle fontSize="large" />
                 </ListItemIcon>
                 <Typography className={classes.usernameMenu}>
-                    username
+                    {username}
                 </Typography>
             </MenuItem>
 
@@ -187,7 +195,9 @@ const NavigationBar = () => {
                         color="inherit"
                     >
                         {logged ? (
-                            <Avatar className={classes.avatar}>XX</Avatar>
+                            <Avatar className={classes.avatar}>
+                                {username?.substring(0, 2)}
+                            </Avatar>
                         ) : (
                             <AccountCircle fontSize="large" />
                         )}
@@ -199,4 +209,12 @@ const NavigationBar = () => {
     )
 }
 
-export default NavigationBar
+export default React.memo(
+    NavigationBar,
+    ({ session: old }, { session: next }) => {
+        return (
+            old?.username === next?.username &&
+            old?.cart.length === next?.cart.length
+        )
+    }
+)

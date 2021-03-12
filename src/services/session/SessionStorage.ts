@@ -1,22 +1,26 @@
 import { CartProduct, User } from '../../types'
 import { CookieSessionManager } from '../../utils'
 
+type SessionCallback = (session?: Session) => void
+
 export interface SessionStorage {
+    session?: Session
     update: (token: string, user?: User) => void
     clear: () => void
     isLogged: () => boolean
-    storedToken: () => string
+    setCallback: (callback: SessionCallback) => void
 }
 
-interface Session {
+export interface Session {
     sessionId: string
     userId?: number
     username?: string
-    cart?: CartProduct[]
+    cart: CartProduct[]
 }
 
 export class SessionStorageImpl implements SessionStorage {
     session?: Session
+    private callback?: SessionCallback
 
     private cookies = new CookieSessionManager()
 
@@ -33,13 +37,13 @@ export class SessionStorageImpl implements SessionStorage {
                 this.session.sessionId = sessionId
                 this.session.userId = userId
                 this.session.username = username
-                this.session.cart = decoded.cart ?? []
+                this.session.cart = JSON.parse(decoded.cart ?? '[]')
             }
         }
 
         this.cookies.storeToken(token)
 
-        console.debug(this.session)
+        if (this.callback) this.callback(this.session)
     }
 
     isLogged = () => this.session?.userId !== undefined
@@ -49,6 +53,10 @@ export class SessionStorageImpl implements SessionStorage {
     clear = () => {
         this.cookies.remove()
         this.session = undefined
+    }
+
+    setCallback = (callback: SessionCallback) => {
+        this.callback = callback
     }
 
     private decode = (token: string): any => {

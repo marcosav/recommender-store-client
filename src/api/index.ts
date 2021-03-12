@@ -6,9 +6,9 @@ import FavoriteAPI from './FavoriteAPI'
 
 import { ProductService } from './ProductAPI'
 import { UserService } from './UserAPI'
-import { CartService } from './CartAPI'
 import { FavoriteService } from './FavoriteAPI'
+import { CartService } from './CartAPI'
 
 export { AuthAPI, ProductAPI, UserAPI, CartAPI, FavoriteAPI }
 
-export type { ProductService, UserService, CartService, FavoriteService }
+export type { ProductService, UserService, FavoriteService, CartService }

@@ -1,17 +1,16 @@
-import BaseAPI, { RPromise } from './BaseAPI'
+import BaseAPI from './BaseAPI'
 
 import { CartProduct } from '../types'
 
-export interface CartService {
-    current: () => RPromise<CartProduct[]>
-    update: (form: UpdateCartForm) => RPromise<CartResponse>
-    remove: (productId: number) => RPromise<CartResponse>
-    clear: () => RPromise<CartResponse>
-}
-
 const CART_PATH = '/cart'
 
-interface UpdateCartForm {
+export interface CartService {
+    update: (form: UpdateCartForm) => void
+    remove: (productId: number) => void
+    clear: () => void
+}
+
+export interface UpdateCartForm {
     productId: number
     amount: number
     add: boolean

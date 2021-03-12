@@ -26,7 +26,7 @@ export const useStyles = makeStyles((theme: Theme) =>
                 backgroundColor: fade(theme.palette.common.white, 0.25),
             },
             margin: 'auto',
-            width: '35ch',
+            width: '360px',
             [theme.breakpoints.down('xs')]: {
                 marginLeft: theme.spacing(0),
                 width: '100%',

@@ -1,5 +1,6 @@
 import React from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
+
+import { BrowserRouter as Router, Redirect } from 'react-router-dom'
 
 import {
     Login,
@@ -9,6 +10,8 @@ import {
     ProductPage,
     PageNotFound,
     Search,
+    Favorites,
+    CartPage,
 } from './containers'
 
 import { BaseLayout } from './layout'
@@ -43,7 +46,7 @@ const routes: NavRoute[] = [
     {
         id: 'cart',
         path: '/cart',
-        component: () => null,
+        component: CartPage,
     },
     {
         id: 'product',
@@ -78,7 +81,7 @@ const routes: NavRoute[] = [
     {
         id: 'favorites',
         path: '/favorites',
-        component: () => null,
+        component: Favorites,
     },
     {
         id: '404',
@@ -90,6 +93,7 @@ const routes: NavRoute[] = [
 const Routes = () => (
     <Router>
         <BaseLayout routes={routes} />
+        <Redirect to="/404" />
     </Router>
 )
 
