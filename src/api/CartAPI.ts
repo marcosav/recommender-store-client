@@ -1,13 +1,13 @@
-import BaseAPI from './BaseAPI'
+import BaseAPI, { RPromise } from './BaseAPI'
 
 import { CartProduct } from '../types'
 
 const CART_PATH = '/cart'
 
 export interface CartService {
-    update: (form: UpdateCartForm) => void
-    remove: (productId: number) => void
-    clear: () => void
+    update: (form: UpdateCartForm) => RPromise
+    remove: (productId: number) => RPromise
+    clear: () => RPromise
 }
 
 export interface UpdateCartForm {
@@ -16,15 +16,12 @@ export interface UpdateCartForm {
     add: boolean
 }
 
-type CartResponse = null | string
-
 export default class CartAPI extends BaseAPI implements CartService {
     current = () => this.get<CartProduct[]>(CART_PATH)
 
-    update = (form: UpdateCartForm) => this.post<CartResponse>(CART_PATH, form)
+    update = (form: UpdateCartForm) => this.post(CART_PATH, form)
 
-    remove = (productId: number) =>
-        this.delete<CartResponse>(CART_PATH, { productId })
+    remove = (productId: number) => this.delete(CART_PATH, { productId })
 
-    clear = () => this.delete<CartResponse>(`${CART_PATH}/all`)
+    clear = () => this.delete(`${CART_PATH}/all`)
 }

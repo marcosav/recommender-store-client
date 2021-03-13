@@ -2,9 +2,9 @@ import useUserService from './UserService'
 import useProductService from './ProductService'
 import useFavoriteService from './FavoriteService'
 import useCartService from './CartService'
-import useSessionService, { Session } from './session'
+import useSessionService, { Session, SessionService } from './session'
 
-export type { Session }
+export type { Session, SessionService }
 
 export {
     useUserService,

@@ -3,12 +3,12 @@ import React from 'react'
 import { AuthService, AuthServiceImpl } from './AuthService'
 import { SessionStorage, SessionStorageImpl } from './SessionStorage'
 
-type SessionContextType = AuthService & SessionStorage
+export type SessionService = AuthService & SessionStorage
 
-const sessionStorage = new SessionStorageImpl()
-const authService = new AuthServiceImpl(sessionStorage)
+const sessionStorage = SessionStorageImpl()
+const authService = AuthServiceImpl(sessionStorage)
 
-export const SessionContext = React.createContext<SessionContextType>({
+export const SessionContext = React.createContext<SessionService>({
     ...authService,
     ...sessionStorage,
 })

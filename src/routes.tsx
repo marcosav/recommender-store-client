@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BrowserRouter as Router, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 import {
     Login,
@@ -15,6 +15,7 @@ import {
 } from './containers'
 
 import { BaseLayout } from './layout'
+import { useSessionService } from './services'
 
 export interface NavRoute {
     id: string
@@ -90,11 +91,13 @@ const routes: NavRoute[] = [
     },
 ]
 
-const Routes = () => (
-    <Router>
-        <BaseLayout routes={routes} />
-        <Redirect to="/404" />
-    </Router>
-)
+const Routes = () => {
+    const sessionService = useSessionService()
+    return (
+        <Router>
+            <BaseLayout sessionService={sessionService} routes={routes} />
+        </Router>
+    )
+}
 
 export default Routes

@@ -1,4 +1,4 @@
 import AuthRequestInterceptor from './AuthRequestInterceptor'
-import CookieSessionManager from './CookieSessionManager'
+import SessionStorageManager from './SessionStorageManager'
 
-export { AuthRequestInterceptor, CookieSessionManager }
+export { AuthRequestInterceptor, SessionStorageManager }

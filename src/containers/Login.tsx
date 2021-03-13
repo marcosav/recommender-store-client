@@ -14,7 +14,6 @@ const Login = () => {
             if (sessionService.isLogged()) return
 
             const r = await userService.login({ username, password })
-
             //if (r.status === 200) ...
         }
 

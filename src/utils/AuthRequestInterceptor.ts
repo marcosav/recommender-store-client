@@ -1,15 +1,20 @@
 import axios from 'axios'
 
 export default class AuthRequestinterceptor {
-    private interceptor?: number
+    private interceptorReq?: number
+    private interceptorRes?: number
+
+    private lastToken?: string
 
     setup = (token: string, onToken: (token: string) => void) => {
-        if (this.interceptor !== undefined)
-            axios.interceptors.request.eject(this.interceptor)
+        this.lastToken = token
 
-        this.interceptor = axios.interceptors.request.use((req) => {
-            console.debug('request')
-            req.headers.authorization = `Bearer ${token}`
+        if (this.interceptorReq !== undefined)
+            axios.interceptors.request.eject(this.interceptorReq)
+
+        this.interceptorReq = axios.interceptors.request.use((req) => {
+            console.debug('request', req.data?.token)
+            req.headers.authorization = `Bearer ${this.lastToken}`
             return req
         })
 
@@ -17,16 +22,27 @@ export default class AuthRequestinterceptor {
     }
 
     remove = () => {
-        if (this.interceptor !== undefined) {
-            axios.interceptors.request.eject(this.interceptor)
-            this.interceptor = undefined
+        if (this.interceptorReq !== undefined) {
+            axios.interceptors.request.eject(this.interceptorReq)
+            this.interceptorReq = undefined
+        }
+
+        if (this.interceptorRes !== undefined) {
+            axios.interceptors.response.eject(this.interceptorRes)
+            this.interceptorRes = undefined
         }
     }
 
     private setupTokenInterceptor = (onToken: (token: string) => void) => {
-        this.interceptor = axios.interceptors.response.use((res) => {
+        if (this.interceptorRes !== undefined)
+            axios.interceptors.response.eject(this.interceptorRes)
+
+        this.interceptorRes = axios.interceptors.response.use((res) => {
             const token = res.data?.token
-            if (token) onToken(token)
+            if (token) {
+                this.lastToken = token
+                onToken(token)
+            }
             return res
         })
     }

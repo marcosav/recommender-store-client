@@ -1,9 +1,9 @@
 import BaseAPI, { RPromise } from './BaseAPI'
 
-import { Product, User } from '../types'
+import { PreviewProduct, User } from '../types'
 
 export interface FavoriteService {
-    getForUser: (product: boolean) => RPromise<Product[] | User[]>
+    getForUser: (product: boolean) => RPromise<PreviewProduct[] | User[]>
     add: (id: number, product: boolean) => RPromise
     remove: (id: number, product: boolean) => RPromise
 }
@@ -14,7 +14,7 @@ const FAV_VENDORS_PATH = '/vendors'
 
 export default class FavoritesAPI extends BaseAPI implements FavoriteService {
     getForUser = (product: boolean = true) =>
-        this.get<Product[] | User[]>(this.u(product))
+        this.get<PreviewProduct[] | User[]>(this.u(product))
 
     add = (id: number, product: boolean = true) =>
         this.post(this.u(product), { id })

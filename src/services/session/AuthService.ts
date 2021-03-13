@@ -1,6 +1,6 @@
 import { AuthAPI } from '../../api'
 
-import { SessionStorageImpl } from './SessionStorage'
+import { SessionStorage } from './SessionStorage'
 
 import { AuthRequestInterceptor } from '../../utils'
 
@@ -10,46 +10,42 @@ export interface AuthService {
     logout: () => Promise<void>
 }
 
-export class AuthServiceImpl implements AuthService {
-    private interceptor = new AuthRequestInterceptor()
+export const AuthServiceImpl = (sessionStorage: SessionStorage) => {
+    const interceptor = new AuthRequestInterceptor()
 
-    isAuth: boolean = false
+    let isAuth = false
 
-    private api = new AuthAPI()
+    const api = new AuthAPI()
 
-    private sessionStorage
-
-    constructor(sessionStorage: SessionStorageImpl) {
-        this.sessionStorage = sessionStorage
-    }
-
-    auth = async () => {
+    const auth = async () => {
         console.debug('auth start')
-        let token = this.sessionStorage.storedToken()
+        let token = sessionStorage.storedToken()
 
         if (!token) {
-            const res = await this.api.auth()
+            const res = await api.auth()
 
             if (res.status === 200) token = res.data
         }
 
         if (token) {
-            this.isAuth = true
-            this.interceptor.setup(token, this.onToken)
-            this.sessionStorage.update(token)
+            isAuth = true
+            interceptor.setup(token, onToken)
+            sessionStorage.update(token)
         }
         console.debug('auth end')
     }
 
-    logout = async () => {
-        this.interceptor.remove()
-        this.sessionStorage.clear()
+    const logout = async () => {
+        interceptor.remove()
+        sessionStorage.clear()
 
-        await this.auth()
+        await auth()
     }
 
-    private onToken = (token: string) => {
+    const onToken = (token: string) => {
         console.debug('withtoken ' + token)
-        this.sessionStorage.update(token)
+        sessionStorage.update(token)
     }
+
+    return { isAuth, auth, logout }
 }

@@ -1,6 +1,6 @@
-import useSession from './SessionService'
+import useSession, { SessionService } from './SessionService'
 import { Session } from './SessionStorage'
 
-export type { Session }
+export type { Session, SessionService }
 
 export default useSession

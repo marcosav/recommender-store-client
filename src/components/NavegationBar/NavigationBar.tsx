@@ -209,7 +209,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
     )
 }
 
-export default React.memo(
+/*export default React.memo(
     NavigationBar,
     ({ session: old }, { session: next }) => {
         return (
@@ -217,4 +217,6 @@ export default React.memo(
             old?.cart.length === next?.cart.length
         )
     }
-)
+)*/
+
+export default NavigationBar

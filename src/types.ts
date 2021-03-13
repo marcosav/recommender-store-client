@@ -4,14 +4,29 @@ interface Product {
     price: number
     stock: number
     category: ProductCategory
-    imgUris: string
+    images: ProductImage[]
     hidden: boolean
     description: string
-    lastUpdated: string
-    date: string
+    lastUpdated: Date
+    date: Date
     visits: number
     rating: number
     userId: number
+}
+
+interface ProductImage {
+    i: number
+    u: string
+}
+
+interface PreviewProduct {
+    id: number
+    name: string
+    price: number
+    mainImage: string
+    lastUpdated: Date
+    visits: number
+    rating: number
 }
 
 interface ProductCategory {
@@ -24,13 +39,17 @@ interface User {
     nickname: string
     description: string
     profileImgUri?: string
-    registerDate: string
+    registerDate: Date
 }
 
 interface CartProduct {
-    id: number
-    product: Product
+    product: PreviewProduct
     amount: number
 }
 
-export type { Product, ProductCategory, User, CartProduct }
+interface Date {
+    seconds: number
+    nanos: number
+}
+
+export type { Product, PreviewProduct, ProductCategory, User, CartProduct }

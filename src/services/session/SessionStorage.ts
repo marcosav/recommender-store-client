@@ -1,5 +1,5 @@
 import { CartProduct, User } from '../../types'
-import { CookieSessionManager } from '../../utils'
+import { SessionStorageManager } from '../../utils'
 
 type SessionCallback = (session?: Session) => void
 
@@ -7,6 +7,7 @@ export interface SessionStorage {
     session?: Session
     update: (token: string, user?: User) => void
     clear: () => void
+    storedToken: () => string | null
     isLogged: () => boolean
     setCallback: (callback: SessionCallback) => void
 }
@@ -18,52 +19,55 @@ export interface Session {
     cart: CartProduct[]
 }
 
-export class SessionStorageImpl implements SessionStorage {
-    session?: Session
-    private callback?: SessionCallback
+export const SessionStorageImpl = () => {
+    let session: Session | undefined
+    let callback: SessionCallback | undefined
 
-    private cookies = new CookieSessionManager()
+    let cookies = new SessionStorageManager()
 
-    update = (token: string) => {
-        const decoded = this.decode(token)
+    const update = (token: string) => {
+        const decoded = decode(token)
+
         if (decoded) {
             const sessionId = decoded.sub
             const userId = decoded.uid
             const username = decoded.username
+            const cart = JSON.parse(decoded.cart ?? '[]')
 
-            if (!this.session)
-                this.session = { sessionId, userId, username, cart: [] }
+            if (!session) session = { sessionId, userId, username, cart }
             else {
-                this.session.sessionId = sessionId
-                this.session.userId = userId
-                this.session.username = username
-                this.session.cart = JSON.parse(decoded.cart ?? '[]')
+                session.sessionId = sessionId
+                session.userId = userId
+                session.username = username
+                session.cart = cart
             }
         }
 
-        this.cookies.storeToken(token)
+        cookies.storeToken(token)
 
-        if (this.callback) this.callback(this.session)
+        if (callback) callback(session)
     }
 
-    isLogged = () => this.session?.userId !== undefined
+    const isLogged = () => session?.userId !== undefined
 
-    storedToken = () => this.cookies.readToken()
+    const storedToken = () => cookies.readToken()
 
-    clear = () => {
-        this.cookies.remove()
-        this.session = undefined
+    const clear = () => {
+        cookies.remove()
+        session = undefined
     }
 
-    setCallback = (callback: SessionCallback) => {
-        this.callback = callback
+    const setCallback = (cb: SessionCallback) => {
+        callback = cb
     }
 
-    private decode = (token: string): any => {
+    const decode = (token: string): any => {
         try {
             return JSON.parse(atob(token.split('.')[1]))
         } catch (error) {
             return null
         }
     }
+
+    return { session, update, clear, storedToken, isLogged, setCallback }
 }
