@@ -13,7 +13,6 @@ export default class AuthRequestinterceptor {
             axios.interceptors.request.eject(this.interceptorReq)
 
         this.interceptorReq = axios.interceptors.request.use((req) => {
-            console.debug('request', req.data?.token)
             req.headers.authorization = `Bearer ${this.lastToken}`
             return req
         })

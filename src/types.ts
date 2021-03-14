@@ -12,6 +12,8 @@ interface Product {
     visits: number
     rating: number
     userId: number
+
+    fav?: boolean
 }
 
 interface ProductImage {
@@ -27,6 +29,8 @@ interface PreviewProduct {
     lastUpdated: Date
     visits: number
     rating: number
+
+    fav?: boolean
 }
 
 interface ProductCategory {

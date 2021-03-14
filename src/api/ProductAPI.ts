@@ -1,6 +1,7 @@
 import BaseAPI, { RPromise, StatusHandler } from './BaseAPI'
 
 import { PreviewProduct, Product } from '../types'
+import { Paged } from './types'
 
 export interface ProductService {
     getProduct: (id: number, handler: StatusHandler) => RPromise<Product>
@@ -8,8 +9,8 @@ export interface ProductService {
         id: number,
         shown: boolean,
         page: number
-    ) => RPromise<SearchResult>
-    searchProducts: (search: SearchProduct) => RPromise<SearchResult>
+    ) => RPromise<Paged<PreviewProduct>>
+    searchProducts: (search: SearchProduct) => RPromise<Paged<PreviewProduct>>
     publishProduct: (product: ProductForm, update: boolean) => RPromise<Product>
     deleteProduct: (id: number) => RPromise
 }
@@ -36,20 +37,15 @@ interface SearchProduct {
     order?: number
 }
 
-interface SearchResult {
-    items: PreviewProduct[]
-    total: number
-}
-
 export default class ProductAPI extends BaseAPI implements ProductService {
     getProduct = (id: number, handler: StatusHandler) =>
         this.get<Product>(`${PRODUCT_PATH}/${id}`, null, handler)
 
     getVendorProducts = (id: number, shown: boolean, page: number) =>
-        this.get<SearchResult>(`${VENDOR_PATH}/${id}`, { shown, page })
+        this.get<Paged<PreviewProduct>>(`${VENDOR_PATH}/${id}`, { shown, page })
 
     searchProducts = (search: SearchProduct) =>
-        this.get<SearchResult>(`${PRODUCT_PATH}/list`, search)
+        this.get<Paged<PreviewProduct>>(`${PRODUCT_PATH}/list`, search)
 
     publishProduct = (product: ProductForm, update: boolean) =>
         (update ? this.put : this.post)<Product>(PRODUCT_PATH, product)

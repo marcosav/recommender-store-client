@@ -2,11 +2,15 @@ import React from 'react'
 
 import { RouteComponentProps } from 'react-router'
 
-import { useCartService, useProductService } from '../services'
+import {
+    useCartService,
+    useFavoriteService,
+    useProductService,
+} from '../services'
 
-import { Product, PreviewProduct } from '../types'
+import { PreviewProduct } from '../types'
 
-import { Button } from '@material-ui/core'
+import { ProductHolder } from '../components'
 
 interface SearchParams {
     query: string
@@ -17,6 +21,7 @@ const Search: React.FC<RouteComponentProps<SearchParams>> = ({ match }) => {
 
     const productService = useProductService()
     const cartService = useCartService()
+    const favService = useFavoriteService()
 
     const [products, setProducts] = React.useState<PreviewProduct[]>([])
     const [total, setTotal] = React.useState(0)
@@ -27,7 +32,7 @@ const Search: React.FC<RouteComponentProps<SearchParams>> = ({ match }) => {
             const r = await productService.searchProducts({ query })
             setProducts(r.data.items)
             setTotal(r.data.total)
-            console.log(r.data)
+            console.log(query, r.data)
         }
 
         fetchProducts()
@@ -35,23 +40,12 @@ const Search: React.FC<RouteComponentProps<SearchParams>> = ({ match }) => {
 
     return (
         <>
-            <p>
-                {products.map((p, i: number) => (
-                    <Button
-                        key={i}
-                        onClick={() =>
-                            cartService.update({
-                                productId: p.id,
-                                amount: 1,
-                                add: true,
-                            })
-                        }
-                    >
-                        {p.name}
-                    </Button>
-                ))}
-            </p>
-            <p>{query}</p>
+            {products.map((p, i: number) => (
+                <ProductHolder
+                    key={i}
+                    {...{ product: p, cartService, favService }}
+                />
+            ))}
         </>
     )
 }

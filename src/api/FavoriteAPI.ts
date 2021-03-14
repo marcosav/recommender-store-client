@@ -2,10 +2,14 @@ import BaseAPI, { RPromise } from './BaseAPI'
 
 import { PreviewProduct, User } from '../types'
 
+import { Paged } from './types'
+
 export interface FavoriteService {
-    getForUser: (product: boolean) => RPromise<PreviewProduct[] | User[]>
-    add: (id: number, product: boolean) => RPromise
-    remove: (id: number, product: boolean) => RPromise
+    getForUser: (
+        product?: boolean
+    ) => RPromise<Paged<PreviewProduct[] | User[]>>
+    add: (id: number, product?: boolean) => RPromise
+    remove: (id: number, product?: boolean) => RPromise
 }
 
 const FAVORITES_PATH = '/favorites'
@@ -14,7 +18,7 @@ const FAV_VENDORS_PATH = '/vendors'
 
 export default class FavoritesAPI extends BaseAPI implements FavoriteService {
     getForUser = (product: boolean = true) =>
-        this.get<PreviewProduct[] | User[]>(this.u(product))
+        this.get<Paged<PreviewProduct[] | User[]>>(this.u(product))
 
     add = (id: number, product: boolean = true) =>
         this.post(this.u(product), { id })
