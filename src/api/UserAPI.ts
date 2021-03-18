@@ -4,8 +4,12 @@ import { User } from '../types'
 
 export interface UserService {
     login: (form: LoginForm) => RPromise<LoginResponse>
-    signup: (form: SignupForm) => RPromise<LoginResponse>
-    edit: (form: SignupForm) => RPromise
+    signup: (
+        form: SignupForm,
+        image: File,
+        onUploadProgress: any
+    ) => RPromise<LoginResponse>
+    edit: (form: SignupForm, image: File, onUploadProgress: any) => RPromise
     getUser: (id: number) => RPromise<User>
     searchUsers: (search: SearchUser) => RPromise<User[]>
 }
@@ -24,7 +28,7 @@ interface LoginForm {
     password: string
 }
 
-interface SignupForm {
+export interface SignupForm {
     id?: number
     name: string
     surname: string
@@ -46,9 +50,33 @@ interface LoginResponse {
 export default class UserAPI extends BaseAPI implements UserService {
     login = (form: LoginForm) => this.post<LoginResponse>('/login', form)
 
-    signup = (form: SignupForm) => this.post<LoginResponse>('/signup', form)
+    signup = (form: SignupForm, image: File, onUploadProgress: any) => {
+        const formData = new FormData()
+        
+        formData.append('form', JSON.stringify(form))
+        formData.append('file', image)
+        
+        return this.postMP<LoginResponse>('/signup', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            onUploadProgress,
+        })
+    }
 
-    edit = (form: SignupForm) => this.put('/profile/edit', form)
+    edit = (form: SignupForm, image: File, onUploadProgress: any) => {
+        const formData = new FormData()
+        
+        formData.append('form', JSON.stringify(form))
+        formData.append('file', image)
+
+        return this.putMP('/profile/edit', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            onUploadProgress,
+        })
+    }
 
     getUser = (id: number) => this.get<User>(`${USER_PATH}/${id}`)
 

@@ -27,6 +27,7 @@ import { useStyles } from './NavigationBar.style'
 import { useHistory } from 'react-router'
 
 import { Session } from '../../services'
+import { useTranslation } from 'react-i18next'
 
 interface NavigationBarProps {
     session: Session
@@ -35,12 +36,12 @@ interface NavigationBarProps {
 const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
     const classes = useStyles()
     const history = useHistory()
+    const { t } = useTranslation()
 
     const cartItems = session.cart.length
     const username = session.username
     const logged = username !== undefined
 
-    const [showSearchBar, setShowSearchBar] = React.useState(true)
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [searched, setSearched] = React.useState('')
 
@@ -65,23 +66,23 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
     const menuContent = (
         <div>
             <Typography color={'textSecondary'} className={classes.menuText}>
-                Entra con tu cuenta
+                {t('nav.login_info')}
             </Typography>
             <MenuItem onClick={() => redirect('/login')}>
                 <ListItemIcon color="inherit">
                     <Person />
                 </ListItemIcon>
-                Login
+                {t('nav.login')}
             </MenuItem>
 
             <Typography color={'textSecondary'} className={classes.menuText}>
-                ¿No tienes? Regístrate
+                {t('nav.signup_info')}
             </Typography>
             <MenuItem onClick={() => redirect('/signup')}>
                 <ListItemIcon color="inherit">
                     <SignUp />
                 </ListItemIcon>
-                Sign up
+                {t('nav.signup')}
             </MenuItem>
         </div>
     )
@@ -103,14 +104,14 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
                 <ListItemIcon color="inherit">
                     <Favorite />
                 </ListItemIcon>
-                Favorites
+                {t('nav.favorites')}
             </MenuItem>
 
             <MenuItem onClick={() => redirect('/product/publish')}>
                 <ListItemIcon color="inherit">
                     <Add />
                 </ListItemIcon>
-                Upload product
+                {t('nav.upload')}
             </MenuItem>
 
             <Divider className={classes.divider} light />
@@ -119,7 +120,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
                 <ListItemIcon color="inherit">
                     <ExitToApp />
                 </ListItemIcon>
-                Logout
+                {t('nav.logout')}
             </MenuItem>
         </div>
     )
@@ -143,40 +144,36 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
             <AppBar position="static">
                 <Toolbar variant={'dense'}>
                     <Typography className={classes.title} variant="h6">
-                        Shop
+                        {t('nav.header')}
                     </Typography>
 
-                    {showSearchBar && (
-                        <div className={classes.searchContainer}>
-                            <Paper
-                                component="form"
-                                onSubmit={onSearch}
-                                className={classes.search}
+                    <div className={classes.searchContainer}>
+                        <Paper
+                            component="form"
+                            onSubmit={onSearch}
+                            className={classes.search}
+                        >
+                            <div className={classes.searchIcon}>
+                                <SearchIcon />
+                            </div>
+                            <InputBase
+                                placeholder={t('nav.search')}
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput,
+                                }}
+                                inputProps={{ 'aria-label': 'search' }}
+                                onChange={(e) => setSearched(e.target.value)}
+                            />
+                            <IconButton
+                                type="submit"
+                                className={classes.inputButton}
+                                aria-label="search"
                             >
-                                <div className={classes.searchIcon}>
-                                    <SearchIcon />
-                                </div>
-                                <InputBase
-                                    placeholder="Search"
-                                    classes={{
-                                        root: classes.inputRoot,
-                                        input: classes.inputInput,
-                                    }}
-                                    inputProps={{ 'aria-label': 'search' }}
-                                    onChange={(e) =>
-                                        setSearched(e.target.value)
-                                    }
-                                />
-                                <IconButton
-                                    type="submit"
-                                    className={classes.inputButton}
-                                    aria-label="search"
-                                >
-                                    <ArrowForward />
-                                </IconButton>
-                            </Paper>
-                        </div>
-                    )}
+                                <ArrowForward />
+                            </IconButton>
+                        </Paper>
+                    </div>
 
                     <div className={classes.grow} />
 
@@ -208,15 +205,5 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
         </div>
     )
 }
-
-/*export default React.memo(
-    NavigationBar,
-    ({ session: old }, { session: next }) => {
-        return (
-            old?.username === next?.username &&
-            old?.cart.length === next?.cart.length
-        )
-    }
-)*/
 
 export default NavigationBar

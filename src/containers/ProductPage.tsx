@@ -7,6 +7,7 @@ import { RouteComponentProps } from 'react-router'
 import { useProductService } from '../services'
 
 import { Product } from '../types'
+import { HttpStatusCode } from '../utils'
 
 interface ProductPageParams {
     id: string
@@ -41,11 +42,18 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
         const handleNotFound = () => history.push('/404')
 
         const fetchProduct = async (productId: number) => {
-            const r = await productService.getProduct(productId, (n) => {
-                if (n === 404) handleNotFound()
-                return true
-            })
-            setProduct(r.data)
+            const r = await productService.getProduct(productId)
+
+            switch (r.status) {
+                case HttpStatusCode.OK:
+                    setProduct(r.data)
+                    break
+                case HttpStatusCode.NotFound:
+                    handleNotFound()
+                    break
+                default:
+                    //error
+            }
         }
 
         let productId = parseInt(id)

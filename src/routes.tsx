@@ -16,6 +16,7 @@ import {
 
 import { BaseLayout } from './layout'
 import { useSessionService } from './services'
+import { useServerErrorHandler } from './utils'
 
 export interface NavRoute {
     id: string
@@ -93,9 +94,15 @@ const routes: NavRoute[] = [
 
 const Routes = () => {
     const sessionService = useSessionService()
+    const serverErrorHandler = useServerErrorHandler()
+
     return (
         <Router>
-            <BaseLayout sessionService={sessionService} routes={routes} />
+            <BaseLayout
+                serverErrorHandler={serverErrorHandler}
+                sessionService={sessionService}
+                routes={routes}
+            />
         </Router>
     )
 }

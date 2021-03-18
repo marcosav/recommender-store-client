@@ -18,7 +18,6 @@ export const AuthServiceImpl = (sessionStorage: SessionStorage) => {
     const api = new AuthAPI()
 
     const auth = async () => {
-        console.debug('auth start')
         let token = sessionStorage.storedToken()
 
         if (!token) {
@@ -32,7 +31,6 @@ export const AuthServiceImpl = (sessionStorage: SessionStorage) => {
             interceptor.setup(token, onToken)
             sessionStorage.update(token)
         }
-        console.debug('auth end')
     }
 
     const logout = async () => {
@@ -43,7 +41,6 @@ export const AuthServiceImpl = (sessionStorage: SessionStorage) => {
     }
 
     const onToken = (token: string) => {
-        console.debug('withtoken ' + token)
         sessionStorage.update(token)
     }
 

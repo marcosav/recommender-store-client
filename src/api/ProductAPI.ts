@@ -1,10 +1,10 @@
-import BaseAPI, { RPromise, StatusHandler } from './BaseAPI'
+import BaseAPI, { RPromise } from './BaseAPI'
 
 import { PreviewProduct, Product } from '../types'
 import { Paged } from './types'
 
 export interface ProductService {
-    getProduct: (id: number, handler: StatusHandler) => RPromise<Product>
+    getProduct: (id: number) => RPromise<Product>
     getVendorProducts: (
         id: number,
         shown: boolean,
@@ -38,8 +38,8 @@ interface SearchProduct {
 }
 
 export default class ProductAPI extends BaseAPI implements ProductService {
-    getProduct = (id: number, handler: StatusHandler) =>
-        this.get<Product>(`${PRODUCT_PATH}/${id}`, null, handler)
+    getProduct = (id: number) =>
+        this.get<Product>(`${PRODUCT_PATH}/${id}`, null)
 
     getVendorProducts = (id: number, shown: boolean, page: number) =>
         this.get<Paged<PreviewProduct>>(`${VENDOR_PATH}/${id}`, { shown, page })

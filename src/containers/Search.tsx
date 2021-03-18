@@ -28,7 +28,6 @@ const Search: React.FC<RouteComponentProps<SearchParams>> = ({ match }) => {
 
     React.useEffect(() => {
         const fetchProducts = async () => {
-            console.debug('fetching search')
             const r = await productService.searchProducts({ query })
             setProducts(r.data.items)
             setTotal(r.data.total)
