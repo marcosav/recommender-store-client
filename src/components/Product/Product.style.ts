@@ -16,14 +16,16 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         actions: {},
         titleChip: {
+            '& > span': {
+                color: theme.palette.grey[50],
+                fontSize: 17,
+                fontWeight: 'bold',
+                textShadow: '.5px .5px .5px black',
+            },
             maxWidth: '285px',
             padding: theme.spacing(0, 0.5),
             margin: theme.spacing(1),
-            color: theme.palette.grey[50],
             backgroundColor: '#00000033',
-            fontSize: 17,
-            fontWeight: 'bold',
-            textShadow: '.5px .5px .5px black',
         },
         price: {
             marginLeft: 'auto',

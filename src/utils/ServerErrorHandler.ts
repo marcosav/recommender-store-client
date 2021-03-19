@@ -1,21 +1,21 @@
 import React from 'react'
 
-type Callback = () => void
+type Callback = (code: number) => void
 
 export interface ServerErrorHandlerListener {
     setCallback: (callback: Callback) => void
 }
 
 export interface ServerErrorHandlerEmitter {
-    handle: () => void
+    handle: (code: number) => void
 }
 
 class ServerErrorHandler
     implements ServerErrorHandlerListener, ServerErrorHandlerEmitter {
     private callback: Callback | undefined
 
-    handle = () => {
-        if (this.callback) this.callback()
+    handle = (code: number) => {
+        if (this.callback) this.callback(code)
     }
 
     setCallback = (cb: Callback) => {

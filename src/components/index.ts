@@ -4,7 +4,9 @@ import {
     PasswordField,
     ErrorHandler,
     CircularProgressIndicator,
-    ErrorModal,
+    ErrorAlert,
+    ContentWarn,
+    Loading,
 } from './utils'
 
 export {
@@ -13,5 +15,7 @@ export {
     PasswordField,
     ErrorHandler,
     CircularProgressIndicator,
-    ErrorModal,
+    ErrorAlert,
+    ContentWarn,
+    Loading,
 }

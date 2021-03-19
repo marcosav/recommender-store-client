@@ -34,6 +34,9 @@
             "photo_footer": "Profile photo (Max 14MB .jpeg, .jpg, .png)"
         }
     },
+    "cart": {
+        "empty": "Cart is empty"
+    },
     "validation": {
         "min_length": "Min allowed length is {0}",
         "max_length": "Max allowed length is {0}",
@@ -47,11 +50,19 @@
         "invalid_img_format": "Invalid format use .jpg, .jpeg o .png",
         "max_size": "Maximum allowed size is {0}MB"
     },
+    "info": {
+        "loading": "Loading..."
+    },
     "error": {
-        "server_response": {
-            "title": "Sorry, an error has ocurred",
-            "text": "There was an error while processing your request, sorry for the inconvenient, contact an administrator or try again after refreshing the page",
-            "close": "Close"
-        }
+        "500": {
+            "text": "Sorry, an error has ocurred, please represh the page and try again!"
+        },
+        "401": {
+            "text": "Please log in to do that!"
+        },
+        "other": {
+            "text": "An unknown error has ocurred, refresh the page!"
+        },
+        "not_found": "Not found | 404"
     }
 }

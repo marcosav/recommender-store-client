@@ -52,11 +52,11 @@ export default class UserAPI extends BaseAPI implements UserService {
 
     signup = (form: SignupForm, image: File, onUploadProgress: any) => {
         const formData = new FormData()
-        
+
         formData.append('form', JSON.stringify(form))
         formData.append('file', image)
-        
-        return this.postMP<LoginResponse>('/signup', formData, {
+
+        return this.postMP<LoginResponse>('/signup', formData, undefined, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -66,11 +66,11 @@ export default class UserAPI extends BaseAPI implements UserService {
 
     edit = (form: SignupForm, image: File, onUploadProgress: any) => {
         const formData = new FormData()
-        
+
         formData.append('form', JSON.stringify(form))
         formData.append('file', image)
 
-        return this.putMP('/profile/edit', formData, {
+        return this.putMP('/profile/edit', formData, undefined, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

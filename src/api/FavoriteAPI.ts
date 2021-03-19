@@ -3,6 +3,7 @@ import BaseAPI, { RPromise } from './BaseAPI'
 import { PreviewProduct, User } from '../types'
 
 import { Paged } from './types'
+import { HttpStatusCode } from '../utils'
 
 export interface FavoriteService {
     getForUser: (
@@ -21,7 +22,7 @@ export default class FavoritesAPI extends BaseAPI implements FavoriteService {
         this.get<Paged<PreviewProduct[] | User[]>>(this.u(product))
 
     add = (id: number, product: boolean = true) =>
-        this.post(this.u(product), { id })
+        this.post(this.u(product), { id }, [HttpStatusCode.NotFound])
 
     remove = (id: number, product: boolean = true) =>
         this.delete(this.u(product), { id })

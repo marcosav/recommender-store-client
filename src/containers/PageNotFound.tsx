@@ -2,6 +2,7 @@ import React from 'react'
 
 import Typography from '@material-ui/core/Typography'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { useTranslation } from 'react-i18next'
 
 const useStyle = makeStyles((theme: Theme) =>
     createStyles({
@@ -16,7 +17,11 @@ const useStyle = makeStyles((theme: Theme) =>
 
 const PageNotFound = () => {
     const classes = useStyle()
-    return <Typography className={classes.main}>Not found | 404</Typography>
+    const { t } = useTranslation()
+
+    return (
+        <Typography className={classes.main}>{t('error.not_found')}</Typography>
+    )
 }
 
 export default PageNotFound

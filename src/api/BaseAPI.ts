@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 
-import { serverErrorHandler } from '../utils'
+import { HttpStatusCode, serverErrorHandler } from '../utils'
 
 const API_URL = `https://${process.env.REACT_APP_API_URL}/api/v${process.env.REACT_APP_API_VERSION}`
 
@@ -9,58 +9,86 @@ const url = (path: string) => `${API_URL}${path}`
 export type RPromise<T = null> = Promise<AxiosResponse<T>>
 export type StatusHandler = (status: number) => boolean
 
-const emptyStatusValidation = (code: number) => {
-    if (code === 500) serverErrorHandler.handle()
+const DEFAULT_HANDLED = [
+    HttpStatusCode.ServerError,
+    HttpStatusCode.Unauthorized,
+]
+
+const emptyStatusValidation = (h?: number[]) => (code: number) => {
+    let handled = h ? [...DEFAULT_HANDLED, ...h] : DEFAULT_HANDLED
+    if (handled.includes(code)) serverErrorHandler.handle(code)
 
     return true
 }
 
 export default class BaseAPI {
-    protected get = <T = null>(path: string, params?: any, options: any = {}) =>
+    protected get = <T = null>(
+        path: string,
+        params?: any,
+        handled?: number[],
+        options: any = {}
+    ) =>
         axios.get<T>(url(path), {
             params,
-            validateStatus: emptyStatusValidation,
+            validateStatus: emptyStatusValidation(handled),
             ...options,
         })
 
     protected post = <T = null>(
         path: string,
         params?: any,
+        handled?: number[],
         options: any = {}
     ) =>
         axios.post<T>(url(path), null, {
             params,
-            validateStatus: emptyStatusValidation,
+            validateStatus: emptyStatusValidation(handled),
             ...options,
         })
 
-    protected postMP = <T = null>(path: string, data: any, options: any = {}) =>
+    protected postMP = <T = null>(
+        path: string,
+        data: any,
+        handled?: number[],
+        options: any = {}
+    ) =>
         axios.post<T>(url(path), data, {
-            validateStatus: emptyStatusValidation,
+            validateStatus: emptyStatusValidation(handled),
             ...options,
         })
 
-    protected put = <T = null>(path: string, params?: any, options: any = {}) =>
+    protected put = <T = null>(
+        path: string,
+        params?: any,
+        handled?: number[],
+        options: any = {}
+    ) =>
         axios.put<T>(url(path), null, {
             params,
-            validateStatus: emptyStatusValidation,
+            validateStatus: emptyStatusValidation(handled),
             ...options,
         })
 
-    protected putMP = <T = null>(path: string, data: any, options: any = {}) =>
+    protected putMP = <T = null>(
+        path: string,
+        data: any,
+        handled?: number[],
+        options: any = {}
+    ) =>
         axios.put<T>(url(path), data, {
-            validateStatus: emptyStatusValidation,
+            validateStatus: emptyStatusValidation(handled),
             ...options,
         })
 
     protected delete = <T = null>(
         path: string,
         params?: any,
+        handled?: number[],
         options: any = {}
     ) =>
         axios.delete<T>(url(path), {
             params,
-            validateStatus: emptyStatusValidation,
+            validateStatus: emptyStatusValidation(handled),
             ...options,
         })
 }

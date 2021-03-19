@@ -55,6 +55,9 @@ const Signup: React.FC<RouteComponentProps> = ({ history }) => {
         switch (r.status) {
             case HttpStatusCode.OK:
                 break
+            case HttpStatusCode.NoContent:
+                history.push('/')
+                return
             case HttpStatusCode.BadRequest:
                 setErrors((r.data as any).error)
                 return

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Redirect, Route, Switch } from 'react-router'
-import { ErrorModal, NavigationBar } from '../components'
+import { ErrorAlert, NavigationBar } from '../components'
 
 import { NavRoute } from '../routes'
 import { Session, SessionService } from '../services'
@@ -20,6 +20,53 @@ const styles = () =>
         },
     })
 
+interface RouteCheckProps {
+    props: any
+    route: NavRoute
+    sessionService: SessionService
+}
+
+const CheckRedirect: React.FC<any> = ({ props, path }) => {
+    return (
+        <Redirect
+            to={{
+                pathname: path,
+                state: {
+                    from: props.location,
+                },
+            }}
+        />
+    )
+}
+
+const RouteCheck: React.FC<RouteCheckProps> = ({
+    props,
+    route,
+    sessionService,
+}) => {
+    const RouteComponent = route.component
+
+    return route.identified === true ? (
+        <Route>
+            {sessionService.isLogged() ? (
+                <RouteComponent {...props} />
+            ) : (
+                <CheckRedirect path="/login" {...{ props }} />
+            )}
+        </Route>
+    ) : route.identified === false ? (
+        <Route>
+            {sessionService.isLogged() ? (
+                <CheckRedirect path="/" {...{ props }} />
+            ) : (
+                <RouteComponent {...props} />
+            )}
+        </Route>
+    ) : (
+        <RouteComponent {...props} />
+    )
+}
+
 interface BaseLayoutProps extends WithStyles<typeof styles> {
     serverErrorHandler: ServerErrorHandlerListener
     sessionService: SessionService
@@ -28,18 +75,19 @@ interface BaseLayoutProps extends WithStyles<typeof styles> {
 
 interface State {
     session?: Session
-    error: boolean
+    error?: number
+    open: boolean
 }
 
 class BaseLayout extends React.Component<BaseLayoutProps, State> {
     constructor(props: any) {
         super(props)
-        this.state = { session: undefined, error: false }
+        this.state = { session: undefined, error: undefined, open: false }
     }
 
     componentDidMount() {
-        this.props.serverErrorHandler.setCallback(() =>
-            this.setState({ ...this.state, error: true })
+        this.props.serverErrorHandler.setCallback((code) =>
+            this.setState({ ...this.state, error: code, open: true })
         )
 
         const getSession = async () => {
@@ -55,7 +103,7 @@ class BaseLayout extends React.Component<BaseLayoutProps, State> {
     }
 
     setOpen(open: boolean) {
-        this.setState({ ...this.state, error: open })
+        this.setState({ ...this.state, open })
     }
 
     render() {
@@ -63,29 +111,31 @@ class BaseLayout extends React.Component<BaseLayoutProps, State> {
             <div className={this.props.classes.base}>
                 <NavigationBar session={this.state.session} />
                 <Switch>
-                    {this.props.routes.map((route) => {
-                        const RouteComponent = route.component
-                        return (
-                            <Route
-                                key={route.id}
-                                path={route.path}
-                                render={(props) => (
-                                    <RouteComponent
-                                        {...props}
-                                        session={this.state.session}
-                                    />
-                                )}
-                                exact
-                            />
-                        )
-                    })}
+                    {this.props.routes.map((route) => (
+                        <Route
+                            key={route.id}
+                            path={route.path}
+                            render={(props) => (
+                                <RouteCheck
+                                    {...{
+                                        props,
+                                        route,
+                                        sessionService: this.props
+                                            .sessionService,
+                                    }}
+                                />
+                            )}
+                            exact
+                        />
+                    ))}
                     <Redirect to="/404" />
                 </Switch>
 
-                <ErrorModal
+                <ErrorAlert
                     {...{
-                        open: this.state.error,
+                        error: this.state.error,
                         setOpen: this.setOpen.bind(this),
+                        open: this.state.open,
                     }}
                 />
             </div>

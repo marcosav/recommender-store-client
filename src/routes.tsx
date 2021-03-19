@@ -22,6 +22,7 @@ export interface NavRoute {
     id: string
     path: string
     component: React.FC<any>
+    identified?: boolean
 }
 
 const routes: NavRoute[] = [
@@ -54,36 +55,43 @@ const routes: NavRoute[] = [
         id: 'product',
         path: '/product/:id/edit',
         component: () => null, //same
+        identified: true,
     },
     {
         id: 'product',
         path: '/product/publish',
         component: () => null, //same
+        identified: true,
     },
     {
         id: 'login',
         path: '/login',
         component: Login,
+        identified: false,
     },
     {
         id: 'logout',
         path: '/logout',
         component: Logout,
+        identified: true,
     },
     {
         id: 'signup',
         path: '/signup',
         component: Signup,
+        identified: false,
     },
     {
         id: 'profile',
         path: '/profile',
         component: () => null,
+        identified: true,
     },
     {
         id: 'favorites',
         path: '/favorites',
         component: Favorites,
+        identified: true,
     },
     {
         id: '404',

@@ -31,6 +31,7 @@ interface PreviewProduct {
     rating: number
 
     fav?: boolean
+    onCartAmount?: number
 }
 
 interface ProductCategory {
@@ -47,6 +48,11 @@ interface User {
 }
 
 interface CartProduct {
+    id: number
+    amount: number
+}
+
+interface CartProductPreview {
     product: PreviewProduct
     amount: number
 }
@@ -56,4 +62,11 @@ interface Date {
     nanos: number
 }
 
-export type { Product, PreviewProduct, ProductCategory, User, CartProduct }
+export type {
+    Product,
+    PreviewProduct,
+    ProductCategory,
+    User,
+    CartProduct,
+    CartProductPreview,
+}

@@ -18,6 +18,7 @@ import ShoppingBasket from '@material-ui/icons/ShoppingBasketOutlined'
 import { useHistory } from 'react-router'
 import { useTheme } from '@material-ui/core'
 import { CartService, FavoriteService } from '../../api'
+import { HttpStatusCode } from '../../utils'
 
 interface ProductProps {
     Actions?: React.FC<ProductActionsProps>
@@ -47,11 +48,16 @@ const DefaultActions: React.FC<ProductActionsProps> = ({
         })
     }
 
-    const addToFav = (e: any) => {
+    const addToFav = async (e: any) => {
         e.stopPropagation()
+
+        const r = await (favorite
+            ? favService!!.remove(product.id)
+            : favService!!.add(product.id))
+
+        if (r.status !== HttpStatusCode.OK) return
+
         setFavorite(!favorite)
-        if (favorite) favService!!.remove(product.id)
-        else favService!!.add(product.id)
     }
 
     return (

@@ -1,6 +1,7 @@
 import BaseAPI, { RPromise } from './BaseAPI'
 
-import { CartProduct } from '../types'
+import { CartProductPreview } from '../types'
+import { HttpStatusCode } from '../utils'
 
 const CART_PATH = '/cart'
 
@@ -8,6 +9,7 @@ export interface CartService {
     update: (form: UpdateCartForm) => RPromise
     remove: (productId: number) => RPromise
     clear: () => RPromise
+    current: () => RPromise<CartProductPreview[]>
 }
 
 export interface UpdateCartForm {
@@ -17,9 +19,10 @@ export interface UpdateCartForm {
 }
 
 export default class CartAPI extends BaseAPI implements CartService {
-    current = () => this.get<CartProduct[]>(CART_PATH)
+    current = () => this.get<CartProductPreview[]>(CART_PATH)
 
-    update = (form: UpdateCartForm) => this.post(CART_PATH, form)
+    update = (form: UpdateCartForm) =>
+        this.post(CART_PATH, form, [HttpStatusCode.NotFound])
 
     remove = (productId: number) => this.delete(CART_PATH, { productId })
 
