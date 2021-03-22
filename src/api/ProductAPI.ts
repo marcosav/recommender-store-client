@@ -1,7 +1,8 @@
 import BaseAPI, { RPromise } from './BaseAPI'
 
-import { PreviewProduct, Product } from '../types'
+import { PreviewProduct, Product, ProductCategory } from '../types'
 import { Paged } from './types'
+import { HttpStatusCode } from '../utils'
 
 export interface ProductService {
     getProduct: (id: number) => RPromise<Product>
@@ -13,6 +14,7 @@ export interface ProductService {
     searchProducts: (search: SearchProduct) => RPromise<Paged<PreviewProduct>>
     publishProduct: (product: ProductForm, update: boolean) => RPromise<Product>
     deleteProduct: (id: number) => RPromise
+    findCategories: () => RPromise<ProductCategory[]>
 }
 
 const PRODUCT_PATH = '/product'
@@ -45,10 +47,15 @@ export default class ProductAPI extends BaseAPI implements ProductService {
         this.get<Paged<PreviewProduct>>(`${VENDOR_PATH}/${id}`, { shown, page })
 
     searchProducts = (search: SearchProduct) =>
-        this.get<Paged<PreviewProduct>>(`${PRODUCT_PATH}/list`, search)
+        this.get<Paged<PreviewProduct>>(`${PRODUCT_PATH}/list`, search, [
+            HttpStatusCode.BadRequest,
+        ])
 
     publishProduct = (product: ProductForm, update: boolean) =>
         (update ? this.put : this.post)<Product>(PRODUCT_PATH, product)
 
     deleteProduct = (id: number) => this.delete(`${PRODUCT_PATH}/${id}`)
+
+    findCategories = () =>
+        this.get<ProductCategory[]>(`${PRODUCT_PATH}/categories`)
 }

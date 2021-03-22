@@ -53,7 +53,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
 
     const redirect = (path: string) => {
         handleMenuClose()
-        history.push(path)
+        history.push(path, undefined)
     }
 
     const onSearch = (e: any) => {
@@ -143,7 +143,11 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
         <div className={classes.grow}>
             <AppBar position="static">
                 <Toolbar variant={'dense'}>
-                    <Typography className={classes.title} variant="h6">
+                    <Typography
+                        className={classes.title}
+                        variant="h5"
+                        onClick={() => redirect('/')}
+                    >
                         {t('nav.header')}
                     </Typography>
 

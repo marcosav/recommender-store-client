@@ -37,6 +37,9 @@
     "cart": {
         "empty": "Cart is empty"
     },
+    "search": {
+        "no_results": "No results"
+    },
     "validation": {
         "min_length": "Min allowed length is {0}",
         "max_length": "Max allowed length is {0}",
@@ -64,5 +67,15 @@
             "text": "An unknown error has ocurred, refresh the page!"
         },
         "not_found": "Not found | 404"
+    },
+    "category": {
+        "fashion": "Fashion",
+        "multimedia": "Multimedia",
+        "phones": "Phones",
+        "computers-electronic": "Computers/Electronic",
+        "sports": "Sports",
+        "games": "Games",
+        "home": "Home",
+        "others": "Others"
     }
 }

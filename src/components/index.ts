@@ -1,5 +1,6 @@
 import NavigationBar from './NavegationBar'
 import ProductHolder from './Product'
+import PageContainer from './PageContainer'
 import {
     PasswordField,
     ErrorHandler,
@@ -18,4 +19,5 @@ export {
     ErrorAlert,
     ContentWarn,
     Loading,
+    PageContainer,
 }

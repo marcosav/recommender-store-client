@@ -33,9 +33,6 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
                     break
                 case HttpStatusCode.NotFound:
                     handleNotFound()
-                    break
-                default:
-                //error
             }
         }
 
