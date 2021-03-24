@@ -18,7 +18,7 @@ import ShoppingBasket from '@material-ui/icons/ShoppingBasketOutlined'
 import { useHistory } from 'react-router'
 import { useTheme } from '@material-ui/core'
 import { CartService, FavoriteService } from '../../api'
-import { HttpStatusCode } from '../../utils'
+import { HttpStatusCode, Constants } from '../../utils'
 
 interface ProductProps {
     Actions?: React.FC<ProductActionsProps>
@@ -86,14 +86,14 @@ const ProductHolder: React.FC<ProductProps & ProductActionsProps> = ({
 
     const classes = useStyles()
 
-    const gotoProduct = () => history.push(`/product/${product.id}`)
+    const gotoProduct = () => history.push(`/product/${product.id}`, undefined)
 
     return (
         <Card className={classes.container}>
             <CardActionArea onClick={gotoProduct}>
                 <CardMedia
                     className={classes.media}
-                    image={product.mainImage ?? '/icons/noimage.svg'}
+                    image={product.mainImage ?? Constants.FALLBACK_IMAGE}
                 >
                     <Chip label={product.name} className={classes.titleChip} />
                 </CardMedia>

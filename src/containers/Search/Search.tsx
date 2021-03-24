@@ -12,32 +12,20 @@ import { PreviewProduct, ProductCategory } from '../../types'
 
 import { PageContainer, ProductHolder } from '../../components'
 import { HttpStatusCode } from '../../utils'
+
 import Chip from '@material-ui/core/Chip'
 import { useTranslation } from 'react-i18next'
 
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-
-export const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-        },
-        categories: {
-            margin: theme.spacing(1, 0.5),
-            '& > div': {
-                margin: theme.spacing(0.5),
-            },
-            display: 'flex',
-            maxWidth: '100%',
-            overflowX: 'auto',
-        },
-    })
-)
+import { useStyles } from './Search.style'
 
 interface SearchParams {
     query: string
+}
+
+export interface SearchLocationState {
+    category?: number
+    page?: number
+    all?: boolean
 }
 
 const Search: React.FC<RouteComponentProps<SearchParams>> = ({
@@ -46,7 +34,7 @@ const Search: React.FC<RouteComponentProps<SearchParams>> = ({
     match,
 }) => {
     const { query } = match.params
-    const state = location?.state as any
+    const state = location?.state as SearchLocationState
 
     const { t } = useTranslation()
 
@@ -57,13 +45,19 @@ const Search: React.FC<RouteComponentProps<SearchParams>> = ({
     const [shownItems, setShownItems] = React.useState<PreviewProduct[]>()
     const [categories, setCategories] = React.useState<ProductCategory[]>()
 
-    const [category, setCategory] = React.useState<any>(state?.category)
+    const [category, setCategory] = React.useState(state?.category)
+
+    const all = state?.all === true
 
     const classes = useStyles()
 
     const handleCategory = (id: number) => {
         const newId = category === id ? undefined : id
-        history.push(location.pathname, { category: newId, page: undefined })
+        history.push(location.pathname, {
+            all: all ? newId !== undefined : undefined,
+            category: newId,
+            page: undefined,
+        })
         setCategory(newId)
     }
 
@@ -95,7 +89,7 @@ const Search: React.FC<RouteComponentProps<SearchParams>> = ({
             <PageContainer
                 request={(page) =>
                     productService.searchProducts({
-                        query,
+                        query: all ? '' : query,
                         page,
                         category,
                     })

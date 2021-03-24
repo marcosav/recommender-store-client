@@ -13,6 +13,7 @@ interface Product {
     rating: number
     userId: number
 
+    vendorNick?: string
     fav?: boolean
 }
 

@@ -1,6 +1,6 @@
 import Login from './Login'
 import Signup from './Signup'
-import Home from './Home'
+import Home from './Home/Home'
 import PageNotFound from './PageNotFound'
 import ProductPage from './ProductPage'
 import Logout from './Logout'

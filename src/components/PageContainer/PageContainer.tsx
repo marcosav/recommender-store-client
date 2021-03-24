@@ -13,42 +13,8 @@ import Typography from '@material-ui/core/Typography'
 
 import { useTranslation } from 'react-i18next'
 
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { useHistory, useLocation } from 'react-router'
-
-export const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            margin: '0 auto',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-        },
-        container: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(1, 300px)',
-            [theme.breakpoints.up(490)]: {
-                gridTemplateColumns: 'repeat(2, 1fr)',
-            },
-            [theme.breakpoints.up(730)]: {
-                gridTemplateColumns: 'repeat(3, 1fr)',
-            },
-            [theme.breakpoints.up('md')]: {
-                gridTemplateColumns: 'repeat(4, 1fr)',
-            },
-            [theme.breakpoints.up('lg')]: {
-                gridTemplateColumns: 'repeat(5, 1fr)',
-            },
-            [theme.breakpoints.up(1600)]: {
-                gridTemplateColumns: 'repeat(6, 1fr)',
-            },
-            margin: theme.spacing(0, 0, 1, 2),
-        },
-        pagger: {
-            margin: theme.spacing(2),
-        },
-    })
-)
+import { useStyles } from './PageContainer.style'
 
 interface PageContainerProps<T> {
     request: (page: number) => RPromise<Paged<T>>
@@ -96,14 +62,14 @@ function PageContainer<T>({
         const fetchRequest = async () => {
             setItems(undefined)
             setShownItems(undefined)
-    
+
             const r = await request(page - 1)
-    
+
             if (r.status !== HttpStatusCode.OK) return
-    
+
             handleData(r.data)
         }
-    
+
         const handleData = (data: Paged<T>) => {
             setItems(data.items)
             setShownItems(data.items)
@@ -111,7 +77,7 @@ function PageContainer<T>({
             setPages(pageCount)
         }
 
-       fetchRequest()
+        fetchRequest()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [setShownItems, page, ...deps])
 
