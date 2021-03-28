@@ -91,8 +91,8 @@ class BaseLayout extends React.Component<BaseLayoutProps, State> {
         )
 
         const getSession = async () => {
-            if (!this.props.sessionService.isAuth)
-                await this.props.sessionService.auth()
+            //if (!this.props.sessionService.isAuth())
+            await this.props.sessionService.auth()
         }
 
         this.props.sessionService.setCallback((s) =>

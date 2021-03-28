@@ -15,8 +15,8 @@ const es = {
         subtitle: '¿Aún no te has registrado? ¡Hazlo ya!',
         field: {
             username: 'Seudónimio o correo',
-            password: 'Password',
-            incorrect: 'Incorrect user/password',
+            password: 'Contraseña',
+            incorrect: 'Usuario o contraseña incorrectos',
         },
     },
     signup: {
@@ -39,11 +39,22 @@ const es = {
     },
     search: {
         no_results: 'Sin resultados',
+        found: 'Encontrados {0} resultados para "{1}"'
     },
     product: {
         buy: 'Comprar',
         amount: 'Cantidad',
-        no_stock: 'Sin stock',
+        no_stock: 'Agotado',
+        name: 'Título',
+        description: 'Descripción',
+        price: 'Precio',
+        stock: 'Stock disponible',
+        hidden: 'Hidden',
+        category: 'Categoría',
+        edit: 'Editar producto',
+        publish: 'Publicar producto',
+        save: 'Guardar',
+        delete: 'Borrar'
     },
     home: {
         popular: 'Populares',

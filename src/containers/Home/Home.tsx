@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { ProductSlider } from '../../components'
+import { Loading, ProductSlider } from '../../components'
 
-import { useFavoriteService, useProductService } from '../../services'
+import { useCartService, useFavoriteService, useProductService } from '../../services'
 import { PreviewProduct, ProductCategory } from '../../types'
 
 import { HttpStatusCode } from '../../utils'
@@ -19,6 +19,7 @@ import { RouteComponentProps } from 'react-router'
 const Home: React.FC<RouteComponentProps> = ({ history }) => {
     const productService = useProductService()
     const favService = useFavoriteService()
+    const cartService = useCartService()
 
     const { t } = useTranslation()
 
@@ -26,8 +27,8 @@ const Home: React.FC<RouteComponentProps> = ({ history }) => {
 
     const [categories, setCategories] = React.useState<ProductCategory[]>()
 
-    const [popular, setPopular] = React.useState<PreviewProduct[]>([])
-    const [recommended, setRecommended] = React.useState<PreviewProduct[]>([])
+    const [popular, setPopular] = React.useState<PreviewProduct[]>()
+    const [recommended, setRecommended] = React.useState<PreviewProduct[]>()
 
     React.useEffect(() => {
         const fetchProducts = async () => {
@@ -86,9 +87,13 @@ const Home: React.FC<RouteComponentProps> = ({ history }) => {
             >
                 {t('home.popular')}
             </Typography>
-            <ProductSlider
-                {...{ products: popular, productService, favService }}
-            />
+            {popular === undefined ? (
+                <Loading />
+            ) : (
+                <ProductSlider
+                    {...{ products: popular, productService, cartService, favService }}
+                />
+            )}
 
             <Typography
                 className={classes.subtitle}
@@ -98,9 +103,13 @@ const Home: React.FC<RouteComponentProps> = ({ history }) => {
             >
                 {t('home.recommended')}
             </Typography>
-            <ProductSlider
-                {...{ products: recommended, productService, favService }}
-            />
+            {recommended === undefined ? (
+                <Loading />
+            ) : (
+                <ProductSlider
+                    {...{ products: recommended, productService, cartService, favService }}
+                />
+            )}
         </>
     )
 }

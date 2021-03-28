@@ -4,7 +4,7 @@ import { SessionStorageManager } from '../../utils'
 type SessionCallback = (session?: Session) => void
 
 export interface SessionStorage {
-    session?: Session
+    current: () => Session | undefined
     update: (token: string, user?: User) => void
     clear: () => void
     storedToken: () => string | null
@@ -17,13 +17,17 @@ export interface Session {
     userId?: number
     username?: string
     cart: CartProduct[]
+    admin: boolean
 }
 
 export const SessionStorageImpl = () => {
     let session: Session | undefined
+
     let callback: SessionCallback | undefined
 
     let cookies = new SessionStorageManager()
+
+    const current = () => session
 
     const update = (token: string) => {
         const decoded = decode(token)
@@ -33,13 +37,15 @@ export const SessionStorageImpl = () => {
             const userId = decoded.uid
             const username = decoded.username
             const cart = JSON.parse(decoded.cart ?? '[]')
+            const admin = decoded.r
 
-            if (!session) session = { sessionId, userId, username, cart }
+            if (!session) session = { sessionId, userId, username, cart, admin }
             else {
                 session.sessionId = sessionId
                 session.userId = userId
                 session.username = username
                 session.cart = cart
+                session.admin = admin
             }
         }
 
@@ -69,5 +75,5 @@ export const SessionStorageImpl = () => {
         }
     }
 
-    return { session, update, clear, storedToken, isLogged, setCallback }
+    return { current, update, clear, storedToken, isLogged, setCallback }
 }

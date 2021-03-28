@@ -1,0 +1,204 @@
+import React from 'react'
+
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+import Switch from '@material-ui/core/Switch'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import DeleteIcon from '@material-ui/icons/Delete'
+import SaveIcon from '@material-ui/icons/Save'
+
+import { useTranslation } from 'react-i18next'
+
+import { ProductForm } from '../../../../api/ProductAPI'
+
+import { useStyles } from './ProductEditForm.style'
+import { ProductCategory } from '../../../../types'
+
+import clsx from 'clsx'
+
+interface ProductEditFormProps {
+    updateProduct: (e: any) => void
+    deleteProduct: (e: any) => void
+    data: ProductForm
+    setData: (data: any) => void
+    errors: any
+    categories: ProductCategory[]
+}
+
+const ProductEditForm: React.FC<ProductEditFormProps> = ({
+    updateProduct,
+    deleteProduct,
+    data,
+    setData,
+    errors,
+    categories,
+}) => {
+    const { t } = useTranslation()
+
+    const classes = useStyles()
+
+    const [category, setCategory] = React.useState<ProductCategory>(
+        categories.find((c) => c.id === data.category) ?? categories[0]
+    )
+
+    const edit = data.id !== undefined
+
+    const updateData = (actual: {}) => {
+        setData({ ...data, ...actual })
+    }
+
+    const changeData = (field: string) => (e: any) =>
+        updateData({ [field]: e.target.value })
+
+    const errorFor = (field: string) => field in errors
+
+    const helperFor = (field: string) => {
+        const error = errors[field]
+        if (error === undefined) return undefined
+        const args = error.split('.')
+
+        let msg = t(`validation.${args[0]}`)
+
+        const details = args.slice(1)
+        for (let k = 0; k < details.length; k++)
+            msg = msg.replace('{' + k + '}', details[k])
+
+        return msg
+    }
+
+    React.useEffect(() => {
+        updateData({ category: category.id })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [categories])
+
+    return (
+        <form
+            className={classes.form}
+            onSubmitCapture={updateProduct}
+            noValidate
+            autoComplete="off"
+        >
+            <TextField
+                className={classes.input}
+                label={t('product.name')}
+                variant="outlined"
+                value={data['name']}
+                onChange={changeData('name')}
+                error={errorFor('name')}
+                helperText={helperFor('name')}
+                required
+            />
+
+            <div className={classes.pair}>
+                <TextField
+                    className={classes.input}
+                    label={t('product.price')}
+                    variant="outlined"
+                    value={data['price']}
+                    onChange={changeData('price')}
+                    error={errorFor('price')}
+                    helperText={helperFor('price')}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">€</InputAdornment>
+                        ),
+                    }}
+                    required
+                />
+
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={data['hidden']}
+                            onChange={(e) =>
+                                updateData({ hidden: e.target.checked })
+                            }
+                            name="hidden"
+                            color="primary"
+                        />
+                    }
+                    label={t('product.hidden')}
+                />
+            </div>
+
+            <div className={classes.pair}>
+                <Autocomplete
+                    className={classes.input}
+                    options={categories}
+                    getOptionLabel={(c) => t(`category.${c.name!!}`)}
+                    value={category}
+                    onChange={(e, v) => {
+                        setCategory(v)
+                        updateData({ category: v.id })
+                    }}
+                    disableClearable
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label={t('product.category')}
+                            variant="outlined"
+                            error={errorFor('category')}
+                            helperText={helperFor('category')}
+                        />
+                    )}
+                />
+
+                <TextField
+                    className={clsx(classes.input, classes.stock)}
+                    label={t('product.stock')}
+                    variant="outlined"
+                    type="number"
+                    value={data['stock']}
+                    onChange={changeData('stock')}
+                    error={errorFor('stock')}
+                    helperText={helperFor('stock')}
+                    required
+                />
+            </div>
+
+            <TextField
+                className={classes.input}
+                label={t('product.description')}
+                variant="outlined"
+                value={data['description']}
+                onChange={changeData('description')}
+                error={errorFor('description')}
+                helperText={helperFor('description')}
+                multiline
+                rows={17}
+            />
+
+            <div className={classes.bottom}>
+                {edit && (
+                    <Button
+                        className={classes.buttons}
+                        disableElevation
+                        onClick={deleteProduct}
+                        variant="contained"
+                        color="secondary"
+                        type="submit"
+                        size="large"
+                        startIcon={<DeleteIcon />}
+                    >
+                        {t('product.delete')}
+                    </Button>
+                )}
+
+                <Button
+                    className={classes.buttons}
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    size="large"
+                    startIcon={<SaveIcon />}
+                >
+                    {t('product.save')}
+                </Button>
+            </div>
+        </form>
+    )
+}
+
+export default ProductEditForm

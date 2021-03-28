@@ -9,6 +9,7 @@ import blue from '@material-ui/core/colors/red'
 
 const theme = createMuiTheme({
     palette: {
+        //type: 'dark',
         primary: {
             light: deepPurple[200],
             main: deepPurple[600],

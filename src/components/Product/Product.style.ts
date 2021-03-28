@@ -29,7 +29,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             },
             maxWidth: 220,
             margin: theme.spacing(1),
-            backgroundColor: '#00000033',
+            //backgroundColor: '#00000033',
         },
         price: {
             marginLeft: 'auto',

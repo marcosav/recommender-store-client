@@ -6,6 +6,10 @@ export const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            '& > h1': {
+                margin: theme.spacing(0, 0, 2, 4),
+                alignSelf: 'normal'
+            }
         },
         categories: {
             margin: theme.spacing(1, 0.5),

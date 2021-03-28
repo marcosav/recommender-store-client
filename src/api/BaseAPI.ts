@@ -26,7 +26,7 @@ export default class BaseAPI {
         path: string,
         params?: any,
         handled?: number[],
-        options: any = {}
+        options: any = {},
     ) =>
         axios.get<T>(url(path), {
             params,

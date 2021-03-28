@@ -26,6 +26,7 @@ interface PreviewProduct {
     id: number
     name: string
     price: number
+    stock: number
     mainImage: string
     lastUpdated: Date
     visits: number

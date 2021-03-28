@@ -122,7 +122,6 @@ const Signup: React.FC<RouteComponentProps> = ({ history }) => {
                     <input
                         accept=".jpg,.jpeg,.png"
                         id="profile-img-upload"
-                        multiple
                         type="file"
                         onChange={selectPhoto}
                     />

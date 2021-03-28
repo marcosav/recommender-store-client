@@ -9,6 +9,7 @@ import {
     CircularProgressIndicator,
     PasswordField,
 } from '../../../../components'
+
 import { SignupForm } from '../../../../api/UserAPI'
 
 import { useStyles } from './Signup.style'

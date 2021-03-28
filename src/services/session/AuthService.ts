@@ -5,7 +5,7 @@ import { SessionStorage } from './SessionStorage'
 import { AuthRequestInterceptor } from '../../utils'
 
 export interface AuthService {
-    isAuth: boolean
+    isAuth: () => boolean
     auth: () => Promise<void>
     logout: () => Promise<void>
 }
@@ -44,5 +44,5 @@ export const AuthServiceImpl = (sessionStorage: SessionStorage) => {
         sessionStorage.update(token)
     }
 
-    return { isAuth, auth, logout }
+    return { isAuth: () => isAuth, auth, logout }
 }

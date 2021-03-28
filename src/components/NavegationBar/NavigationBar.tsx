@@ -22,6 +22,7 @@ import Add from '@material-ui/icons/Add'
 import Person from '@material-ui/icons/Person'
 import SignUp from '@material-ui/icons/HowToReg'
 import ArrowForward from '@material-ui/icons/ArrowForward'
+import GavelIcon from '@material-ui/icons/Gavel'
 
 import { useStyles } from './NavigationBar.style'
 import { useHistory } from 'react-router'
@@ -180,6 +181,12 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
                     </div>
 
                     <div className={classes.grow} />
+
+                    {session.admin && (
+                        <IconButton onClick={() => undefined} color="inherit">
+                            <GavelIcon />
+                        </IconButton>
+                    )}
 
                     <IconButton
                         onClick={() => redirect('/cart')}

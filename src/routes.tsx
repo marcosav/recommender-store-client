@@ -8,6 +8,7 @@ import {
     Signup,
     Home,
     ProductPage,
+    ProductEdit,
     PageNotFound,
     Search,
     Favorites,
@@ -37,11 +38,6 @@ const routes: NavRoute[] = [
         component: Search,
     },
     {
-        id: 'product',
-        path: '/product/:id',
-        component: ProductPage,
-    },
-    {
         id: 'vendor',
         path: '/vendor/:id',
         component: () => null,
@@ -52,15 +48,20 @@ const routes: NavRoute[] = [
         component: CartPage,
     },
     {
-        id: 'product',
-        path: '/product/:id/edit',
-        component: () => null, //same
+        id: 'productPublish',
+        path: '/product/publish',
+        component: ProductEdit,
         identified: true,
     },
     {
         id: 'product',
-        path: '/product/publish',
-        component: () => null, //same
+        path: '/product/:id',
+        component: ProductPage,
+    },
+    {
+        id: 'productEdit',
+        path: '/product/:id/edit',
+        component: ProductEdit,
         identified: true,
     },
     {

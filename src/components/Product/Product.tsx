@@ -17,8 +17,9 @@ import ShoppingBasket from '@material-ui/icons/ShoppingBasketOutlined'
 
 import { useHistory } from 'react-router'
 import { useTheme } from '@material-ui/core'
-import { CartService, FavoriteService } from '../../api'
+import { CartService, FavoriteService, ResourceService } from '../../api'
 import { HttpStatusCode, Constants } from '../../utils'
+import { useTranslation } from 'react-i18next'
 
 interface ProductProps {
     Actions?: React.FC<ProductActionsProps>
@@ -28,6 +29,7 @@ interface ProductActionsProps {
     product: PreviewProduct
     favService?: FavoriteService
     cartService?: CartService
+    resources?: ResourceService
 }
 
 const DefaultActions: React.FC<ProductActionsProps> = ({
@@ -36,6 +38,7 @@ const DefaultActions: React.FC<ProductActionsProps> = ({
     cartService,
 }) => {
     const theme = useTheme()
+    const { t } = useTranslation()
 
     const [favorite, setFavorite] = React.useState(product.fav === true)
 
@@ -69,9 +72,19 @@ const DefaultActions: React.FC<ProductActionsProps> = ({
                     <FavoriteBorder />
                 )}
             </IconButton>
-            <IconButton size={'small'} onClick={addToCart}>
-                <ShoppingBasket />
-            </IconButton>
+            {product.stock ? (
+                <IconButton size={'small'} onClick={addToCart}>
+                    <ShoppingBasket />
+                </IconButton>
+            ) : (
+                <Typography
+                    variant="body2"
+                    color="error"
+                    style={{ marginLeft: 4 }}
+                >
+                    {t('product.no_stock')}
+                </Typography>
+            )}
         </>
     )
 }
@@ -81,21 +94,42 @@ const ProductHolder: React.FC<ProductProps & ProductActionsProps> = ({
     Actions = DefaultActions,
     favService,
     cartService,
+    resources,
 }) => {
     const history = useHistory()
 
     const classes = useStyles()
 
+    const [img, setImg] = React.useState<any>()
+
     const gotoProduct = () => history.push(`/product/${product.id}`, undefined)
+
+    React.useEffect(() => {
+        const loadImage = async () => {
+            const r = await resources!!.load(product.mainImage)
+
+            if (r.status !== HttpStatusCode.OK) return
+
+            const reader = new FileReader()
+            reader.readAsDataURL(r.data)
+            reader.onload = () => setImg(reader.result)
+        }
+
+        if (product.mainImage) loadImage()
+    }, [product, resources])
 
     return (
         <Card className={classes.container}>
             <CardActionArea onClick={gotoProduct}>
                 <CardMedia
                     className={classes.media}
-                    image={product.mainImage ?? Constants.FALLBACK_IMAGE}
+                    image={img ?? Constants.FALLBACK_IMAGE}
                 >
-                    <Chip label={product.name} className={classes.titleChip} />
+                    <Chip
+                        style={{ backgroundColor: '#00000033' }}
+                        label={product.name}
+                        className={classes.titleChip}
+                    />
                 </CardMedia>
             </CardActionArea>
             <CardActions disableSpacing className={classes.actions}>

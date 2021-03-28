@@ -20,7 +20,7 @@ interface PageContainerProps<T> {
     request: (page: number) => RPromise<Paged<T>>
     itemRender: (item: T, index: number) => React.ReactNode
     EmptyComponent?: React.FC
-    setShownItems?: (loaded?: T[]) => void
+    setShownItems?: (loaded?: Paged<T>) => void
     deps: any[]
 }
 
@@ -72,7 +72,7 @@ function PageContainer<T>({
 
         const handleData = (data: Paged<T>) => {
             setItems(data.items)
-            setShownItems(data.items)
+            setShownItems(data)
             const pageCount = Math.ceil(data.total / data.pageSize)
             setPages(pageCount)
         }

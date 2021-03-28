@@ -39,11 +39,22 @@ const en = {
     },
     search: {
         no_results: 'No results',
+        found: 'Found {0} results for "{1}"'
     },
     product: {
         buy: 'Buy',
         amount: 'Amount',
-        no_stock: 'No stock',
+        no_stock: 'Out of stock',
+        name: 'Title',
+        description: 'Description',
+        price: 'Price',
+        stock: 'Available stock',
+        hidden: 'Hidden',
+        category: 'Category',
+        edit: 'Edit product',
+        publish: 'Publish product',
+        save: 'Save',
+        delete: 'Delete'
     },
     home: {
         title: 'What are you buying?',

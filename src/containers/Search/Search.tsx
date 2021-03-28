@@ -6,6 +6,7 @@ import {
     useCartService,
     useFavoriteService,
     useProductService,
+    useResourceService,
 } from '../../services'
 
 import { PreviewProduct, ProductCategory } from '../../types'
@@ -14,9 +15,12 @@ import { PageContainer, ProductHolder } from '../../components'
 import { HttpStatusCode } from '../../utils'
 
 import Chip from '@material-ui/core/Chip'
+import Typography from '@material-ui/core/Typography'
+
 import { useTranslation } from 'react-i18next'
 
 import { useStyles } from './Search.style'
+import { Paged } from '../../api/types'
 
 interface SearchParams {
     query: string
@@ -41,8 +45,9 @@ const Search: React.FC<RouteComponentProps<SearchParams>> = ({
     const productService = useProductService()
     const cartService = useCartService()
     const favService = useFavoriteService()
+    const resources = useResourceService()
 
-    const [shownItems, setShownItems] = React.useState<PreviewProduct[]>()
+    const [shownItems, setShownItems] = React.useState<Paged<PreviewProduct>>()
     const [categories, setCategories] = React.useState<ProductCategory[]>()
 
     const [category, setCategory] = React.useState(state?.category)
@@ -86,6 +91,14 @@ const Search: React.FC<RouteComponentProps<SearchParams>> = ({
                     ))}
             </div>
 
+            {shownItems !== undefined && (
+                <Typography variant="h5" component="h1" color="textSecondary">
+                    {t('search.found')
+                        .replace('{0}', `${shownItems.total}`)
+                        .replace('{1}', query)}
+                </Typography>
+            )}
+
             <PageContainer
                 request={(page) =>
                     productService.searchProducts({
@@ -97,7 +110,7 @@ const Search: React.FC<RouteComponentProps<SearchParams>> = ({
                 itemRender={(product: PreviewProduct, i) => (
                     <ProductHolder
                         key={i}
-                        {...{ product, cartService, favService }}
+                        {...{ product, cartService, favService, resources }}
                     />
                 )}
                 {...{ setShownItems, deps: [category, query] }}

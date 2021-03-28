@@ -12,7 +12,12 @@ export interface ProductService {
         page: number
     ) => RPromise<Paged<PreviewProduct>>
     searchProducts: (search: SearchProduct) => RPromise<Paged<PreviewProduct>>
-    publishProduct: (product: ProductForm, update: boolean) => RPromise<Product>
+    publishProduct: (
+        form: ProductForm,
+        images: File[],
+        onUploadProgress: any,
+        update: boolean
+    ) => RPromise
     deleteProduct: (id: number) => RPromise
     findCategories: () => RPromise<ProductCategory[]>
 }
@@ -20,7 +25,7 @@ export interface ProductService {
 const PRODUCT_PATH = '/product'
 const VENDOR_PATH = '/vendor'
 
-interface ProductForm {
+export interface ProductForm {
     id?: number
     name: string
     description: string
@@ -28,8 +33,6 @@ interface ProductForm {
     stock: number
     category: number
     hidden: boolean
-    image: string[]
-    imageExt: string[]
 }
 
 interface SearchProduct {
@@ -51,10 +54,35 @@ export default class ProductAPI extends BaseAPI implements ProductService {
             HttpStatusCode.BadRequest,
         ])
 
-    publishProduct = (product: ProductForm, update: boolean) =>
-        (update ? this.put : this.post)<Product>(PRODUCT_PATH, product)
+    publishProduct = (
+        form: ProductForm,
+        files: File[],
+        onUploadProgress: any,
+        update: boolean
+    ) => {
+        const formData = new FormData()
 
-    deleteProduct = (id: number) => this.delete(`${PRODUCT_PATH}/${id}`)
+        formData.append('form', JSON.stringify(form))
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i]
+            if (file) formData.append(`file${i}`, file)
+        }
+
+        return (update ? this.putMP : this.postMP)(
+            '/product',
+            formData,
+            [HttpStatusCode.Forbidden],
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                onUploadProgress,
+            }
+        )
+    }
+
+    deleteProduct = (id: number) =>
+        this.delete(`${PRODUCT_PATH}/${id}`, null, [HttpStatusCode.Forbidden])
 
     findCategories = () =>
         this.get<ProductCategory[]>(`${PRODUCT_PATH}/categories`)
