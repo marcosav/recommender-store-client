@@ -13,6 +13,7 @@ import {
     Search,
     Favorites,
     CartPage,
+    VendorProfile,
 } from './containers'
 
 import { BaseLayout } from './layout'
@@ -40,7 +41,7 @@ const routes: NavRoute[] = [
     {
         id: 'vendor',
         path: '/vendor/:id',
-        component: () => null,
+        component: VendorProfile,
     },
     {
         id: 'cart',
@@ -85,7 +86,13 @@ const routes: NavRoute[] = [
     {
         id: 'profile',
         path: '/profile',
-        component: () => null,
+        component: VendorProfile,
+        identified: true,
+    },
+    {
+        id: 'profileEdit',
+        path: '/profile/edit/:id?',
+        component: Signup,
         identified: true,
     },
     {

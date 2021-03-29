@@ -1,4 +1,5 @@
 const es = {
+    cancel: 'Cancelar',
     nav: {
         header: 'Tienda',
         favorites: 'Favoritos',
@@ -33,13 +34,29 @@ const es = {
             description: 'Descripción',
             photo_footer: 'Foto de perfil (Máx 14MB .jpeg, .jpg, .png)',
         },
+        continue: 'Continuar',
     },
     cart: {
         empty: 'Carrito vacío',
     },
+    favorites: {
+        title: 'Mis favoritos',
+        empty: 'No hay favoritos',
+        products: 'Productos',
+        vendors: 'Vendedores',
+    },
+    profile: {
+        empty: 'No hay productos',
+        shown: 'Visibles',
+        hidden: 'Ocultos',
+        product_title: 'Productos',
+        edit: {
+            title: 'Editar perfil'
+        }
+    },
     search: {
         no_results: 'Sin resultados',
-        found: 'Encontrados {0} resultados para "{1}"'
+        found: 'Encontrados {0} resultados para "{1}"',
     },
     product: {
         buy: 'Comprar',
@@ -54,7 +71,14 @@ const es = {
         edit: 'Editar producto',
         publish: 'Publicar producto',
         save: 'Guardar',
-        delete: 'Borrar'
+        delete: 'Borrar',
+        report: {
+            title: 'Reportar producto',
+            body:
+                'Si consideras que el contenido de este producto puede ser inadeacuado, repórtalo para que lo revise un administrador.',
+            placeholder: 'Mensaje',
+            button: 'Reportar',
+        },
     },
     home: {
         popular: 'Populares',

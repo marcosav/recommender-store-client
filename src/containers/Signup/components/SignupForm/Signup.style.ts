@@ -24,9 +24,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             margin: theme.spacing(1),
         },
         bottom: {
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            alignItems: 'center',
+            marginLeft: 'auto',
         },
         loader: {
             margin: 'auto',

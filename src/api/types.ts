@@ -3,3 +3,8 @@ export interface Paged<T> {
     total: number
     pageSize: number
 }
+
+export interface PagedParams {
+    page?: number
+    order?: number
+}

@@ -1,4 +1,5 @@
 const en = {
+    cancel: 'Cancel',
     nav: {
         header: 'Shop',
         favorites: 'Favorites',
@@ -33,13 +34,29 @@ const en = {
             description: 'Description',
             photo_footer: 'Profile photo (Max 14MB .jpeg, .jpg, .png)',
         },
+        continue: 'Continue',
     },
     cart: {
         empty: 'Cart is empty',
     },
+    favorites: {
+        title: 'My favorites',
+        empty: 'No favorites',
+        products: 'Products',
+        vendors: 'Vendors',
+    },
+    profile: {
+        empty: 'No products',
+        shown: 'Shown',
+        hidden: 'Hidden',
+        product_title: 'Products',
+        edit: {
+            title: 'Edit profile'
+        }
+    },
     search: {
         no_results: 'No results',
-        found: 'Found {0} results for "{1}"'
+        found: 'Found {0} results for "{1}"',
     },
     product: {
         buy: 'Buy',
@@ -54,7 +71,14 @@ const en = {
         edit: 'Edit product',
         publish: 'Publish product',
         save: 'Save',
-        delete: 'Delete'
+        delete: 'Delete',
+        report: {
+            title: 'Report product',
+            body:
+                'If you think that the content of this product may be inappropriate, please report it to an administrator for review.',
+            placeholder: 'Message',
+            button: 'Report',
+        },
     },
     home: {
         title: 'What are you buying?',

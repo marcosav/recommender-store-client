@@ -12,12 +12,17 @@ import { ProductForm } from '../../api/ProductAPI'
 
 import { useStyles } from './ProductEdit.style'
 import { RouteComponentProps } from 'react-router'
-import { Loading, ProductImg } from '../../components'
+import {
+    CircularProgressIndicator,
+    Loading,
+    ProductImg,
+} from '../../components'
 
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import Backdrop from '@material-ui/core/Backdrop'
 
 import { ProductEditForm } from './components'
 import { ProductCategory } from '../../types'
@@ -61,6 +66,8 @@ const ProductEdit: React.FC<RouteComponentProps<ProductEditProps>> = ({
 
     const [uploadProgress, setUploadProgress] = React.useState<any>()
 
+    const uploading = uploadProgress !== undefined
+
     const onUploadProgress = (e: any) => {
         const p = (e.loaded / e.total) * 100
         setUploadProgress(p === 100 ? undefined : p)
@@ -79,6 +86,7 @@ const ProductEdit: React.FC<RouteComponentProps<ProductEditProps>> = ({
     const updateProduct = async (e: any) => {
         e.preventDefault()
 
+        if (uploading) return
         if (!data) return
         const r = await productService.publishProduct(
             data,
@@ -100,6 +108,7 @@ const ProductEdit: React.FC<RouteComponentProps<ProductEditProps>> = ({
     const deleteProduct = async (e: any) => {
         e.preventDefault()
 
+        if (uploading) return
         if (!edit) return
         const r = await productService.deleteProduct(data?.id!!)
 
@@ -177,62 +186,70 @@ const ProductEdit: React.FC<RouteComponentProps<ProductEditProps>> = ({
         if (!categories) fetchCategories()
     }, [productService, categories])
 
-    return categories === undefined || data === undefined ? (
-        <Loading />
-    ) : (
-        <div className={classes.root}>
-            <div className={classes.header}>
-                <IconButton onClick={() => goBack()}>
-                    <ArrowBackIcon />
-                </IconButton>
-                <Typography
-                    className={classes.title}
-                    variant="h4"
-                    component="h1"
-                >
-                    {edit ? t('product.edit') : t('product.publish')}
-                </Typography>
-            </div>
-            <div className={classes.images}>
-                {Array.from(
-                    { length: Constants.MAX_PRODUCT_IMAGES },
-                    (_, i) => i
-                ).map((i) => (
-                    <Paper key={i} className={classes.holder}>
-                        <input
-                            accept=".jpg,.jpeg,.png"
-                            id={`product-img-upload-${i}`}
-                            type="file"
-                            onChange={(e) => selectPhoto(i, e)}
-                        />
-                        <label htmlFor={`product-img-upload-${i}`}>
-                            <IconButton component="span">
-                                <ProductImg
-                                    className={classes.imagePreview}
-                                    src={imagePreviews[i]}
-                                    url={
-                                        images.find((im) => im.i === i)?.u ??
-                                        undefined
-                                    }
-                                    resources={resources}
-                                    alt={`I${i}`}
+    return (
+        <>
+            {categories === undefined || data === undefined ? (
+                <Loading />
+            ) : (
+                <div className={classes.root}>
+                    <header className={classes.header}>
+                        <IconButton onClick={() => goBack()}>
+                            <ArrowBackIcon />
+                        </IconButton>
+                        <Typography
+                            className={classes.title}
+                            variant="h4"
+                            component="h1"
+                        >
+                            {edit ? t('product.edit') : t('product.publish')}
+                        </Typography>
+                    </header>
+                    <div className={classes.images}>
+                        {Array.from(
+                            { length: Constants.MAX_PRODUCT_IMAGES },
+                            (_, i) => i
+                        ).map((i) => (
+                            <Paper key={i} className={classes.holder}>
+                                <input
+                                    accept=".jpg,.jpeg,.png"
+                                    id={`product-img-upload-${i}`}
+                                    type="file"
+                                    onChange={(e) => selectPhoto(i, e)}
                                 />
-                            </IconButton>
-                        </label>
-                    </Paper>
-                ))}
-            </div>
-            <ProductEditForm
-                {...{
-                    updateProduct,
-                    deleteProduct,
-                    errors,
-                    data,
-                    setData,
-                    categories,
-                }}
-            />
-        </div>
+                                <label htmlFor={`product-img-upload-${i}`}>
+                                    <IconButton component="span">
+                                        <ProductImg
+                                            className={classes.imagePreview}
+                                            src={imagePreviews[i]}
+                                            url={
+                                                images.find((im) => im.i === i)
+                                                    ?.u ?? undefined
+                                            }
+                                            resources={resources}
+                                            alt={`I${i}`}
+                                        />
+                                    </IconButton>
+                                </label>
+                            </Paper>
+                        ))}
+                    </div>
+                    <ProductEditForm
+                        {...{
+                            updateProduct,
+                            deleteProduct,
+                            errors,
+                            data,
+                            setData,
+                            categories,
+                            uploading,
+                        }}
+                    />
+                </div>
+            )}
+            <Backdrop className={classes.backdrop} open={uploading}>
+                <CircularProgressIndicator value={uploadProgress} size={52} />
+            </Backdrop>
+        </>
     )
 }
 

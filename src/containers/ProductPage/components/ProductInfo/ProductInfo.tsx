@@ -30,7 +30,7 @@ import {
     useSessionService,
 } from '../../../../services'
 import { Constants, HttpStatusCode } from '../../../../utils'
-import { ProductImg } from '../../../../components'
+import { ProductImg, ReportDialog } from '../../../../components'
 
 interface ProductInfoParams {
     product: Product
@@ -55,8 +55,11 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
     const [selectedImgUrl, setSelectedImgUrl] = React.useState<string>()
     const [selectedImg, setSelectedImg] = React.useState<any>()
 
+    const [reporting, setReporting] = React.useState(false)
+
     const session = sessionService.current()
-    const editable = session?.userId === product.userId || session?.admin
+    const owner = session?.userId === product.userId
+    const editable = owner || session?.admin
 
     const addToFav = async (e: any) => {
         e.stopPropagation()
@@ -83,7 +86,12 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
         if (editable) history.push(`/product/${product.id}/edit`)
     }
 
-    const report = () => undefined
+    const report = () => setReporting(true)
+
+    const checkVendor = (e: any) => {
+        e.preventDefault()
+        history.push(`/vendor/${product.userId}`)
+    }
 
     React.useEffect(() => {
         setFavorite(product.fav === true)
@@ -106,126 +114,140 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
     }, [product])
 
     return (
-        <div className={classes.root}>
-            <div className={classes.image}>
-                <Paper className={classes.holder}>
-                    <ProductImg
-                        className={classes.mainImage}
-                        src={selectedImg ?? Constants.FALLBACK_IMAGE}
-                        alt={product.name}
-                    />
-                </Paper>
-                <div className={classes.images}>
-                    {product.images.map((im) => (
-                        <Paper
-                            key={im.i}
-                            className={classes.holder}
-                            onClick={() => setSelectedImgUrl(im.u)}
-                        >
-                            <ProductImg
-                                className={classes.imagePreview}
-                                url={im.u}
-                                resources={resources}
-                                selectedImgUrl={selectedImgUrl}
-                                setSelectedImg={setSelectedImg}
-                                alt={`I${im.i}`}
-                            />
-                        </Paper>
-                    ))}
-                </div>
-            </div>
-            <div className={classes.details}>
-                <Typography variant="h5" component="h1">
-                    {product.name}
-                </Typography>
-                <div className={classes.catVendorVisits}>
-                    <div>
-                        <Typography variant="button">
-                            {t(`category.${product.category.name}`)}
-                        </Typography>
-                        {' – '}
-                        <Link
-                            href={`/vendor/${product.userId}`}
-                            onClick={(e: any) => e.preventDefault()}
-                            variant="subtitle1"
-                        >
-                            {product.vendorNick}
-                        </Link>
-                    </div>
-                    <div className={classes.visits}>
-                        <VisibilityIcon color="disabled" />
-                        <Typography variant="button" color="textSecondary">
-                            {product.visits}
-                        </Typography>
+        <>
+            <div className={classes.root}>
+                <div className={classes.image}>
+                    <Paper className={classes.holder}>
+                        <ProductImg
+                            className={classes.mainImage}
+                            src={selectedImg ?? Constants.FALLBACK_IMAGE}
+                            alt={product.name}
+                        />
+                    </Paper>
+                    <div className={classes.images}>
+                        {product.images.map((im) => (
+                            <Paper
+                                key={im.i}
+                                className={classes.holder}
+                                onClick={() => setSelectedImgUrl(im.u)}
+                            >
+                                <ProductImg
+                                    className={classes.imagePreview}
+                                    url={im.u}
+                                    resources={resources}
+                                    selectedImgUrl={selectedImgUrl}
+                                    setSelectedImg={setSelectedImg}
+                                    alt={`I${im.i}`}
+                                />
+                            </Paper>
+                        ))}
                     </div>
                 </div>
-                <div className={classes.priceRating}>
-                    <Typography variant="h6">{product.price}</Typography>
-                    <Rating name="read-only" value={product.rating} readOnly />
-                </div>
-                <div className={classes.descriptionBuy}>
-                    <Typography variant="body2" className={classes.description}>
-                        {product.description}
+                <div className={classes.details}>
+                    <Typography variant="h5" component="h1">
+                        {product.name}
                     </Typography>
-                    <div>
-                        {' '}
-                        <div className={classes.buttons}>
-                            {editable && (
-                                <IconButton size="small" onClick={edit}>
-                                    <EditOutlined />
-                                </IconButton>
-                            )}
-                            <IconButton size="small" onClick={report}>
-                                <ReportOutlined />
-                            </IconButton>
-                            <IconButton size="small" onClick={addToFav}>
-                                {favorite ? (
-                                    <Favorite
-                                        htmlColor={theme.palette.error.main}
-                                    />
-                                ) : (
-                                    <FavoriteBorder />
-                                )}
-                            </IconButton>
+                    <div className={classes.catVendorVisits}>
+                        <div>
+                            <Typography variant="button">
+                                {t(`category.${product.category.name}`)}
+                            </Typography>
+                            {' – '}
+                            <Link
+                                href={`/vendor/${product.userId}`}
+                                onClick={checkVendor}
+                                variant="subtitle1"
+                            >
+                                {product.vendorNick}
+                            </Link>
                         </div>
-                        <Paper className={classes.buyHolder}>
-                            <Autocomplete
-                                options={amounts}
-                                getOptionLabel={(i) => `${i}`}
-                                value={amount}
-                                disabled={amount === 0}
-                                onChange={(e, v) => setAmount(v)}
-                                style={{ width: 120 }}
-                                disableClearable
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label={t('product.amount')}
-                                        variant="outlined"
-                                        margin="dense"
-                                    />
+                        <div className={classes.visits}>
+                            <VisibilityIcon color="disabled" />
+                            <Typography variant="button" color="textSecondary">
+                                {product.visits}
+                            </Typography>
+                        </div>
+                    </div>
+                    <div className={classes.priceRating}>
+                        <Typography variant="h6">{product.price}</Typography>
+                        <Rating
+                            name="read-only"
+                            value={product.rating}
+                            readOnly
+                        />
+                    </div>
+                    <div className={classes.descriptionBuy}>
+                        <Typography
+                            variant="body2"
+                            className={classes.description}
+                        >
+                            {product.description}
+                        </Typography>
+                        <div>
+                            {' '}
+                            <div className={classes.buttons}>
+                                {editable && (
+                                    <IconButton size="small" onClick={edit}>
+                                        <EditOutlined />
+                                    </IconButton>
                                 )}
-                            />
-                            <div>
-                                <Button
-                                    variant="outlined"
-                                    size="small"
-                                    color="secondary"
-                                    disabled={amount === 0}
-                                    onClick={addToCart}
-                                >
-                                    {t(
-                                        amount === 0
-                                            ? 'product.no_stock'
-                                            : 'product.buy'
-                                    )}
-                                </Button>
+                                <IconButton size="small" onClick={report}>
+                                    <ReportOutlined />
+                                </IconButton>
+                                {!owner && (
+                                    <IconButton size="small" onClick={addToFav}>
+                                        {favorite ? (
+                                            <Favorite
+                                                htmlColor={
+                                                    theme.palette.error.main
+                                                }
+                                            />
+                                        ) : (
+                                            <FavoriteBorder />
+                                        )}
+                                    </IconButton>
+                                )}
                             </div>
-                        </Paper>
+                            <Paper className={classes.buyHolder}>
+                                <Autocomplete
+                                    options={amounts}
+                                    getOptionLabel={(i) => `${i}`}
+                                    value={amount}
+                                    disabled={amount === 0}
+                                    onChange={(e, v) => setAmount(v)}
+                                    style={{ width: 120 }}
+                                    disableClearable
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label={t('product.amount')}
+                                            variant="outlined"
+                                            margin="dense"
+                                        />
+                                    )}
+                                />
+                                <div>
+                                    <Button
+                                        variant="outlined"
+                                        size="small"
+                                        color="secondary"
+                                        disabled={amount === 0}
+                                        onClick={addToCart}
+                                    >
+                                        {t(
+                                            amount === 0
+                                                ? 'product.no_stock'
+                                                : 'product.buy'
+                                        )}
+                                    </Button>
+                                </div>
+                            </Paper>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <ReportDialog {...{ open: reporting, setOpen: setReporting }} />
+        </>
     )
 }
 

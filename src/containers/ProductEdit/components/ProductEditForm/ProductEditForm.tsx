@@ -25,6 +25,7 @@ interface ProductEditFormProps {
     setData: (data: any) => void
     errors: any
     categories: ProductCategory[]
+    uploading: boolean
 }
 
 const ProductEditForm: React.FC<ProductEditFormProps> = ({
@@ -34,6 +35,7 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
     setData,
     errors,
     categories,
+    uploading,
 }) => {
     const { t } = useTranslation()
 
@@ -180,6 +182,7 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
                         color="secondary"
                         type="submit"
                         size="large"
+                        disabled={uploading}
                         startIcon={<DeleteIcon />}
                     >
                         {t('product.delete')}
@@ -192,6 +195,7 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
                     color="primary"
                     type="submit"
                     size="large"
+                    disabled={uploading}
                     startIcon={<SaveIcon />}
                 >
                     {t('product.save')}

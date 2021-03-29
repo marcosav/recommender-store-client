@@ -11,7 +11,7 @@ const CircularProgressIndicator = (
 ) => {
     return (
         <Box position="relative" display="inline-flex">
-            <CircularProgress variant="determinate" {...props} />
+            <CircularProgress color="inherit" variant="determinate" {...props} />
             <Box
                 top={0}
                 left={0}
@@ -25,7 +25,7 @@ const CircularProgressIndicator = (
                 <Typography
                     variant="caption"
                     component="div"
-                    color="textSecondary"
+                    color="inherit"
                 >{`${Math.round(props.value)}%`}</Typography>
             </Box>
         </Box>

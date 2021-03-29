@@ -5,29 +5,28 @@ import Button from '@material-ui/core/Button'
 
 import { useTranslation } from 'react-i18next'
 
-import {
-    CircularProgressIndicator,
-    PasswordField,
-} from '../../../../components'
+import { PasswordField } from '../../../../components'
 
 import { SignupForm } from '../../../../api/UserAPI'
 
 import { useStyles } from './Signup.style'
 
 interface SignupFormProps {
-    doSignup: (e: any) => void
+    doForm: (e: any) => void
     data: SignupForm
     setData: (data: any) => void
     errors: any
-    uploadProgress: number
+    uploading: boolean
+    edit: boolean
 }
 
 const SignupFormComponent: React.FC<SignupFormProps> = ({
-    doSignup,
+    doForm,
     data,
     setData,
     errors,
-    uploadProgress,
+    uploading,
+    edit,
 }) => {
     const { t } = useTranslation()
 
@@ -59,7 +58,7 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
     return (
         <form
             className={classes.form}
-            onSubmitCapture={doSignup}
+            onSubmitCapture={doForm}
             noValidate
             autoComplete="off"
         >
@@ -93,19 +92,22 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
                 onChange={changeData('email')}
                 error={errorFor('email')}
                 helperText={helperFor('email')}
+                disabled={edit}
                 required
             />
 
-            <TextField
-                className={classes.input}
-                label={t('signup.field.repeatedEmail')}
-                variant="outlined"
-                value={data['repeatedEmail']}
-                onChange={changeData('repeatedEmail')}
-                error={errorFor('repeatedEmail')}
-                helperText={helperFor('repeatedEmail')}
-                required
-            />
+            {!edit && (
+                <TextField
+                    className={classes.input}
+                    label={t('signup.field.repeatedEmail')}
+                    variant="outlined"
+                    value={data['repeatedEmail']}
+                    onChange={changeData('repeatedEmail')}
+                    error={errorFor('repeatedEmail')}
+                    helperText={helperFor('repeatedEmail')}
+                    required
+                />
+            )}
 
             <TextField
                 className={classes.input}
@@ -155,25 +157,16 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
             />
 
             <div className={classes.bottom}>
-                {uploadProgress !== undefined ? (
-                    <CircularProgressIndicator
-                        className={classes.loader}
-                        value={uploadProgress}
-                        size={52}
-                    />
-                ) : (
-                    <div></div>
-                )}
-
                 <Button
                     className={classes.buttons}
                     disableElevation
+                    disabled={uploading}
                     variant="contained"
                     color="primary"
                     type="submit"
                     size="large"
                 >
-                    {t('signup.title')}
+                    {t('signup.continue')}
                 </Button>
             </div>
         </form>

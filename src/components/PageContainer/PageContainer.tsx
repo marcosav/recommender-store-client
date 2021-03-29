@@ -20,8 +20,8 @@ interface PageContainerProps<T> {
     request: (page: number) => RPromise<Paged<T>>
     itemRender: (item: T, index: number) => React.ReactNode
     EmptyComponent?: React.FC
-    setShownItems?: (loaded?: Paged<T>) => void
-    deps: any[]
+    setShownItems: (loaded?: Paged<T>) => void
+    deps?: any[]
 }
 
 const NoResults = () => {
@@ -38,8 +38,8 @@ function PageContainer<T>({
     request,
     itemRender,
     EmptyComponent,
-    setShownItems = () => undefined,
-    deps,
+    setShownItems,
+    deps = [],
 }: PageContainerProps<T>) {
     const location = useLocation()
     const history = useHistory()

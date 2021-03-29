@@ -1,8 +1,10 @@
 import NavigationBar from './NavegationBar'
-import ProductHolder from './Product'
+import ProductHolder from './ProductHolder'
+import UserHolder from './UserHolder'
 import PageContainer from './PageContainer'
 import ProductSlider from './ProductSlider'
 import ProductImg from './ProductImg'
+import ReportDialog from './ReportDialog'
 import {
     PasswordField,
     ErrorHandler,
@@ -24,4 +26,6 @@ export {
     PageContainer,
     ProductSlider,
     ProductImg,
+    ReportDialog,
+    UserHolder,
 }

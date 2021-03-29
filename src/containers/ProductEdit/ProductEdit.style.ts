@@ -44,5 +44,9 @@ export const useStyles = makeStyles((theme: Theme) =>
                 display: 'none',
             },
         },
+        backdrop: {
+            zIndex: theme.zIndex.drawer + 1,
+            color: '#fff',
+        },
     })
 )

@@ -6,51 +6,78 @@ import IconButton from '@material-ui/core/IconButton'
 
 import { RouteComponentProps } from 'react-router'
 
-import { useUserService } from '../../services'
+import {
+    useResourceService,
+    useSessionService,
+    useUserService,
+} from '../../services'
 import { HttpStatusCode } from '../../utils'
 
 import { SignupForm } from '../../api/UserAPI'
 
 import { useStyles } from './Signup.style'
 
-import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
 
-import { SignupFormComponent } from './components'
+import { EditTitle, SignupFormComponent } from './components'
+import { CircularProgressIndicator } from '../../components'
 
-const Signup: React.FC<RouteComponentProps> = ({ history }) => {
+import Backdrop from '@material-ui/core/Backdrop'
+
+import { SignupTitle } from './components'
+
+interface UserEditParams {
+    id?: string
+}
+
+const Signup: React.FC<RouteComponentProps<UserEditParams>> = ({
+    history,
+    match,
+}) => {
     const userService = useUserService()
+    const sessionService = useSessionService()
+    const resources = useResourceService()
+
     const { t } = useTranslation()
+
+    const { id } = match.params
+    const edit = match.path.includes('edit')
 
     const classes = useStyles()
 
-    const [data, setData] = React.useState<SignupForm>({
-        name: '',
-        surname: '',
-        email: '',
-        repeatedEmail: '',
-        password: '',
-        repeatedPassword: '',
-        nickname: '',
-        description: '',
-    })
+    const [data, setData] = React.useState<SignupForm | undefined>(
+        edit
+            ? undefined
+            : {
+                  name: '',
+                  surname: '',
+                  email: '',
+                  repeatedEmail: '',
+                  password: '',
+                  repeatedPassword: '',
+                  nickname: '',
+                  description: '',
+              }
+    )
 
     const [imagePreview, setImagePreview] = React.useState<any>()
     const [image, setImage] = React.useState<any>()
 
+    const [editImageUri, setEditImageUri] = React.useState<any>()
+
     const [errors, setErrors] = React.useState<any>({})
 
     const [uploadProgress, setUploadProgress] = React.useState<any>()
+
+    const uploading = uploadProgress !== undefined
 
     const onUploadProgress = (e: any) => {
         const p = (e.loaded / e.total) * 100
         setUploadProgress(p === 100 ? undefined : p)
     }
 
-    const doSignup = async (e: any) => {
-        e.preventDefault()
-
-        const r = await userService.signup(data, image, onUploadProgress)
+    const doSignup = async () => {
+        const r = await userService.signup(data!!, image, onUploadProgress)
 
         switch (r.status) {
             case HttpStatusCode.OK:
@@ -64,8 +91,8 @@ const Signup: React.FC<RouteComponentProps> = ({ history }) => {
         }
 
         const rLogin = await userService.login({
-            username: data.nickname,
-            password: data.password,
+            username: data!!.nickname,
+            password: data!!.password,
         })
 
         switch (rLogin.status) {
@@ -76,7 +103,21 @@ const Signup: React.FC<RouteComponentProps> = ({ history }) => {
         }
     }
 
-    const login = () => history.push('/login')
+    const doEdit = async () => {
+        const r = await userService.edit(data!!, image, onUploadProgress)
+
+        if (r.status !== HttpStatusCode.OK) setErrors((r.data as any).error)
+        else history.goBack()
+    }
+
+    const doForm = (e: any) => {
+        e.preventDefault()
+
+        if (uploading || !data) return
+
+        if (edit) doEdit()
+        else doSignup()
+    }
 
     const selectPhoto = (e: any) => {
         const file = e.target.files[0]
@@ -85,37 +126,61 @@ const Signup: React.FC<RouteComponentProps> = ({ history }) => {
         setImage(file)
     }
 
+    React.useEffect(() => {
+        const handleNotFound = () => history.push('/404')
+        const handleNotPermission = () => history.goBack()
+
+        const fetchUser = async (userId: number) => {
+            const session = sessionService.current()
+            if (userId !== session?.userId && !session?.admin) {
+                handleNotPermission()
+                return
+            }
+
+            const r = await userService.getDetailedUser(userId)
+
+            switch (r.status) {
+                case HttpStatusCode.OK:
+                    const u = r.data
+                    setData({
+                        id: u.id,
+                        name: u.name,
+                        surname: u.surname,
+                        email: u.email,
+                        password: '',
+                        repeatedPassword: '',
+                        nickname: u.nickname,
+                        description: u.description,
+                    })
+
+                    setEditImageUri(u.profileImgUri)
+                    break
+                case HttpStatusCode.NotFound:
+                    handleNotFound()
+            }
+        }
+
+        if (edit) {
+            let userId = parseInt(id!!)
+            fetchUser(userId)
+        }
+    }, [edit, userService, id, history, sessionService])
+
+    React.useEffect(() => {
+        const loadImage = async () => {
+            const r = await resources.load(editImageUri)
+
+            if (r.status !== HttpStatusCode.OK) return
+
+            setImagePreview(URL.createObjectURL(r.data))
+        }
+
+        if (editImageUri) loadImage()
+    }, [editImageUri, resources])
+
     return (
         <>
-            <header className={classes.header}>
-                <Typography
-                    className={classes.title}
-                    variant="h3"
-                    component="h1"
-                >
-                    {t('signup.title')}
-                </Typography>
-                <div className={classes.subtitleContainer}>
-                    <Typography
-                        className={classes.subtitle}
-                        variant="h5"
-                        component="h2"
-                    >
-                        {t('signup.subtitle')}
-                    </Typography>
-                    <Typography
-                        onClick={login}
-                        className={clsx(
-                            classes.subtitle,
-                            classes.subtitleLogin
-                        )}
-                        variant="h5"
-                        component="h2"
-                    >
-                        {t('login.title')}
-                    </Typography>
-                </div>
-            </header>
+            {edit ? <EditTitle /> : <SignupTitle />}
 
             <div className={classes.container}>
                 <div className={classes.upload}>
@@ -141,10 +206,23 @@ const Signup: React.FC<RouteComponentProps> = ({ history }) => {
                     </Typography>
                 </div>
 
-                <SignupFormComponent
-                    {...{ doSignup, uploadProgress, data, errors, setData }}
-                />
+                {data && (
+                    <SignupFormComponent
+                        {...{
+                            doForm,
+                            data,
+                            errors,
+                            setData,
+                            uploading,
+                            edit,
+                        }}
+                    />
+                )}
             </div>
+
+            <Backdrop className={classes.backdrop} open={uploading}>
+                <CircularProgressIndicator value={uploadProgress} size={52} />
+            </Backdrop>
         </>
     )
 }

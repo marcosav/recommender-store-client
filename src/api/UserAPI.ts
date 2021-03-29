@@ -1,16 +1,13 @@
 import BaseAPI, { RPromise } from './BaseAPI'
 
-import { User } from '../types'
+import { User, DetailedUser } from '../types'
 
 export interface UserService {
     login: (form: LoginForm) => RPromise<LoginResponse>
-    signup: (
-        form: SignupForm,
-        image: File,
-        onUploadProgress: any
-    ) => RPromise<LoginResponse>
+    signup: (form: SignupForm, image: File, onUploadProgress: any) => RPromise
     edit: (form: SignupForm, image: File, onUploadProgress: any) => RPromise
     getUser: (id: number) => RPromise<User>
+    getDetailedUser: (id: number) => RPromise<DetailedUser>
     searchUsers: (search: SearchUser) => RPromise<User[]>
 }
 
@@ -38,8 +35,6 @@ export interface SignupForm {
     repeatedPassword: string
     nickname: string
     description: string
-    profileImage?: string
-    profileImageExt?: string
 }
 
 interface LoginResponse {
@@ -56,7 +51,7 @@ export default class UserAPI extends BaseAPI implements UserService {
         formData.append('form', JSON.stringify(form))
         formData.append('file', image)
 
-        return this.postMP<LoginResponse>('/signup', formData, undefined, {
+        return this.postMP('/signup', formData, undefined, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -79,6 +74,9 @@ export default class UserAPI extends BaseAPI implements UserService {
     }
 
     getUser = (id: number) => this.get<User>(`${USER_PATH}/${id}`)
+
+    getDetailedUser = (id: number) =>
+        this.get<DetailedUser>(`${USER_PATH}/${id}`, { detailed: true })
 
     searchUsers = (search: SearchUser) =>
         this.get<User[]>(`${USER_PATH}/list`, search)

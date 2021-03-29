@@ -47,7 +47,17 @@ interface User {
     description: string
     profileImgUri?: string
     registerDate: Date
+
+    fav?: boolean
 }
+
+interface UserDetails {
+    name: string
+    surname: string
+    email: string
+}
+
+type DetailedUser = User & UserDetails
 
 interface CartProduct {
     id: number
@@ -69,6 +79,7 @@ export type {
     PreviewProduct,
     ProductCategory,
     User,
+    DetailedUser,
     CartProduct,
     CartProductPreview,
 }

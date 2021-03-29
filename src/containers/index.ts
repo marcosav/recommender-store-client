@@ -1,6 +1,6 @@
 import Login from './Login'
 import Signup from './Signup'
-import Home from './Home/Home'
+import Home from './Home'
 import PageNotFound from './PageNotFound'
 import ProductPage from './ProductPage'
 import ProductEdit from './ProductEdit'
@@ -8,6 +8,7 @@ import Logout from './Logout'
 import Search from './Search/Search'
 import Favorites from './Favorites'
 import CartPage from './CartPage'
+import VendorProfile from './VendorProfile'
 
 export {
     Login,
@@ -20,4 +21,5 @@ export {
     Search,
     Favorites,
     CartPage,
+    VendorProfile,
 }

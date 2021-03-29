@@ -20,9 +20,6 @@ export const useStyles = makeStyles((theme: Theme) =>
         bottom: {
             marginLeft: 'auto',
         },
-        loader: {
-            margin: 'auto',
-        },
         pair: {
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',

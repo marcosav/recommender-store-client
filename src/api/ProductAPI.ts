@@ -1,7 +1,7 @@
 import BaseAPI, { RPromise } from './BaseAPI'
 
 import { PreviewProduct, Product, ProductCategory } from '../types'
-import { Paged } from './types'
+import { Paged, PagedParams } from './types'
 import { HttpStatusCode } from '../utils'
 
 export interface ProductService {
@@ -9,9 +9,11 @@ export interface ProductService {
     getVendorProducts: (
         id: number,
         shown: boolean,
-        page: number
+        params: PagedParams
     ) => RPromise<Paged<PreviewProduct>>
-    searchProducts: (search: SearchProduct) => RPromise<Paged<PreviewProduct>>
+    searchProducts: (
+        search: SearchProduct & PagedParams
+    ) => RPromise<Paged<PreviewProduct>>
     publishProduct: (
         form: ProductForm,
         images: File[],
@@ -37,19 +39,24 @@ export interface ProductForm {
 
 interface SearchProduct {
     query: string
-    page?: number
     category?: number
-    order?: number
 }
 
 export default class ProductAPI extends BaseAPI implements ProductService {
     getProduct = (id: number) =>
         this.get<Product>(`${PRODUCT_PATH}/${id}`, null)
 
-    getVendorProducts = (id: number, shown: boolean, page: number) =>
-        this.get<Paged<PreviewProduct>>(`${VENDOR_PATH}/${id}`, { shown, page })
+    getVendorProducts = (id: number, shown: boolean, params: PagedParams) =>
+        this.get<Paged<PreviewProduct>>(
+            `${PRODUCT_PATH}${VENDOR_PATH}/${id}`,
+            {
+                shown,
+                ...params,
+            },
+            [HttpStatusCode.Forbidden]
+        )
 
-    searchProducts = (search: SearchProduct) =>
+    searchProducts = (search: SearchProduct & PagedParams) =>
         this.get<Paged<PreviewProduct>>(`${PRODUCT_PATH}/list`, search, [
             HttpStatusCode.BadRequest,
         ])
