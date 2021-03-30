@@ -72,7 +72,11 @@ export default class ProductAPI extends BaseAPI implements ProductService {
         formData.append('form', JSON.stringify(form))
         for (let i = 0; i < files.length; i++) {
             const file = files[i]
-            if (file) formData.append(`file${i}`, file)
+            if (file !== undefined)
+                formData.append(
+                    `${update && file === null ? 'delete' : 'file'}${i}`,
+                    file
+                )
         }
 
         return (update ? this.putMP : this.postMP)(

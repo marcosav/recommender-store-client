@@ -32,6 +32,7 @@ interface VendorProfileParams {
 const VendorProfile: React.FC<RouteComponentProps<VendorProfileParams>> = ({
     match,
     history,
+    location,
 }) => {
     const { id } = match.params
 
@@ -48,15 +49,24 @@ const VendorProfile: React.FC<RouteComponentProps<VendorProfileParams>> = ({
 
     const self = id === undefined
     const session = sessionService.current()
+    const perms = self || session?.admin
 
     const vendorId = self ? session?.userId!! : parseInt(id!!)
 
     const [user, setUser] = React.useState<User>()
 
-    const [shown, setShown] = React.useState(true)
+    const [shown, setShown] = React.useState(
+        (location?.state as any)?.shown !== false
+    )
 
     const handleShown = (e: any, value: boolean) => {
-        if (self) setShown(value)
+        if (perms) {
+            history.push(location.pathname, {
+                shown: value,
+                page: undefined,
+            })
+            setShown(value)
+        }
     }
 
     React.useEffect(() => {
@@ -94,25 +104,23 @@ const VendorProfile: React.FC<RouteComponentProps<VendorProfileParams>> = ({
 
             <Divider />
 
-            {self && (
-                <>
-                    <ToggleButtonGroup
-                        value={shown}
-                        exclusive
-                        onChange={handleShown}
-                        className={classes.toggler}
-                    >
-                        <ToggleButton value={true}>
-                            {t('profile.shown')}
-                        </ToggleButton>
-                        <ToggleButton value={false}>
-                            {t('profile.hidden')}
-                        </ToggleButton>
-                    </ToggleButtonGroup>
-                </>
+            {user && perms && (
+                <ToggleButtonGroup
+                    value={shown}
+                    exclusive
+                    onChange={handleShown}
+                    className={classes.toggler}
+                >
+                    <ToggleButton value={true}>
+                        {t('profile.shown')}
+                    </ToggleButton>
+                    <ToggleButton value={false}>
+                        {t('profile.hidden')}
+                    </ToggleButton>
+                </ToggleButtonGroup>
             )}
 
-            <div className={self ? undefined : classes.container}>
+            <div className={perms ? undefined : classes.container}>
                 <PageContainer
                     request={(page) =>
                         productService.getVendorProducts(vendorId, shown, {
@@ -127,11 +135,12 @@ const VendorProfile: React.FC<RouteComponentProps<VendorProfileParams>> = ({
                                 cartService,
                                 favService,
                                 resources,
+                                noFav: self,
                             }}
                         />
                     )}
                     EmptyComponent={Empty}
-                    {...{ setShownItems: () => undefined }}
+                    {...{ setShownItems: () => undefined, deps: [shown] }}
                 />
             </div>
         </>

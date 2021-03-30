@@ -41,6 +41,14 @@ interface ProductCategory {
     name?: string
 }
 
+interface ProductReport {
+    id: number
+    productId: number
+    userId: number
+    reason: string
+    date: Date
+}
+
 interface User {
     id: number
     nickname: string
@@ -78,6 +86,7 @@ export type {
     Product,
     PreviewProduct,
     ProductCategory,
+    ProductReport,
     User,
     DetailedUser,
     CartProduct,

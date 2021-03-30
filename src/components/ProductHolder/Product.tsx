@@ -30,12 +30,14 @@ interface ProductActionsProps {
     favService?: FavoriteService
     cartService?: CartService
     resources?: ResourceService
+    noFav?: boolean
 }
 
 const DefaultActions: React.FC<ProductActionsProps> = ({
     product,
     favService,
     cartService,
+    noFav = false,
 }) => {
     const theme = useTheme()
     const { t } = useTranslation()
@@ -65,13 +67,15 @@ const DefaultActions: React.FC<ProductActionsProps> = ({
 
     return (
         <>
-            <IconButton size={'small'} onClick={addToFav}>
-                {favorite ? (
-                    <Favorite htmlColor={theme.palette.error.main} />
-                ) : (
-                    <FavoriteBorder />
-                )}
-            </IconButton>
+            {!noFav && (
+                <IconButton size={'small'} onClick={addToFav}>
+                    {favorite ? (
+                        <Favorite htmlColor={theme.palette.error.main} />
+                    ) : (
+                        <FavoriteBorder />
+                    )}
+                </IconButton>
+            )}
             {product.stock ? (
                 <IconButton size={'small'} onClick={addToCart}>
                     <ShoppingBasket />
@@ -95,6 +99,7 @@ const ProductHolder: React.FC<ProductProps & ProductActionsProps> = ({
     favService,
     cartService,
     resources,
+    noFav = false,
 }) => {
     const history = useHistory()
 
@@ -133,7 +138,7 @@ const ProductHolder: React.FC<ProductProps & ProductActionsProps> = ({
                 </CardMedia>
             </CardActionArea>
             <CardActions disableSpacing className={classes.actions}>
-                <Actions {...{ product, favService, cartService }} />
+                <Actions {...{ product, favService, cartService, noFav }} />
 
                 <Typography className={classes.price}>
                     {`${product.price}€`}

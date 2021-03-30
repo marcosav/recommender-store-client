@@ -23,6 +23,7 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import Backdrop from '@material-ui/core/Backdrop'
+import DeleteIcon from '@material-ui/icons/Delete'
 
 import { ProductEditForm } from './components'
 import { ProductCategory } from '../../types'
@@ -76,7 +77,7 @@ const ProductEdit: React.FC<RouteComponentProps<ProductEditProps>> = ({
     const [imagePreviews, setImagePreviews] = React.useState<any[]>(
         new Array(Constants.MAX_PRODUCT_IMAGES)
     )
-    const [files, setFiles] = React.useState<File[]>(
+    const [files, setFiles] = React.useState<any[]>(
         new Array(Constants.MAX_PRODUCT_IMAGES)
     )
     const [images, setImages] = React.useState<any[]>([])
@@ -88,6 +89,7 @@ const ProductEdit: React.FC<RouteComponentProps<ProductEditProps>> = ({
 
         if (uploading) return
         if (!data) return
+
         const r = await productService.publishProduct(
             data,
             files,
@@ -118,10 +120,23 @@ const ProductEdit: React.FC<RouteComponentProps<ProductEditProps>> = ({
                 break
             case HttpStatusCode.Forbidden:
                 goBack()
-                break
-            case HttpStatusCode.BadRequest:
-                setErrors((r.data as any).error)
         }
+    }
+
+    const removePhoto = (i: number) => {
+        setImagePreviews((current) => {
+            current[i] = undefined
+            return [...current]
+        })
+        setFiles((current) => {
+            current[i] = null
+            return [...current]
+        })
+        setImages((current) => {
+            const index = current.findIndex((im) => im?.i === i)
+            current[index] = undefined
+            return [...current]
+        })
     }
 
     const selectPhoto = (i: number, e: any) => {
@@ -208,30 +223,40 @@ const ProductEdit: React.FC<RouteComponentProps<ProductEditProps>> = ({
                         {Array.from(
                             { length: Constants.MAX_PRODUCT_IMAGES },
                             (_, i) => i
-                        ).map((i) => (
-                            <Paper key={i} className={classes.holder}>
-                                <input
-                                    accept=".jpg,.jpeg,.png"
-                                    id={`product-img-upload-${i}`}
-                                    type="file"
-                                    onChange={(e) => selectPhoto(i, e)}
-                                />
-                                <label htmlFor={`product-img-upload-${i}`}>
-                                    <IconButton component="span">
-                                        <ProductImg
-                                            className={classes.imagePreview}
-                                            src={imagePreviews[i]}
-                                            url={
-                                                images.find((im) => im.i === i)
-                                                    ?.u ?? undefined
-                                            }
-                                            resources={resources}
-                                            alt={`I${i}`}
-                                        />
-                                    </IconButton>
-                                </label>
-                            </Paper>
-                        ))}
+                        ).map((i) => {
+                            const url = images.find((im) => im?.i === i)?.u
+                            return (
+                                <Paper key={i} className={classes.holder}>
+                                    {(url || files[i]) && (
+                                        <IconButton
+                                            size="small"
+                                            component="span"
+                                            onClick={() => removePhoto(i)}
+                                            className={classes.deleteImage}
+                                        >
+                                            <DeleteIcon color="error" />
+                                        </IconButton>
+                                    )}
+                                    <input
+                                        accept=".jpg,.jpeg,.png"
+                                        id={`product-img-upload-${i}`}
+                                        type="file"
+                                        onChange={(e) => selectPhoto(i, e)}
+                                    />
+                                    <label htmlFor={`product-img-upload-${i}`}>
+                                        <IconButton component="span">
+                                            <ProductImg
+                                                className={classes.imagePreview}
+                                                src={imagePreviews[i]}
+                                                url={url ?? undefined}
+                                                resources={resources}
+                                                alt={`I${i}`}
+                                            />
+                                        </IconButton>
+                                    </label>
+                                </Paper>
+                            )
+                        })}
                     </div>
                     <ProductEditForm
                         {...{

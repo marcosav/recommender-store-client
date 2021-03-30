@@ -1,6 +1,7 @@
 import BaseAPI, { RPromise } from './BaseAPI'
 
 import { User, DetailedUser } from '../types'
+import { HttpStatusCode } from '../utils'
 
 export interface UserService {
     login: (form: LoginForm) => RPromise<LoginResponse>
@@ -9,6 +10,7 @@ export interface UserService {
     getUser: (id: number) => RPromise<User>
     getDetailedUser: (id: number) => RPromise<DetailedUser>
     searchUsers: (search: SearchUser) => RPromise<User[]>
+    deleteUser: (id: number) => RPromise
 }
 
 const USER_PATH = '/user'
@@ -35,6 +37,7 @@ export interface SignupForm {
     repeatedPassword: string
     nickname: string
     description: string
+    deletePhoto?: boolean
 }
 
 interface LoginResponse {
@@ -49,7 +52,7 @@ export default class UserAPI extends BaseAPI implements UserService {
         const formData = new FormData()
 
         formData.append('form', JSON.stringify(form))
-        formData.append('file', image)
+        if (image) formData.append('file', image)
 
         return this.postMP('/signup', formData, undefined, {
             headers: {
@@ -63,7 +66,7 @@ export default class UserAPI extends BaseAPI implements UserService {
         const formData = new FormData()
 
         formData.append('form', JSON.stringify(form))
-        formData.append('file', image)
+        if (image) formData.append('file', image)
 
         return this.putMP('/profile/edit', formData, undefined, {
             headers: {
@@ -76,8 +79,16 @@ export default class UserAPI extends BaseAPI implements UserService {
     getUser = (id: number) => this.get<User>(`${USER_PATH}/${id}`)
 
     getDetailedUser = (id: number) =>
-        this.get<DetailedUser>(`${USER_PATH}/${id}`, { detailed: true })
+        this.get<DetailedUser>(`${USER_PATH}/${id}`, { detailed: true }, [
+            HttpStatusCode.Forbidden,
+        ])
 
     searchUsers = (search: SearchUser) =>
         this.get<User[]>(`${USER_PATH}/list`, search)
+
+    deleteUser = (id: number) =>
+        this.delete(`${USER_PATH}/${id}`, null, [
+            HttpStatusCode.Forbidden,
+            HttpStatusCode.NotFound,
+        ])
 }

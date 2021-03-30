@@ -33,8 +33,15 @@ export const useStyles = makeStyles((theme: Theme) =>
                 width: '100%',
             },
         },
+        deleteImage: {
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            zIndex: 1,
+        },
         imagePreview: {},
         holder: {
+            position: 'relative',
             margin: theme.spacing(0, 0, 1, 1),
             backgroundColor: '#f5f5f5',
             justifyItems: 'center',

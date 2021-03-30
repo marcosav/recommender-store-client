@@ -15,6 +15,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(1, 5),
         },
         upload: {
+            position: 'relative',
             margin: 'auto',
             transform: 'translateY(-25%)',
             '& > input': {
@@ -31,6 +32,12 @@ export const useStyles = makeStyles((theme: Theme) =>
                 transform: 'translateY(0%)',
                 marginBottom: theme.spacing(2),
             },
+        },
+        deleteImage: {
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            zIndex: 2
         },
         avatar: {
             height: theme.spacing(20),

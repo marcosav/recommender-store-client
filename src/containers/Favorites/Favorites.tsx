@@ -24,7 +24,9 @@ import { useTranslation } from 'react-i18next'
 
 import { useStyles } from './Favorites.style'
 
-const Favorites = () => {
+import { RouteComponentProps } from 'react-router'
+
+const Favorites: React.FC<RouteComponentProps> = ({ history, location }) => {
     const favService = useFavoriteService()
     const cartService = useCartService()
     const resources = useResourceService()
@@ -32,9 +34,16 @@ const Favorites = () => {
     const { t } = useTranslation()
     const classes = useStyles()
 
-    const [productOrUser, setProductOrUser] = React.useState(true)
+    const [productOrUser, setProductOrUser] = React.useState(
+        (location?.state as any)?.favType === true
+    )
 
     const handleType = (e: any, value: boolean) => {
+        history.push(location.pathname, {
+            favType: value,
+            page: undefined,
+        })
+
         setProductOrUser(value)
     }
 
@@ -93,7 +102,7 @@ const Favorites = () => {
                     )
                 }
                 EmptyComponent={Empty}
-                {...{ setShownItems: () => undefined }}
+                {...{ setShownItems: () => undefined, deps: [productOrUser] }}
             />
         </>
     )

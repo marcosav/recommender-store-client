@@ -34,14 +34,15 @@ const ProductImg: React.FC<
 
         if (resources && url) load()
     }, [resources, url])
-    
+
     React.useEffect(() => {
-        if (selectedImgUrl && resources && selectedImgUrl === url) setSelectedImg(img)
+        if (selectedImgUrl && resources && selectedImgUrl === url)
+            setSelectedImg(img)
     }, [resources, selectedImgUrl, url, setSelectedImg, img])
 
     return (
         <picture>
-            <source srcSet={src ?? img} />
+            <source srcSet={src ?? (url ? img : undefined)} />
             <source srcSet={fallback} />
             <img alt={alt} {...rest} />
         </picture>

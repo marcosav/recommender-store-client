@@ -3,6 +3,7 @@ import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
+import DeleteIcon from '@material-ui/icons/Delete'
 
 import { RouteComponentProps } from 'react-router'
 
@@ -43,6 +44,8 @@ const Signup: React.FC<RouteComponentProps<UserEditParams>> = ({
     const { id } = match.params
     const edit = match.path.includes('edit')
 
+    const session = sessionService.current()
+
     const classes = useStyles()
 
     const [data, setData] = React.useState<SignupForm | undefined>(
@@ -74,6 +77,34 @@ const Signup: React.FC<RouteComponentProps<UserEditParams>> = ({
     const onUploadProgress = (e: any) => {
         const p = (e.loaded / e.total) * 100
         setUploadProgress(p === 100 ? undefined : p)
+    }
+
+    const removePhoto = () => {
+        setImagePreview(undefined)
+        setImage(undefined)
+
+        if (!edit || !data) return
+        setData({ ...data!!, deletePhoto: true })
+    }
+
+    const deletable = () =>
+        edit && session?.admin && session?.userId !== parseInt(id!!)
+
+    const deleteUser = async (e: any) => {
+        e.preventDefault()
+
+        if (uploading) return
+        if (!deletable()) return
+        const r = await userService.deleteUser(data?.id!!)
+
+        switch (r.status) {
+            case HttpStatusCode.OK:
+                history.push('/')
+                break
+            case HttpStatusCode.Forbidden:
+            case HttpStatusCode.NotFound:
+                history.goBack()
+        }
     }
 
     const doSignup = async () => {
@@ -124,6 +155,7 @@ const Signup: React.FC<RouteComponentProps<UserEditParams>> = ({
         const image = URL.createObjectURL(file)
         setImagePreview(image)
         setImage(file)
+        setData({ ...data!!, deletePhoto: false })
     }
 
     React.useEffect(() => {
@@ -184,6 +216,15 @@ const Signup: React.FC<RouteComponentProps<UserEditParams>> = ({
 
             <div className={classes.container}>
                 <div className={classes.upload}>
+                    {imagePreview && (
+                        <IconButton
+                            component="span"
+                            onClick={removePhoto}
+                            className={classes.deleteImage}
+                        >
+                            <DeleteIcon color="error" />
+                        </IconButton>
+                    )}
                     <input
                         accept=".jpg,.jpeg,.png"
                         id="profile-img-upload"
@@ -215,6 +256,7 @@ const Signup: React.FC<RouteComponentProps<UserEditParams>> = ({
                             setData,
                             uploading,
                             edit,
+                            deleteUser: deletable() ? deleteUser : undefined,
                         }}
                     />
                 )}

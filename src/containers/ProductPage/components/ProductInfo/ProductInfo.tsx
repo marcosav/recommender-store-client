@@ -246,7 +246,9 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
                     </div>
                 </div>
             </div>
-            <ReportDialog {...{ open: reporting, setOpen: setReporting }} />
+            <ReportDialog
+                {...{ product, open: reporting, setOpen: setReporting }}
+            />
         </>
     )
 }

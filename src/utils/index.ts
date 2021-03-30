@@ -8,6 +8,7 @@ import {
 } from './ServerErrorHandler'
 import * as HttpStatusCode from './HttpStatusCodes'
 import * as Constants from './Constants'
+import * as ValidationTools from './ValidationTools'
 
 export {
     AuthRequestInterceptor,
@@ -16,6 +17,7 @@ export {
     useServerErrorHandler,
     serverErrorHandler,
     Constants,
+    ValidationTools,
 }
 
 export type { ServerErrorHandlerEmitter, ServerErrorHandlerListener }

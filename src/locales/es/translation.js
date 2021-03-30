@@ -96,6 +96,7 @@ const es = {
         invalid: 'Valor inválido',
         invalid_img_format: 'Extensión inválida, usa .jpg, .jpeg o .png',
         max_size: 'Tamaño máximo permitido {0}MB',
+        already_reported: "Ya has reportado este producto, ¡por favor espera!"
     },
     info: {
         title: '¿Qué vas a comprar?',

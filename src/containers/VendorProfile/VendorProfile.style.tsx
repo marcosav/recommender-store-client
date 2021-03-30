@@ -16,6 +16,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         container: {
             marginTop: theme.spacing(4),
+            margin: 'auto'
         },
     })
 )

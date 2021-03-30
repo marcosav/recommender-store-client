@@ -9,21 +9,46 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
 import { useTranslation } from 'react-i18next'
+import { useProductReportService } from '../../services'
+import { Product } from '../../types'
+import { HttpStatusCode, ValidationTools } from '../../utils'
 
 interface ReportDialogProps {
+    product: Product
     open: boolean
     setOpen: (open: boolean) => void
 }
 
-const ReportDialog: React.FC<ReportDialogProps> = ({ open, setOpen }) => {
+const ReportDialog: React.FC<ReportDialogProps> = ({
+    product,
+    open,
+    setOpen,
+}) => {
     const { t } = useTranslation()
+
+    const reportService = useProductReportService()
+
+    const [reason, setReason] = React.useState('')
+    const [errors, setErrors] = React.useState<any>({})
 
     const handleClose = () => setOpen(false)
 
-    const handleReport = () => {
-        
+    const handleReport = async () => {
+        const r = await reportService.report(product.id, reason)
+        switch (r.status) {
+            case HttpStatusCode.OK:
+            case HttpStatusCode.NoContent:
+            case HttpStatusCode.NotFound:
+                break
+            case HttpStatusCode.BadRequest:
+                setErrors((r.data as any).error)
+                return
+        }
+
         handleClose()
     }
+
+    const { errorFor, helperFor } = ValidationTools.createValidator(t, errors)
 
     return (
         <Dialog
@@ -46,6 +71,10 @@ const ReportDialog: React.FC<ReportDialogProps> = ({ open, setOpen }) => {
                     label={t('product.report.placeholder')}
                     fullWidth
                     multiline
+                    onChange={(e) => setReason(e.target.value)}
+                    value={reason}
+                    error={errorFor('reason')}
+                    helperText={helperFor('reason')}
                     rows={3}
                 />
             </DialogContent>
@@ -53,7 +82,7 @@ const ReportDialog: React.FC<ReportDialogProps> = ({ open, setOpen }) => {
                 <Button onClick={handleClose} color="primary">
                     {t('cancel')}
                 </Button>
-                <Button onClick={handleClose} color="primary">
+                <Button onClick={handleReport} color="primary">
                     {t('product.report.button')}
                 </Button>
             </DialogActions>

@@ -4,14 +4,24 @@ import UserAPI from './UserAPI'
 import CartAPI from './CartAPI'
 import FavoriteAPI from './FavoriteAPI'
 import ResourceAPI from './ResourceAPI'
+import ProductReportAPI from './ProductReportAPI'
 
 import { ProductService } from './ProductAPI'
 import { UserService } from './UserAPI'
 import { FavoriteService } from './FavoriteAPI'
 import { CartService } from './CartAPI'
 import { ResourceService } from './ResourceAPI'
+import { ProductReportService } from './ProductReportAPI'
 
-export { AuthAPI, ProductAPI, UserAPI, CartAPI, FavoriteAPI, ResourceAPI }
+export {
+    AuthAPI,
+    ProductAPI,
+    UserAPI,
+    CartAPI,
+    FavoriteAPI,
+    ResourceAPI,
+    ProductReportAPI,
+}
 
 export type {
     ProductService,
@@ -19,4 +29,5 @@ export type {
     FavoriteService,
     CartService,
     ResourceService,
+    ProductReportService,
 }

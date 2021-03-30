@@ -97,6 +97,7 @@ const en = {
         invalid: 'Invalid value',
         invalid_img_format: 'Invalid format use .jpg, .jpeg o .png',
         max_size: 'Maximum allowed size is {0}MB',
+        already_reported: "You have already reported this product, please wait!"
     },
     info: {
         loading: 'Loading...',

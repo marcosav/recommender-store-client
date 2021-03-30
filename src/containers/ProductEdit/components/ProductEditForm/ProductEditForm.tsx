@@ -17,6 +17,7 @@ import { useStyles } from './ProductEditForm.style'
 import { ProductCategory } from '../../../../types'
 
 import clsx from 'clsx'
+import { ValidationTools } from '../../../../utils'
 
 interface ProductEditFormProps {
     updateProduct: (e: any) => void
@@ -54,21 +55,7 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
     const changeData = (field: string) => (e: any) =>
         updateData({ [field]: e.target.value })
 
-    const errorFor = (field: string) => field in errors
-
-    const helperFor = (field: string) => {
-        const error = errors[field]
-        if (error === undefined) return undefined
-        const args = error.split('.')
-
-        let msg = t(`validation.${args[0]}`)
-
-        const details = args.slice(1)
-        for (let k = 0; k < details.length; k++)
-            msg = msg.replace('{' + k + '}', details[k])
-
-        return msg
-    }
+    const { errorFor, helperFor } = ValidationTools.createValidator(t, errors)
 
     React.useEffect(() => {
         updateData({ category: category.id })

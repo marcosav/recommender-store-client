@@ -2,6 +2,7 @@ import React from 'react'
 
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
+import DeleteIcon from '@material-ui/icons/Delete'
 
 import { useTranslation } from 'react-i18next'
 
@@ -10,6 +11,7 @@ import { PasswordField } from '../../../../components'
 import { SignupForm } from '../../../../api/UserAPI'
 
 import { useStyles } from './Signup.style'
+import { ValidationTools } from '../../../../utils'
 
 interface SignupFormProps {
     doForm: (e: any) => void
@@ -18,6 +20,7 @@ interface SignupFormProps {
     errors: any
     uploading: boolean
     edit: boolean
+    deleteUser?: any
 }
 
 const SignupFormComponent: React.FC<SignupFormProps> = ({
@@ -27,6 +30,7 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
     errors,
     uploading,
     edit,
+    deleteUser,
 }) => {
     const { t } = useTranslation()
 
@@ -39,21 +43,7 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
     const changeData = (field: string) => (e: any) =>
         updateData({ [field]: e.target.value })
 
-    const errorFor = (field: string) => field in errors
-
-    const helperFor = (field: string) => {
-        const error = errors[field]
-        if (error === undefined) return undefined
-        const args = error.split('.')
-
-        let msg = t(`validation.${args[0]}`)
-
-        const details = args.slice(1)
-        for (let k = 0; k < details.length; k++)
-            msg = msg.replace('{' + k + '}', details[k])
-
-        return msg
-    }
+    const { errorFor, helperFor } = ValidationTools.createValidator(t, errors)
 
     return (
         <form
@@ -157,6 +147,22 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
             />
 
             <div className={classes.bottom}>
+                {deleteUser && (
+                    <Button
+                        className={classes.buttons}
+                        disableElevation
+                        onClick={deleteUser}
+                        variant="contained"
+                        color="secondary"
+                        type="submit"
+                        size="large"
+                        disabled={uploading}
+                        startIcon={<DeleteIcon />}
+                    >
+                        {t('product.delete')}
+                    </Button>
+                )}
+
                 <Button
                     className={classes.buttons}
                     disableElevation
