@@ -10,6 +10,9 @@ const es = {
         signup: 'Registrarse',
         signup_info: '¿No tienes? Regístrate',
         search: 'Buscar',
+        admin: {
+            reports: 'Reportes',
+        },
     },
     login: {
         title: 'Inicia sesión',
@@ -38,6 +41,14 @@ const es = {
     },
     cart: {
         empty: 'Carrito vacío',
+        title: 'Carrito',
+        buy: 'Proceder',
+        total: 'Total',
+        items: 'Items',
+        unit: 'Unidad',
+        unavailable: 'No disponible ya',
+        no_stock: 'Stock insuficiente',
+        favorites: 'Tus favoritos',
     },
     favorites: {
         title: 'Mis favoritos',
@@ -51,8 +62,8 @@ const es = {
         hidden: 'Ocultos',
         product_title: 'Productos',
         edit: {
-            title: 'Editar perfil'
-        }
+            title: 'Editar perfil',
+        },
     },
     search: {
         no_results: 'Sin resultados',
@@ -96,7 +107,7 @@ const es = {
         invalid: 'Valor inválido',
         invalid_img_format: 'Extensión inválida, usa .jpg, .jpeg o .png',
         max_size: 'Tamaño máximo permitido {0}MB',
-        already_reported: "Ya has reportado este producto, ¡por favor espera!"
+        already_reported: 'Ya has reportado este producto, ¡por favor espera!',
     },
     info: {
         title: '¿Qué vas a comprar?',

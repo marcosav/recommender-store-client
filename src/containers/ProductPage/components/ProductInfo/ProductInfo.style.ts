@@ -16,11 +16,13 @@ export const useStyles = makeStyles((theme: Theme) =>
             '& img': {
                 display: 'block',
                 width: '100%',
+                borderRadius: 4,
             },
         },
         images: {
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
+            alignItems: 'center',
         },
         mainImage: {},
         imagePreview: {},

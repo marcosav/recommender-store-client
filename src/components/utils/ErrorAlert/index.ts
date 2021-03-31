@@ -1,3 +1,3 @@
-import ErrorAlert from './ErrorAlert'
+import ErrorWrapperClass from './ErrorWrapperClass'
 
-export default ErrorAlert
+export default ErrorWrapperClass

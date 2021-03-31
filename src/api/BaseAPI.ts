@@ -16,7 +16,9 @@ const DEFAULT_HANDLED = [
 
 const emptyStatusValidation = (h?: number[]) => (code: number) => {
     let handled = h ? [...DEFAULT_HANDLED, ...h] : DEFAULT_HANDLED
-    if (handled.includes(code)) serverErrorHandler.handle(code)
+    let exceptions = h?.filter((v) => DEFAULT_HANDLED.includes(v)) ?? []
+    if (handled.includes(code) && !exceptions.includes(code))
+        serverErrorHandler.handle(code)
 
     return true
 }
@@ -26,7 +28,7 @@ export default class BaseAPI {
         path: string,
         params?: any,
         handled?: number[],
-        options: any = {},
+        options: any = {}
     ) =>
         axios.get<T>(url(path), {
             params,

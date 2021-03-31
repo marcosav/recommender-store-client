@@ -2,7 +2,11 @@ import React from 'react'
 
 import { RouteComponentProps } from 'react-router'
 
-import { useFavoriteService, useProductService } from '../../services'
+import {
+    useCartService,
+    useFavoriteService,
+    useProductService,
+} from '../../services'
 
 import { PreviewProduct, Product } from '../../types'
 import { HttpStatusCode } from '../../utils'
@@ -28,6 +32,7 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
 
     const productService = useProductService()
     const favService = useFavoriteService()
+    const cartService = useCartService()
 
     const { t } = useTranslation()
 
@@ -82,6 +87,7 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
                         {...{
                             products: recommended,
                             productService,
+                            cartService,
                             favService,
                         }}
                     />

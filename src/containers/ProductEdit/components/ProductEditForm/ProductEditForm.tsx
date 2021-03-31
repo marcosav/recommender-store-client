@@ -143,6 +143,9 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
                     onChange={changeData('stock')}
                     error={errorFor('stock')}
                     helperText={helperFor('stock')}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
                     required
                 />
             </div>

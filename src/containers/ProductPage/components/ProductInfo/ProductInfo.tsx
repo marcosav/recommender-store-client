@@ -58,6 +58,7 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
     const [reporting, setReporting] = React.useState(false)
 
     const session = sessionService.current()
+    const logged = sessionService.isLogged()
     const owner = session?.userId === product.userId
     const editable = owner || session?.admin
 
@@ -191,9 +192,11 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
                                         <EditOutlined />
                                     </IconButton>
                                 )}
-                                <IconButton size="small" onClick={report}>
-                                    <ReportOutlined />
-                                </IconButton>
+                                {logged && (
+                                    <IconButton size="small" onClick={report}>
+                                        <ReportOutlined />
+                                    </IconButton>
+                                )}
                                 {!owner && (
                                     <IconButton size="small" onClick={addToFav}>
                                         {favorite ? (

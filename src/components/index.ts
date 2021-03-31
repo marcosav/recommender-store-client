@@ -1,4 +1,4 @@
-import NavigationBar from './NavegationBar'
+import NavigationBarWrapper from './NavegationBar'
 import ProductHolder from './ProductHolder'
 import UserHolder from './UserHolder'
 import PageContainer from './PageContainer'
@@ -9,18 +9,18 @@ import {
     PasswordField,
     ErrorHandler,
     CircularProgressIndicator,
-    ErrorAlert,
+    ErrorWrapperClass,
     ContentWarn,
     Loading,
 } from './utils'
 
 export {
-    NavigationBar,
+    NavigationBarWrapper,
     ProductHolder,
     PasswordField,
     ErrorHandler,
     CircularProgressIndicator,
-    ErrorAlert,
+    ErrorWrapperClass,
     ContentWarn,
     Loading,
     PageContainer,

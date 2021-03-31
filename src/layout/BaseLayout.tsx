@@ -1,10 +1,10 @@
 import React from 'react'
 
 import { Redirect, Route, Switch } from 'react-router'
-import { ErrorAlert, NavigationBar } from '../components'
+import { ErrorWrapperClass, NavigationBarWrapper } from '../components'
 
 import { NavRoute } from '../routes'
-import { Session, SessionService } from '../services'
+import { SessionService } from '../services'
 
 import { withStyles, createStyles, WithStyles } from '@material-ui/core'
 import { ServerErrorHandlerListener } from '../utils'
@@ -45,18 +45,22 @@ const RouteCheck: React.FC<RouteCheckProps> = ({
     sessionService,
 }) => {
     const RouteComponent = route.component
+    const admin = route.admin
+    const identified = route.identified || admin
 
-    return route.identified === true ? (
+    const logged = sessionService.isLogged()
+
+    return identified === true ? (
         <Route>
-            {sessionService.isLogged() ? (
+            {logged ? (
                 <RouteComponent {...props} />
             ) : (
                 <CheckRedirect path="/login" {...{ props }} />
             )}
         </Route>
-    ) : route.identified === false ? (
+    ) : identified === false ? (
         <Route>
-            {sessionService.isLogged() ? (
+            {logged ? (
                 <CheckRedirect path="/" {...{ props }} />
             ) : (
                 <RouteComponent {...props} />
@@ -73,43 +77,13 @@ interface BaseLayoutProps extends WithStyles<typeof styles> {
     routes: NavRoute[]
 }
 
-interface State {
-    session?: Session
-    error?: number
-    open: boolean
-}
-
-class BaseLayout extends React.Component<BaseLayoutProps, State> {
-    constructor(props: any) {
-        super(props)
-        this.state = { session: undefined, error: undefined, open: false }
-    }
-
-    componentDidMount() {
-        this.props.serverErrorHandler.setCallback((code) =>
-            this.setState({ ...this.state, error: code, open: true })
-        )
-
-        const getSession = async () => {
-            //if (!this.props.sessionService.isAuth())
-            await this.props.sessionService.auth()
-        }
-
-        this.props.sessionService.setCallback((s) =>
-            this.setState({ ...this.state, session: s })
-        )
-
-        getSession()
-    }
-
-    setOpen(open: boolean) {
-        this.setState({ ...this.state, open })
-    }
-
+class BaseLayout extends React.Component<BaseLayoutProps> {
     render() {
-        return this.state.session ? (
+        return (
             <div className={this.props.classes.base}>
-                <NavigationBar session={this.state.session} />
+                <NavigationBarWrapper
+                    sessionService={this.props.sessionService}
+                />
                 <Switch>
                     {this.props.routes.map((route) => (
                         <Route
@@ -131,16 +105,10 @@ class BaseLayout extends React.Component<BaseLayoutProps, State> {
                     <Redirect to="/404" />
                 </Switch>
 
-                <ErrorAlert
-                    {...{
-                        error: this.state.error,
-                        setOpen: this.setOpen.bind(this),
-                        open: this.state.open,
-                    }}
+                <ErrorWrapperClass
+                    serverErrorHandler={this.props.serverErrorHandler}
                 />
             </div>
-        ) : (
-            <></>
         )
     }
 }

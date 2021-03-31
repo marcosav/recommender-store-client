@@ -23,27 +23,30 @@ import Person from '@material-ui/icons/Person'
 import SignUp from '@material-ui/icons/HowToReg'
 import ArrowForward from '@material-ui/icons/ArrowForward'
 import GavelIcon from '@material-ui/icons/Gavel'
+import ReportIcon from '@material-ui/icons/Report'
 
 import { useStyles } from './NavigationBar.style'
 import { useHistory } from 'react-router'
 
-import { Session } from '../../services'
+import { useSessionService } from '../../services'
 import { useTranslation } from 'react-i18next'
 
-interface NavigationBarProps {
-    session: Session
-}
+const NavigationBar = () => {
+    const sessionService = useSessionService()
+    const session = sessionService.current()
 
-const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
     const classes = useStyles()
     const history = useHistory()
     const { t } = useTranslation()
 
-    const cartItems = session.cart.length
-    const username = session.username
+    const cartItems = session?.cart?.length
+    const username = session?.username
     const logged = username !== undefined
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+    const [anchorAdmin, setAnchorAdmin] = React.useState<null | HTMLElement>(
+        null
+    )
     const [searched, setSearched] = React.useState('')
 
     const handleMenuClose = () => setAnchorEl(null)
@@ -52,17 +55,28 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
         setAnchorEl(e.currentTarget)
     }
 
+    const handleAdminMenuClose = () => setAnchorAdmin(null)
+
+    const handleAdminMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
+        setAnchorAdmin(e.currentTarget)
+    }
+
     const redirect = (path: string) => {
         handleMenuClose()
+        handleAdminMenuClose()
         history.push(path, undefined)
     }
 
     const onSearch = (e: any) => {
         e.preventDefault()
-        if (searched) redirect(`/search/${searched}`)
+        if (searched) {
+            setSearched('')
+            redirect(`/search/${searched}`)
+        }
     }
 
     const menuId = 'nav-account-menu'
+    const adminMenuId = 'nav-admin-menu'
 
     const menuContent = (
         <div>
@@ -140,6 +154,25 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
         </Menu>
     )
 
+    const adminMenu = (
+        <Menu
+            anchorEl={anchorAdmin}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            id={adminMenuId}
+            keepMounted
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            open={Boolean(anchorAdmin)}
+            onClose={handleAdminMenuClose}
+        >
+            <MenuItem onClick={() => redirect('/reports')}>
+                <ListItemIcon color="inherit">
+                    <ReportIcon />
+                </ListItemIcon>
+                {t('nav.admin.reports')}
+            </MenuItem>
+        </Menu>
+    )
+
     return (
         <div className={classes.grow}>
             <AppBar position="static">
@@ -167,6 +200,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
                                     root: classes.inputRoot,
                                     input: classes.inputInput,
                                 }}
+                                value={searched}
                                 inputProps={{ 'aria-label': 'search' }}
                                 onChange={(e) => setSearched(e.target.value)}
                             />
@@ -182,8 +216,11 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
 
                     <div className={classes.grow} />
 
-                    {session.admin && (
-                        <IconButton onClick={() => undefined} color="inherit">
+                    {session?.admin && (
+                        <IconButton
+                            onClick={handleAdminMenuOpen}
+                            color="inherit"
+                        >
                             <GavelIcon />
                         </IconButton>
                     )}
@@ -213,6 +250,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ session }) => {
                 </Toolbar>
             </AppBar>
             {renderMenu}
+            {adminMenu}
         </div>
     )
 }

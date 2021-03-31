@@ -25,6 +25,7 @@ export interface NavRoute {
     path: string
     component: React.FC<any>
     identified?: boolean
+    admin?: boolean
 }
 
 const routes: NavRoute[] = [
@@ -94,12 +95,20 @@ const routes: NavRoute[] = [
         path: '/profile/edit/:id?',
         component: Signup,
         identified: true,
+        admin: true,
     },
     {
         id: 'favorites',
         path: '/favorites',
         component: Favorites,
         identified: true,
+    },
+    {
+        id: 'reports',
+        path: '/reports/:id?',
+        component: () => null,
+        identified: true,
+        admin: true,
     },
     {
         id: '404',

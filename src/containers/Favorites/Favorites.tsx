@@ -35,7 +35,7 @@ const Favorites: React.FC<RouteComponentProps> = ({ history, location }) => {
     const classes = useStyles()
 
     const [productOrUser, setProductOrUser] = React.useState(
-        (location?.state as any)?.favType === true
+        (location?.state as any)?.favType !== false
     )
 
     const handleType = (e: any, value: boolean) => {

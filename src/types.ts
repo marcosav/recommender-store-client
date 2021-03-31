@@ -33,7 +33,6 @@ interface PreviewProduct {
     rating: number
 
     fav?: boolean
-    onCartAmount?: number
 }
 
 interface ProductCategory {
@@ -75,6 +74,8 @@ interface CartProduct {
 interface CartProductPreview {
     product: PreviewProduct
     amount: number
+
+    removed?: boolean
 }
 
 interface Date {

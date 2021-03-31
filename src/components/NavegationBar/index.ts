@@ -1,3 +1,3 @@
-import NavigationBar from './NavigationBar'
+import NavigationBarWrapper from './NavigationBarWrapper'
 
-export default NavigationBar
+export default NavigationBarWrapper

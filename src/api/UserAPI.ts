@@ -46,7 +46,8 @@ interface LoginResponse {
 }
 
 export default class UserAPI extends BaseAPI implements UserService {
-    login = (form: LoginForm) => this.post<LoginResponse>('/login', form)
+    login = (form: LoginForm) =>
+        this.post<LoginResponse>('/login', form, [HttpStatusCode.Unauthorized])
 
     signup = (form: SignupForm, image: File, onUploadProgress: any) => {
         const formData = new FormData()

@@ -1,73 +1,62 @@
 import React from 'react'
 
-import { Session, useCartService, useFavoriteService } from '../../services'
+import {
+    useCartService,
+    useFavoriteService,
+    useProductService,
+    useResourceService,
+    useSessionService,
+} from '../../services'
 
-import { ProductHolder, ContentWarn, Loading } from '../../components'
+import { ContentWarn, Loading, ProductSlider } from '../../components'
 
 import { CartProductPreview, PreviewProduct } from '../../types'
-import { CartService } from '../../api'
-
-import { Typography, useTheme } from '@material-ui/core'
 
 import { HttpStatusCode } from '../../utils'
 
-import IconButton from '@material-ui/core/IconButton'
-import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
+import Paper from '@material-ui/core/Paper'
 import ShoppingCart from '@material-ui/icons/ShoppingCart'
-import UndoIcon from '@material-ui/icons/Undo'
+import PaymentIcon from '@material-ui/icons/Payment'
 
 import { useStyles } from './CartPage.style'
+
 import { useTranslation } from 'react-i18next'
+import { RouteComponentProps } from 'react-router'
 
-interface CartPageParams {
-    session: Session
-}
+import CartProductHolder from './components'
 
-const CartProductActions: React.FC<{
-    product: PreviewProduct
-    cartService?: CartService
-}> = ({ product, cartService }) => {
-    const theme = useTheme()
+const round = (n: number) => Math.round(n * 100) / 100
 
-    const [onCart, setOnCart] = React.useState<boolean>(
-        product.onCartAmount !== undefined
-    )
-
-    const handleCart = async (e: any) => {
-        e.stopPropagation()
-
-        const r = await (onCart
-            ? cartService!!.remove(product.id)
-            : cartService!!.update({
-                  productId: product.id,
-                  amount: product.onCartAmount!!,
-                  add: false,
-              }))
-
-        if (r.status !== HttpStatusCode.OK) return
-
-        setOnCart(!onCart)
-    }
-
-    return (
-        <IconButton size={'small'} onClick={handleCart}>
-            {onCart ? (
-                <RemoveShoppingCartIcon htmlColor={theme.palette.error.main} />
-            ) : (
-                <UndoIcon />
-            )}
-        </IconButton>
-    )
-}
-
-const CartPage: React.FC<CartPageParams> = () => {
+const CartPage: React.FC<RouteComponentProps> = ({ history }) => {
     const cartService = useCartService()
+    const productService = useProductService()
     const favService = useFavoriteService()
+    const resources = useResourceService()
+    const sessionService = useSessionService()
 
     const { t } = useTranslation()
     const classes = useStyles()
 
+    const logged = sessionService.isLogged()
+    const [favorites, setFavorites] = React.useState<PreviewProduct[]>()
     const [products, setProducts] = React.useState<CartProductPreview[]>()
+
+    const calcTotal = () =>
+        round(
+            products?.reduce<number>(
+                (prev, prod) =>
+                    (prev += prod.removed
+                        ? 0
+                        : prod.amount * prod.product.price),
+                0
+            ) ?? 0
+        )
+
+    const [total, setTotal] = React.useState<number>()
+
+    const updateTotal = () => setTotal(calcTotal())
 
     React.useEffect(() => {
         const fetchProducts = async () => {
@@ -79,6 +68,23 @@ const CartPage: React.FC<CartPageParams> = () => {
         fetchProducts()
     }, [cartService])
 
+    React.useEffect(() => {
+        updateTotal()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [products])
+
+    React.useEffect(() => {
+        const fetchFavorites = async () => {
+            // TODO
+            const r = await favService.getForUser({ page: 0 })
+
+            if (r.status === HttpStatusCode.OK)
+                setFavorites((r.data.items as PreviewProduct[]).slice(0, 8))
+        }
+
+        if (logged) fetchFavorites()
+    }, [favService, logged])
+
     const EmptyCart = () => (
         <ContentWarn>
             <ShoppingCart />
@@ -86,27 +92,85 @@ const CartPage: React.FC<CartPageParams> = () => {
         </ContentWarn>
     )
 
-    return products !== undefined ? (
-        products.length ? (
-            <>
-                {products!!.map((p, i: number) => {
-                    p.product.onCartAmount = p.amount
-                    return (
-                        <ProductHolder
-                            key={i}
-                            product={p.product}
-                            Actions={CartProductActions}
-                            cartService={cartService}
-                            favService={favService}
-                        />
+    return (
+        <>
+            <header className={classes.header}>
+                <div>
+                    <Typography
+                        className={classes.title}
+                        variant="h3"
+                        component="h1"
+                    >
+                        {t('cart.title')}
+                    </Typography>
+                    <Typography
+                        color="textSecondary"
+                        variant="h5"
+                        component="h2"
+                    >
+                        {products?.length} {t('cart.items')}
+                    </Typography>
+                </div>
+                <Paper variant="outlined" className={classes.buyHolder}>
+                    <Typography variant="h6" component="p">
+                        {t('cart.total')}
+                        {`: ${total} €`}
+                    </Typography>
+                    <Button
+                        variant="outlined"
+                        color="secondary"
+                        endIcon={<PaymentIcon />}
+                    >
+                        {t('cart.buy')}
+                    </Button>
+                </Paper>
+            </header>
+            <div className={classes.contentHolder}>
+                {products !== undefined ? (
+                    products.length ? (
+                        <div className={classes.list}>
+                            {products!!.map((p, i: number) => (
+                                <CartProductHolder
+                                    key={i}
+                                    product={p}
+                                    {...{
+                                        cartService,
+                                        favoriteService: favService,
+                                        history,
+                                        resources,
+                                        updateTotal,
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <EmptyCart />
                     )
-                })}
-            </>
-        ) : (
-            <EmptyCart />
-        )
-    ) : (
-        <Loading />
+                ) : (
+                    <Loading />
+                )}
+            </div>
+            {logged && (
+                <div className={classes.bottom}>
+                    <Typography
+                        variant="h5"
+                        component="h2"
+                        color="textSecondary"
+                    >
+                        {t('cart.favorites')}
+                    </Typography>
+                    {favorites && (
+                        <ProductSlider
+                            {...{
+                                products: favorites,
+                                productService,
+                                favService,
+                            }}
+                        />
+                    )}
+                </div>
+            )}
+        </>
     )
 }
 
