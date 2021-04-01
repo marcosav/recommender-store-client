@@ -22,6 +22,7 @@ interface PageContainerProps<T> {
     EmptyComponent?: React.FC
     setShownItems: (loaded?: Paged<T>) => void
     deps?: any[]
+    ContainerComponent?: React.FC
 }
 
 const NoResults = () => {
@@ -40,6 +41,7 @@ function PageContainer<T>({
     EmptyComponent,
     setShownItems,
     deps = [],
+    ContainerComponent,
 }: PageContainerProps<T>) {
     const location = useLocation()
     const history = useHistory()
@@ -82,14 +84,20 @@ function PageContainer<T>({
     }, [setShownItems, page, ...deps])
 
     const Empty = EmptyComponent ? <EmptyComponent /> : <NoResults />
+    const Container: React.FC = ({ children }) =>
+        ContainerComponent ? (
+            <ContainerComponent>{children}</ContainerComponent>
+        ) : (
+            <div className={classes.container}>{children}</div>
+        )
 
     return items === undefined ? (
         <Loading />
     ) : items.length ? (
         <div className={classes.root}>
-            <div className={classes.container}>
+            <Container>
                 {items.map((p, i: number) => itemRender(p, i))}
-            </div>
+            </Container>
             {pages > 1 && (
                 <Pagination
                     className={classes.pagger}

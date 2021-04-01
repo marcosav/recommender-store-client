@@ -31,6 +31,7 @@ interface ProductActionsProps {
     cartService?: CartService
     resources?: ResourceService
     noFav?: boolean
+    noCart?: boolean
 }
 
 const DefaultActions: React.FC<ProductActionsProps> = ({
@@ -38,6 +39,7 @@ const DefaultActions: React.FC<ProductActionsProps> = ({
     favService,
     cartService,
     noFav = false,
+    noCart = false,
 }) => {
     const theme = useTheme()
     const { t } = useTranslation()
@@ -76,19 +78,20 @@ const DefaultActions: React.FC<ProductActionsProps> = ({
                     )}
                 </IconButton>
             )}
-            {product.stock ? (
-                <IconButton size={'small'} onClick={addToCart}>
-                    <ShoppingBasket />
-                </IconButton>
-            ) : (
-                <Typography
-                    variant="body2"
-                    color="error"
-                    style={{ marginLeft: 4 }}
-                >
-                    {t('product.no_stock')}
-                </Typography>
-            )}
+            {!noCart &&
+                (product.stock ? (
+                    <IconButton size={'small'} onClick={addToCart}>
+                        <ShoppingBasket />
+                    </IconButton>
+                ) : (
+                    <Typography
+                        variant="body2"
+                        color="error"
+                        style={{ marginLeft: 4 }}
+                    >
+                        {t('product.no_stock')}
+                    </Typography>
+                ))}
         </>
     )
 }
@@ -100,6 +103,7 @@ const ProductHolder: React.FC<ProductProps & ProductActionsProps> = ({
     cartService,
     resources,
     noFav = false,
+    noCart = false,
 }) => {
     const history = useHistory()
 
@@ -138,7 +142,9 @@ const ProductHolder: React.FC<ProductProps & ProductActionsProps> = ({
                 </CardMedia>
             </CardActionArea>
             <CardActions disableSpacing className={classes.actions}>
-                <Actions {...{ product, favService, cartService, noFav }} />
+                <Actions
+                    {...{ product, favService, cartService, noFav, noCart }}
+                />
 
                 <Typography className={classes.price}>
                     {`${product.price}€`}

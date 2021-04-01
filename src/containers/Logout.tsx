@@ -8,7 +8,7 @@ const Logout: React.FC<RouteComponentProps> = ({ history }) => {
 
     React.useEffect(() => {
         const logout = async () => {
-            await sessionService.logout()
+            if (sessionService.isLogged()) await sessionService.logout()
 
             history.push('/')
         }

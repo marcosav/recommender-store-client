@@ -46,6 +46,8 @@ interface ProductReport {
     userId: number
     reason: string
     date: Date
+    productName: string
+    userNickname: string
 }
 
 interface User {

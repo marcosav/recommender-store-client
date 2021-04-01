@@ -136,6 +136,7 @@ const VendorProfile: React.FC<RouteComponentProps<VendorProfileParams>> = ({
                                 favService,
                                 resources,
                                 noFav: self,
+                                noCart: !shown
                             }}
                         />
                     )}

@@ -3,14 +3,12 @@ import React from 'react'
 import {
     useCartService,
     useFavoriteService,
-    useProductService,
     useResourceService,
-    useSessionService,
 } from '../../services'
 
-import { ContentWarn, Loading, ProductSlider } from '../../components'
+import { ContentWarn, Loading } from '../../components'
 
-import { CartProductPreview, PreviewProduct } from '../../types'
+import { CartProductPreview } from '../../types'
 
 import { HttpStatusCode } from '../../utils'
 
@@ -31,16 +29,12 @@ const round = (n: number) => Math.round(n * 100) / 100
 
 const CartPage: React.FC<RouteComponentProps> = ({ history }) => {
     const cartService = useCartService()
-    const productService = useProductService()
     const favService = useFavoriteService()
     const resources = useResourceService()
-    const sessionService = useSessionService()
 
     const { t } = useTranslation()
     const classes = useStyles()
 
-    const logged = sessionService.isLogged()
-    const [favorites, setFavorites] = React.useState<PreviewProduct[]>()
     const [products, setProducts] = React.useState<CartProductPreview[]>()
 
     const calcTotal = () =>
@@ -56,7 +50,19 @@ const CartPage: React.FC<RouteComponentProps> = ({ history }) => {
 
     const [total, setTotal] = React.useState<number>()
 
-    const updateTotal = () => setTotal(calcTotal())
+    const [size, setSize] = React.useState<number>(0)
+
+    const updateTotal = () => {
+        setTotal(calcTotal())
+        updateSize()
+    }
+    const updateSize = () =>
+        setSize(
+            products?.reduce<number>(
+                (pred, p) => (pred += p.removed ? 0 : 1),
+                0
+            ) ?? 0
+        )
 
     React.useEffect(() => {
         const fetchProducts = async () => {
@@ -72,18 +78,6 @@ const CartPage: React.FC<RouteComponentProps> = ({ history }) => {
         updateTotal()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [products])
-
-    React.useEffect(() => {
-        const fetchFavorites = async () => {
-            // TODO
-            const r = await favService.getForUser({ page: 0 })
-
-            if (r.status === HttpStatusCode.OK)
-                setFavorites((r.data.items as PreviewProduct[]).slice(0, 8))
-        }
-
-        if (logged) fetchFavorites()
-    }, [favService, logged])
 
     const EmptyCart = () => (
         <ContentWarn>
@@ -108,7 +102,7 @@ const CartPage: React.FC<RouteComponentProps> = ({ history }) => {
                         variant="h5"
                         component="h2"
                     >
-                        {products?.length} {t('cart.items')}
+                        {size} {t('cart.items')}
                     </Typography>
                 </div>
                 <Paper variant="outlined" className={classes.buyHolder}>
@@ -150,26 +144,6 @@ const CartPage: React.FC<RouteComponentProps> = ({ history }) => {
                     <Loading />
                 )}
             </div>
-            {logged && (
-                <div className={classes.bottom}>
-                    <Typography
-                        variant="h5"
-                        component="h2"
-                        color="textSecondary"
-                    >
-                        {t('cart.favorites')}
-                    </Typography>
-                    {favorites && (
-                        <ProductSlider
-                            {...{
-                                products: favorites,
-                                productService,
-                                favService,
-                            }}
-                        />
-                    )}
-                </div>
-            )}
         </>
     )
 }

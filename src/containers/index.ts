@@ -9,6 +9,7 @@ import Search from './Search/Search'
 import Favorites from './Favorites'
 import CartPage from './CartPage'
 import VendorProfile from './VendorProfile'
+import ReportsPage from './ReportsPage'
 
 export {
     Login,
@@ -22,4 +23,5 @@ export {
     Favorites,
     CartPage,
     VendorProfile,
+    ReportsPage,
 }

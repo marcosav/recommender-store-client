@@ -19,6 +19,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete'
 import TextField from '@material-ui/core/TextField'
 import Link from '@material-ui/core/Link'
 import VisibilityIcon from '@material-ui/icons/VisibilityOutlined'
+import AssessmentIcon from '@material-ui/icons/AssessmentOutlined'
 
 import { useStyles } from './ProductInfo.style'
 
@@ -60,7 +61,8 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
     const session = sessionService.current()
     const logged = sessionService.isLogged()
     const owner = session?.userId === product.userId
-    const editable = owner || session?.admin
+    const admin = session?.admin
+    const editable = owner || admin
 
     const addToFav = async (e: any) => {
         e.stopPropagation()
@@ -85,6 +87,10 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
 
     const edit = () => {
         if (editable) history.push(`/product/${product.id}/edit`)
+    }
+
+    const reports = () => {
+        if (admin) history.push(`/reports/${product.id}`)
     }
 
     const report = () => setReporting(true)
@@ -170,7 +176,9 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
                         </div>
                     </div>
                     <div className={classes.priceRating}>
-                        <Typography variant="h6">{product.price}</Typography>
+                        <Typography variant="h6">
+                            {product.price} {'€'}
+                        </Typography>
                         <Rating
                             name="read-only"
                             value={product.rating}
@@ -187,6 +195,11 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
                         <div>
                             {' '}
                             <div className={classes.buttons}>
+                                {admin && (
+                                    <IconButton size="small" onClick={reports}>
+                                        <AssessmentIcon />
+                                    </IconButton>
+                                )}
                                 {editable && (
                                     <IconButton size="small" onClick={edit}>
                                         <EditOutlined />

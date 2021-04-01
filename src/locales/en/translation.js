@@ -96,6 +96,13 @@ const en = {
         popular: 'Popular',
         recommended: 'Recommended',
     },
+    reports: {
+        empty: 'No reports',
+        product: 'Product',
+        date: 'Date',
+        reason: 'Reason',
+        title: 'Reports',
+    },
     validation: {
         min_length: 'Min allowed length is {0}',
         max_length: 'Max allowed length is {0}',

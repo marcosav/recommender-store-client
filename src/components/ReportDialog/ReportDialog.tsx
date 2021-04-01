@@ -31,7 +31,11 @@ const ReportDialog: React.FC<ReportDialogProps> = ({
     const [reason, setReason] = React.useState('')
     const [errors, setErrors] = React.useState<any>({})
 
-    const handleClose = () => setOpen(false)
+    const handleClose = () => {
+        setReason('')
+        setErrors({})
+        setOpen(false)
+    }
 
     const handleReport = async () => {
         const r = await reportService.report(product.id, reason)

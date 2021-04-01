@@ -4,17 +4,19 @@ import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 
-import { useUserService } from '../../services'
+import { useSessionService, useUserService } from '../../services'
 
 import { useStyles } from './Login.style'
 import { PasswordField } from '../../components'
 
-import { RouteComponentProps } from 'react-router'
+import { Redirect, RouteComponentProps } from 'react-router'
 import { HttpStatusCode } from '../../utils'
 import { useTranslation } from 'react-i18next'
 
 const Login: React.FC<RouteComponentProps> = ({ history }) => {
     const userService = useUserService()
+    const sessionService = useSessionService()
+
     const { t } = useTranslation()
 
     const classes = useStyles()
@@ -41,6 +43,8 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
     }
 
     const register = () => history.push('/signup')
+
+    if (sessionService.isLogged()) return <Redirect to="/" />
 
     return (
         <>

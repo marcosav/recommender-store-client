@@ -19,7 +19,7 @@ export const AuthServiceImpl = (sessionStorage: SessionStorage) => {
 
     const auth = async () => {
         let token = sessionStorage.storedToken()
-
+        
         if (!token) {
             const res = await api.auth()
 

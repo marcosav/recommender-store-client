@@ -14,6 +14,8 @@ import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
 import UndoIcon from '@material-ui/icons/Undo'
+import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
+import Favorite from '@material-ui/icons/Favorite'
 
 import { useStyles } from './CartProductHolder.style'
 
@@ -41,11 +43,15 @@ const CartProductHolder: React.FC<{
     const classes = useStyles()
     const { t } = useTranslation()
 
+    const [favorite, setFavorite] = React.useState(pc.product.fav === true)
+
     const [removed, setRemoved] = React.useState(false)
     const [unavailable, setUnavailable] = React.useState(false)
 
     const [amountField, setAmountField] = React.useState<any>(pc.amount)
     const [amountError, setAmountError] = React.useState<string>()
+
+    const outStock = pc.product.stock <= 0
 
     const calcSub = () => round(pc.amount * pc.product.price)
 
@@ -86,11 +92,13 @@ const CartProductHolder: React.FC<{
                 break
             case HttpStatusCode.NotFound:
                 setUnavailable(true)
+                break
+            case HttpStatusCode.BadRequest:
+                if (pc.product.stock) checkStock(pc.amount)
         }
     }
 
     const changeUnits = async () => {
-        if (removed) return
         const a = parseInt(amountField)
 
         setAmountField(pc.amount)
@@ -106,11 +114,28 @@ const CartProductHolder: React.FC<{
         setAmountError(undefined)
         setSubtotal(calcSub())
 
-        await cartService.update({
+        const r = await cartService.update({
             productId: pc.product.id,
             amount: a,
             add: false,
         })
+
+        if (r.status !== HttpStatusCode.OK) return
+
+        setRemoved(false)
+        updateTotal()
+    }
+
+    const addToFav = async (e: any) => {
+        e.stopPropagation()
+
+        const r = await (favorite
+            ? favoriteService.remove(pc.product.id)
+            : favoriteService.add(pc.product.id))
+
+        if (r.status !== HttpStatusCode.OK) return
+
+        setFavorite(!favorite)
     }
 
     return (
@@ -144,6 +169,7 @@ const CartProductHolder: React.FC<{
                     variant="h6"
                     className={classes.subtotal}
                 >{`${subtotal} €`}</Typography>
+
                 <div className={classes.amount}>
                     <TextField
                         label={t('product.amount')}
@@ -154,12 +180,12 @@ const CartProductHolder: React.FC<{
                         onChange={(e) => setAmountField(e.target.value)}
                         onBlur={changeUnits}
                         error={amountError !== undefined}
-                        disabled={removed}
+                        //disabled={removed}
                         InputLabelProps={{
                             shrink: true,
                         }}
                     />
-                    {amountError && (
+                    {!outStock && amountError && (
                         <Typography
                             variant="caption"
                             color="error"
@@ -168,7 +194,17 @@ const CartProductHolder: React.FC<{
                             {amountError}
                         </Typography>
                     )}
+                    {outStock && (
+                        <Typography
+                            className={classes.subtotal}
+                            variant="button"
+                            color="error"
+                        >
+                            {t('product.no_stock')}
+                        </Typography>
+                    )}
                 </div>
+
                 <div className={classes.actions}>
                     {unavailable ? (
                         <Typography variant="button" color="error">
@@ -185,6 +221,13 @@ const CartProductHolder: React.FC<{
                             )}
                         </IconButton>
                     )}
+                    <IconButton size={'small'} onClick={addToFav}>
+                        {favorite ? (
+                            <Favorite htmlColor={theme.palette.error.main} />
+                        ) : (
+                            <FavoriteBorder />
+                        )}
+                    </IconButton>
                 </div>
             </div>
         </Paper>

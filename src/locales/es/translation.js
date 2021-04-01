@@ -95,6 +95,12 @@ const es = {
         popular: 'Populares',
         recommended: 'Recomendados',
     },
+    reports: {
+        empty: 'No hay reportes',
+        product: 'Producto',
+        date: 'Fecha',
+        reason: 'Motivo',
+    },
     validation: {
         min_length: 'Longitud mínima de {0}',
         max_length: 'Longitud máxima de {0}',

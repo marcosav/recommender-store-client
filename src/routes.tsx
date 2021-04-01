@@ -14,6 +14,7 @@ import {
     Favorites,
     CartPage,
     VendorProfile,
+    ReportsPage,
 } from './containers'
 
 import { BaseLayout } from './layout'
@@ -70,7 +71,6 @@ const routes: NavRoute[] = [
         id: 'login',
         path: '/login',
         component: Login,
-        identified: false,
     },
     {
         id: 'logout',
@@ -82,7 +82,6 @@ const routes: NavRoute[] = [
         id: 'signup',
         path: '/signup',
         component: Signup,
-        identified: false,
     },
     {
         id: 'profile',
@@ -94,7 +93,6 @@ const routes: NavRoute[] = [
         id: 'profileEdit',
         path: '/profile/edit/:id?',
         component: Signup,
-        identified: true,
         admin: true,
     },
     {
@@ -106,8 +104,7 @@ const routes: NavRoute[] = [
     {
         id: 'reports',
         path: '/reports/:id?',
-        component: () => null,
-        identified: true,
+        component: ReportsPage,
         admin: true,
     },
     {

@@ -5,7 +5,7 @@ import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete'
 
-import { RouteComponentProps } from 'react-router'
+import { Redirect, RouteComponentProps } from 'react-router'
 
 import {
     useResourceService,
@@ -209,6 +209,8 @@ const Signup: React.FC<RouteComponentProps<UserEditParams>> = ({
 
         if (editImageUri) loadImage()
     }, [editImageUri, resources])
+
+    if (!edit && sessionService.isLogged()) return <Redirect to="/" />
 
     return (
         <>

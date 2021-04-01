@@ -6,10 +6,10 @@ import { ErrorWrapperClass, NavigationBarWrapper } from '../components'
 import { NavRoute } from '../routes'
 import { SessionService } from '../services'
 
-import { withStyles, createStyles, WithStyles } from '@material-ui/core'
+import { makeStyles, createStyles } from '@material-ui/core'
 import { ServerErrorHandlerListener } from '../utils'
 
-const styles = () =>
+const useStyles = makeStyles(() =>
     createStyles({
         base: {
             display: 'flex',
@@ -19,6 +19,7 @@ const styles = () =>
             minHeight: '100vh',
         },
     })
+)
 
 interface RouteCheckProps {
     props: any
@@ -48,69 +49,70 @@ const RouteCheck: React.FC<RouteCheckProps> = ({
     const admin = route.admin
     const identified = route.identified || admin
 
+    const auth = sessionService.isAuth()
     const logged = sessionService.isLogged()
 
-    return identified === true ? (
-        <Route>
-            {logged ? (
-                <RouteComponent {...props} />
-            ) : (
-                <CheckRedirect path="/login" {...{ props }} />
-            )}
-        </Route>
-    ) : identified === false ? (
-        <Route>
-            {logged ? (
-                <CheckRedirect path="/" {...{ props }} />
-            ) : (
-                <RouteComponent {...props} />
-            )}
-        </Route>
-    ) : (
-        <RouteComponent {...props} />
-    )
+    if (!auth) {
+        sessionService
+            .auth()
+            .then(() =>
+                props.history.push(
+                    props.location.pathname,
+                    props.location.state
+                )
+            )
+        return <></>
+    }
+
+    if (admin && !sessionService.current()?.admin)
+        return <CheckRedirect path="/404" {...{ props }} />
+
+    if (identified === true && !logged)
+        return <CheckRedirect path="/login" {...{ props }} />
+
+    return <RouteComponent {...props} />
 }
 
-interface BaseLayoutProps extends WithStyles<typeof styles> {
+interface BaseLayoutProps {
     serverErrorHandler: ServerErrorHandlerListener
     sessionService: SessionService
     routes: NavRoute[]
 }
 
-class BaseLayout extends React.Component<BaseLayoutProps> {
-    render() {
-        return (
-            <div className={this.props.classes.base}>
-                <NavigationBarWrapper
-                    sessionService={this.props.sessionService}
-                />
-                <Switch>
-                    {this.props.routes.map((route) => (
-                        <Route
-                            key={route.id}
-                            path={route.path}
-                            render={(props) => (
-                                <RouteCheck
-                                    {...{
-                                        props,
-                                        route,
-                                        sessionService: this.props
-                                            .sessionService,
-                                    }}
-                                />
-                            )}
-                            exact
-                        />
-                    ))}
-                    <Redirect to="/404" />
-                </Switch>
+const BaseLayout: React.FC<BaseLayoutProps> = ({
+    sessionService,
+    serverErrorHandler,
+    routes,
+}) => {
+    const classes = useStyles()
 
-                <ErrorWrapperClass
-                    serverErrorHandler={this.props.serverErrorHandler}
-                />
-            </div>
-        )
-    }
+    return (
+        <div className={classes.base}>
+            <NavigationBarWrapper sessionService={sessionService} />
+
+            <Switch>
+                {routes.map((route) => (
+                    <Route
+                        key={route.id}
+                        path={route.path}
+                        render={(props) => (
+                            <RouteCheck
+                                {...{
+                                    props,
+                                    route,
+                                    sessionService,
+                                }}
+                            />
+                        )}
+                        exact
+                    />
+                ))}
+                <Redirect to="/404" />
+            </Switch>
+
+            <ErrorWrapperClass serverErrorHandler={serverErrorHandler} />
+        </div>
+    )
 }
 
-export default withStyles(styles)(BaseLayout)
+export default BaseLayout
