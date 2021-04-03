@@ -60,7 +60,7 @@ const Home: React.FC<RouteComponentProps> = ({ history }) => {
         <>
             <Typography
                 className={classes.title}
-                variant="h3"
+                variant="h2"
                 component="h1"
                 color="textSecondary"
             >

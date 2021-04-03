@@ -118,6 +118,9 @@ const en = {
         empty: "Please check your shopping cart because it's empty!",
         invalid:
             'Please check your shopping cart, there are some problems regarding the availability of some items.',
+        recent_addresses: 'Recent addresses',
+        no_recent_addresses: 'No recent addresses',
+        loading_recent_addresses: 'Loading recent addresses...',
     },
     address: {
         recipient: 'Full name',

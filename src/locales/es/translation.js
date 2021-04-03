@@ -116,6 +116,9 @@ const es = {
         empty: 'Por favor revisa el carrito de compra, porque está vacío.',
         invalid:
             'Por favor revisa el carrito de compra, hay problemas con la disponibilidad de alguno de los ítems.',
+        recent_addresses: 'Direcciones recientes',
+        no_recent_addresses: 'No hay direcciones recientes',
+        loading_recent_addresses: 'Cargando direcciones recientes...',
     },
     address: {
         recipient: 'Nombre y apellidos',

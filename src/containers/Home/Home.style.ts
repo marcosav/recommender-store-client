@@ -5,13 +5,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         title: {
             margin: theme.spacing(3),
             textAlign: 'center',
-            //fontWeight: 'lighter',
-            fontStyle: 'italic',
-            fontFamily: '"Source Serif Pro", "Roboto"',
         },
         subtitle: {
             margin: theme.spacing(2, 0, 0, 2),
-            fontFamily: '"Source Serif Pro", "Roboto"',
         },
         categories: {
             marginLeft: 'auto',

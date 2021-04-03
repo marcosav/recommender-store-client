@@ -11,12 +11,10 @@ export const useStyles = makeStyles((theme: Theme) =>
                 display: 'block',
             },
             transitionDuration: '.3s',
-            fontWeight: 'bold',
+            fontWeight: 'lighter',
             '&:hover': {
-                textShadow: '1px 1px 5px #00000088'
+                textShadow: '1px 1px 5px #00000088',
             },
-            fontStyle: 'italic',
-            fontFamily: '"Source Serif Pro", "Roboto"',
         },
         searchContainer: {
             width: '100%',

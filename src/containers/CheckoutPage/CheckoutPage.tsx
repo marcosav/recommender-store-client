@@ -2,11 +2,16 @@ import React from 'react'
 
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
+import ButtonBase from '@material-ui/core/ButtonBase'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import PaymentIcon from '@material-ui/icons/Payment'
 
-import { useCartService } from '../../services'
+import {
+    useCartService,
+    useSessionService,
+    useUserService,
+} from '../../services'
 
 import { useStyles } from './CheckoutPage.style'
 
@@ -19,6 +24,8 @@ import { InvalidCartDialog } from '../CartPage/components'
 
 const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
     const cartService = useCartService()
+    const userService = useUserService()
+    const sessionService = useSessionService()
 
     const { t } = useTranslation()
 
@@ -26,7 +33,7 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
 
     const state = location.state as any
 
-    //const [addresses, setAddresses] = React.useState<UserAddress[]>()
+    const [addresses, setAddresses] = React.useState<UserAddress[]>()
 
     const [errors, setErrors] = React.useState({})
     const [data, setData] = React.useState<UserAddress>({
@@ -41,7 +48,7 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
 
     const [content, setContent] = React.useState<string>()
 
-    /*React.useEffect(() => {
+    React.useEffect(() => {
         ;(async () => {
             const r = await userService.addresses(
                 sessionService.current()?.userId!!
@@ -52,13 +59,12 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
         })()
     }, [sessionService, userService])
 
-    React.useEffect(() => {
-        if (addresses) {
-        }
-    }, [addresses])*/
-
     if (!state) return <Redirect to={'/cart'} />
     const { total, size } = state
+
+    const selectAddress = (i: number) => () => {
+        if (addresses) setData(addresses[i])
+    }
 
     const checkout = async (e: any) => {
         e.preventDefault()
@@ -101,6 +107,49 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
                     {t('checkout.title')}
                 </Typography>
             </header>
+
+            <Typography
+                variant="h6"
+                component="h2"
+                color="textSecondary"
+                className={classes.addressesTitle}
+            >
+                {t(
+                    addresses !== undefined
+                        ? addresses?.length
+                            ? 'checkout.recent_addresses'
+                            : 'checkout.no_recent_addresses'
+                        : 'checkout.loading_recent_addresses'
+                )}
+            </Typography>
+
+            {addresses && addresses.length > 0 && (
+                <div className={classes.addressContainer}>
+                    {addresses.map((a, i) => (
+                        <ButtonBase className={classes.addressButton}>
+                            <Paper
+                                key={i}
+                                variant="outlined"
+                                className={classes.addressHolder}
+                                onClick={selectAddress(i)}
+                            >
+                                <Typography variant="body2">
+                                    {a.recipient}
+                                    {' / '}
+                                    {a.address}
+                                    {' / '}
+                                    {a.city}
+                                    {' / '}
+                                    {a.region}
+                                    {' / '}
+                                    {a.country}
+                                </Typography>
+                            </Paper>
+                        </ButtonBase>
+                    ))}
+                    <div className={classes.endGap} />
+                </div>
+            )}
 
             <form
                 className={classes.root}

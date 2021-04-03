@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Divider from '@material-ui/core/Divider'
+import Tooltip from '@material-ui/core/Tooltip'
 import Paper from '@material-ui/core/Paper'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
@@ -62,14 +63,41 @@ const OrderHolder: React.FC<OrderHolderProps> = ({
                     {o.items.length}{' '}
                     {t(o.items.length > 1 ? 'cart.items' : 'cart.item')}
                 </Typography>
-                <Typography className={classes.secondaryHeading}>
-                    {total} {'€'}
-                </Typography>
+                <Tooltip
+                    title={`longText longTextlongText longText\n longText longText
+                longText\n longText longText
+                longText longText`}
+                >
+                    <Typography className={classes.secondaryHeading}>
+                        {total} {'€'}
+                    </Typography>
+                </Tooltip>
             </AccordionSummary>
             <AccordionDetails>
                 <List className={classes.container}>
+                    <Typography variant="h6" color="textSecondary">
+                        {t('address.address')}
+                    </Typography>
+                    <div className={classes.address}>
+                        {Object.entries(o.address).map(([k, v], i) =>
+                            i ? (
+                                <div key={i} className={classes.addressValues}>
+                                    <Typography
+                                        component="span"
+                                        color="textSecondary"
+                                    >
+                                        {t(`address.${k}`)}:
+                                    </Typography>
+                                    <Typography>{v}</Typography>
+                                </div>
+                            ) : (
+                                <></>
+                            )
+                        )}
+                    </div>
                     {o.items.map((p, i) => (
                         <div key={i}>
+                            <Divider />
                             <ListItem className={classes.product}>
                                 <div className={classes.imageContainer}>
                                     <Paper className={classes.image}>
@@ -104,7 +132,6 @@ const OrderHolder: React.FC<OrderHolderProps> = ({
                                     </Typography>
                                 </div>
                             </ListItem>
-                            {i !== o.items.length - 1 && <Divider />}
                         </div>
                     ))}
                 </List>

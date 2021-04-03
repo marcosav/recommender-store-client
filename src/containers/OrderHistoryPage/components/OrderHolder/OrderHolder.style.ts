@@ -16,6 +16,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         container: {
             width: '100%',
+            padding: 0,
         },
         product: {
             display: 'flex',
@@ -35,7 +36,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         image: {
             margin: 'auto',
-            backgroundColor: '#f5f5f5',
+            backgroundColor: theme.palette.grey[100],
             '& > button': {
                 borderRadius: 4,
             },
@@ -59,6 +60,20 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         price: {
             marginLeft: 'auto',
+        },
+        address: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            marginBottom: theme.spacing(2),
+        },
+        addressValues: {
+            display: 'flex',
+            flexDirection: 'row',
+            flexBasis: '40%',
+            margin: theme.spacing(0.25, 1),
+            '& > span': {
+                marginRight: 4,
+            },
         },
     })
 )

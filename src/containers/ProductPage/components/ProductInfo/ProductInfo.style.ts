@@ -28,7 +28,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         imagePreview: {},
         holder: {
             margin: theme.spacing(0, 0, 1, 1),
-            backgroundColor: '#f5f5f5',
+            backgroundColor: theme.palette.grey[100],
             justifyItems: 'center',
             alignItems: 'center',
             display: 'flex',

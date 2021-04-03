@@ -35,7 +35,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         image: {
             margin: 'auto',
-            backgroundColor: '#f5f5f5',
+            backgroundColor: theme.palette.grey[100],
             '& > button': {
                 borderRadius: 4,
             },
