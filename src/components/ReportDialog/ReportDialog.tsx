@@ -59,12 +59,13 @@ const ReportDialog: React.FC<ReportDialogProps> = ({
             open={open}
             onClose={handleClose}
             aria-labelledby="form-dialog-title"
+            aria-describedby="form-dialog-description"
         >
             <DialogTitle id="form-dialog-title">
                 {t('product.report.title')}
             </DialogTitle>
             <DialogContent>
-                <DialogContentText>
+                <DialogContentText id="form-dialog-description">
                     {t('product.report.body')}
                 </DialogContentText>
                 <TextField

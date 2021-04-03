@@ -14,6 +14,12 @@ export const useStyles = makeStyles((theme: Theme) =>
             '& > h2': {
                 cursor: 'pointer',
             },
+            '& > *': {
+                alignSelf: 'center',
+            },
+            '& > p': {
+                marginLeft: theme.spacing(1),
+            },
         },
         imageContainer: {
             margin: theme.spacing(1),

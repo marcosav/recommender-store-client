@@ -1,6 +1,6 @@
 import BaseAPI, { RPromise } from './BaseAPI'
 
-import { User, DetailedUser } from '../types'
+import { User, DetailedUser, UserAddress } from '../types'
 import { HttpStatusCode } from '../utils'
 
 export interface UserService {
@@ -11,6 +11,7 @@ export interface UserService {
     getDetailedUser: (id: number) => RPromise<DetailedUser>
     searchUsers: (search: SearchUser) => RPromise<User[]>
     deleteUser: (id: number) => RPromise
+    addresses: (id: number) => RPromise<UserAddress[]>
 }
 
 const USER_PATH = '/user'
@@ -89,6 +90,12 @@ export default class UserAPI extends BaseAPI implements UserService {
 
     deleteUser = (id: number) =>
         this.delete(`${USER_PATH}/${id}`, null, [
+            HttpStatusCode.Forbidden,
+            HttpStatusCode.NotFound,
+        ])
+
+    addresses = (id: number) =>
+        this.get<UserAddress[]>(`${USER_PATH}/${id}/addresses`, null, [
             HttpStatusCode.Forbidden,
             HttpStatusCode.NotFound,
         ])

@@ -7,8 +7,9 @@ import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import IconButton from '@material-ui/core/IconButton'
 
+import { DateUtils } from '../../../../utils'
+
 import { Link } from 'react-router-dom'
-import moment from 'moment-timezone'
 
 interface ReportHolderProps {
     report: ProductReport
@@ -21,10 +22,7 @@ const ReportHolder: React.FC<ReportHolderProps> = ({
 }) => {
     const [removed, setRemoved] = React.useState(false)
 
-    const date = moment(report.date.seconds * 1000)
-        .tz('Europe/Madrid')
-        .toDate()
-        .toLocaleString()
+    const date = DateUtils.format(report.date.seconds)
 
     const onDelete = () => {
         if (!removed) if (deleteReport()) setRemoved(true)

@@ -24,6 +24,7 @@ import SignUp from '@material-ui/icons/HowToReg'
 import ArrowForward from '@material-ui/icons/ArrowForward'
 import GavelIcon from '@material-ui/icons/Gavel'
 import ReportIcon from '@material-ui/icons/Report'
+import HistoryIcon from '@material-ui/icons/History'
 
 import { useStyles } from './NavigationBar.style'
 import { useHistory } from 'react-router'
@@ -120,6 +121,13 @@ const NavigationBar = () => {
                     <Favorite />
                 </ListItemIcon>
                 {t('nav.favorites')}
+            </MenuItem>
+
+            <MenuItem onClick={() => redirect('/history')}>
+                <ListItemIcon color="inherit">
+                    <HistoryIcon />
+                </ListItemIcon>
+                {t('nav.history')}
             </MenuItem>
 
             <MenuItem onClick={() => redirect('/product/publish')}>

@@ -46,7 +46,9 @@ const CartProductHolder: React.FC<{
     const [favorite, setFavorite] = React.useState(pc.product.fav === true)
 
     const [removed, setRemoved] = React.useState(false)
-    const [unavailable, setUnavailable] = React.useState(false)
+    const [unavailable, setUnavailable] = React.useState(
+        pc.unavailable === true
+    )
 
     const [amountField, setAmountField] = React.useState<any>(pc.amount)
     const [amountError, setAmountError] = React.useState<string>()
@@ -91,6 +93,7 @@ const CartProductHolder: React.FC<{
                 setRemoved(!removed)
                 break
             case HttpStatusCode.NotFound:
+                pc.unavailable = true
                 setUnavailable(true)
                 break
             case HttpStatusCode.BadRequest:
@@ -155,79 +158,91 @@ const CartProductHolder: React.FC<{
                 <div className={classes.title}>
                     <Typography
                         variant="h6"
-                        component="h2"
-                        onClick={gotoProduct}
+                        component={unavailable ? 'h3' : 'h2'}
+                        onClick={unavailable ? undefined : gotoProduct}
+                        color={unavailable ? 'error' : 'initial'}
                     >
-                        {pc.product.name}
+                        {unavailable ? t('cart.unavailable') : pc.product.name}
                     </Typography>
-                </div>
-                <Typography variant="button" color="textSecondary">
-                    {`${pc.product.price} €/`}
-                    {t('cart.unit')}
-                </Typography>
-                <Typography
-                    variant="h6"
-                    className={classes.subtotal}
-                >{`${subtotal} €`}</Typography>
 
-                <div className={classes.amount}>
-                    <TextField
-                        label={t('product.amount')}
-                        variant="outlined"
-                        margin="dense"
-                        value={amountField}
-                        style={{ maxWidth: 100 }}
-                        onChange={(e) => setAmountField(e.target.value)}
-                        onBlur={changeUnits}
-                        error={amountError !== undefined}
-                        //disabled={removed}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    />
-                    {!outStock && amountError && (
+                    {unavailable && (
                         <Typography
-                            variant="caption"
-                            color="error"
-                            className={classes.subtotal}
+                            variant="body1"
+                            component="p"
+                            color={'textSecondary'}
                         >
-                            {amountError}
-                        </Typography>
-                    )}
-                    {outStock && (
-                        <Typography
-                            className={classes.subtotal}
-                            variant="button"
-                            color="error"
-                        >
-                            {t('product.no_stock')}
+                            {pc.product.name}
                         </Typography>
                     )}
                 </div>
+
+                {!unavailable && (
+                    <>
+                        <Typography variant="button" color="textSecondary">
+                            {`${pc.product.price} €/`}
+                            {t('cart.unit')}
+                        </Typography>
+                        <Typography
+                            variant="h6"
+                            className={classes.subtotal}
+                        >{`${subtotal} €`}</Typography>
+
+                        <div className={classes.amount}>
+                            <TextField
+                                label={t('product.amount')}
+                                variant="outlined"
+                                margin="dense"
+                                value={amountField}
+                                style={{ maxWidth: 100 }}
+                                onChange={(e) => setAmountField(e.target.value)}
+                                onBlur={changeUnits}
+                                error={amountError !== undefined}
+                                //disabled={removed}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                            {!outStock && amountError && (
+                                <Typography
+                                    variant="caption"
+                                    color="error"
+                                    className={classes.subtotal}
+                                >
+                                    {amountError}
+                                </Typography>
+                            )}
+                            {outStock && (
+                                <Typography
+                                    className={classes.subtotal}
+                                    variant="button"
+                                    color="error"
+                                >
+                                    {t('product.no_stock')}
+                                </Typography>
+                            )}
+                        </div>
+                    </>
+                )}
 
                 <div className={classes.actions}>
-                    {unavailable ? (
-                        <Typography variant="button" color="error">
-                            {t('cart.unavailable')}
-                        </Typography>
-                    ) : (
-                        <IconButton size={'small'} onClick={handleCart}>
-                            {removed ? (
-                                <UndoIcon />
-                            ) : (
-                                <DeleteIcon
+                    <IconButton size={'small'} onClick={handleCart}>
+                        {removed ? (
+                            !unavailable && <UndoIcon />
+                        ) : (
+                            <DeleteIcon htmlColor={theme.palette.error.main} />
+                        )}
+                    </IconButton>
+                    {!unavailable && (
+                        <IconButton size={'small'} onClick={addToFav}>
+                            {favorite ? (
+                                <Favorite
                                     htmlColor={theme.palette.error.main}
                                 />
+                            ) : (
+                                <FavoriteBorder />
                             )}
                         </IconButton>
                     )}
-                    <IconButton size={'small'} onClick={addToFav}>
-                        {favorite ? (
-                            <Favorite htmlColor={theme.palette.error.main} />
-                        ) : (
-                            <FavoriteBorder />
-                        )}
-                    </IconButton>
                 </div>
             </div>
         </Paper>

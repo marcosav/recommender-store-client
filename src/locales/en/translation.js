@@ -4,6 +4,7 @@ const en = {
         header: 'Shop',
         favorites: 'Favorites',
         upload: 'Upload product',
+        history: 'My orders',
         logout: 'Logout',
         login: 'Login',
         login_info: 'Login with your account',
@@ -45,10 +46,17 @@ const en = {
         buy: 'Proceed',
         total: 'Total',
         items: 'Items',
+        item: 'Item',
         unit: 'Unit',
         unavailable: 'Unavailable',
         no_stock: 'Insufficient stock',
         favorites: 'Your favorites',
+        invalid: {
+            content:
+                'Please check the following items, they are unavailable or there is insufficient stock: ',
+            title: 'Invalid products',
+            button: 'Got it',
+        },
     },
     favorites: {
         title: 'My favorites',
@@ -103,6 +111,27 @@ const en = {
         reason: 'Reason',
         title: 'Reports',
     },
+    checkout: {
+        title: 'Checkout',
+        finish: 'Finish',
+        success: 'Order #{0} has been successfully completed!',
+        empty: "Please check your shopping cart because it's empty!",
+        invalid:
+            'Please check your shopping cart, there are some problems regarding the availability of some items.',
+    },
+    address: {
+        recipient: 'Full name',
+        city: 'City',
+        region: 'Region',
+        code: 'Zip code',
+        country: 'Country',
+        address: 'Address',
+        phone: 'Phone number',
+    },
+    history: {
+        title: 'Order history',
+        empty: 'No products',
+    },
     validation: {
         min_length: 'Min allowed length is {0}',
         max_length: 'Max allowed length is {0}',
@@ -125,7 +154,7 @@ const en = {
     error: {
         500: {
             text:
-                'Sorry, an error has ocurred, please represh the page and try again!',
+                'Sorry, an error has ocurred, please refresh the page and try again!',
         },
         401: {
             text: 'Please log in to do that!',

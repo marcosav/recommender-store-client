@@ -5,6 +5,7 @@ import useCartService from './CartService'
 import useSessionService, { Session, SessionService } from './session'
 import useResourceService from './ResourceService'
 import useProductReportService from './ProductReportService'
+import useOrdersService from './OrdersService'
 
 export type { Session, SessionService }
 
@@ -16,4 +17,5 @@ export {
     useSessionService,
     useResourceService,
     useProductReportService,
+    useOrdersService,
 }

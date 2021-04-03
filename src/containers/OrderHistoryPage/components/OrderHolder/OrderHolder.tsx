@@ -1,0 +1,116 @@
+import React from 'react'
+
+import { useTranslation } from 'react-i18next'
+
+import { useStyles } from './OrderHolder.style'
+import { Order } from '../../../../types'
+import { ProductImg } from '../../../../components'
+
+import Accordion from '@material-ui/core/Accordion'
+import AccordionDetails from '@material-ui/core/AccordionDetails'
+import AccordionSummary from '@material-ui/core/AccordionSummary'
+import Typography from '@material-ui/core/Typography'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import Divider from '@material-ui/core/Divider'
+import Paper from '@material-ui/core/Paper'
+import ButtonBase from '@material-ui/core/ButtonBase'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+
+import { DateUtils } from '../../../../utils'
+import { ResourceService } from '../../../../api'
+
+interface OrderHolderProps {
+    order: Order
+    resources: ResourceService
+    history: any
+}
+
+const OrderHolder: React.FC<OrderHolderProps> = ({
+    order: o,
+    resources,
+    history,
+}) => {
+    const classes = useStyles()
+
+    const { t } = useTranslation()
+
+    const [expanded, setExpanded] = React.useState(false)
+
+    const handleChange = (e: any, isExpanded: boolean) =>
+        setExpanded(isExpanded)
+
+    const gotoProduct = (id: number) => () =>
+        history.push(`/product/${id}`, undefined)
+
+    const round = (n: number) => Math.round(n * 100) / 100
+
+    const total = round(
+        o.items.reduce<number>((v, p) => (v += p.amount * p.unitPrice), 0)
+    )
+
+    return (
+        <Accordion expanded={expanded} onChange={handleChange}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography variant="body2" className={classes.id}>
+                    #{o.id}
+                </Typography>
+                <Typography className={classes.heading}>
+                    {DateUtils.format(o.date.seconds)}
+                </Typography>
+                <Typography className={classes.secondaryHeading}>
+                    {o.items.length}{' '}
+                    {t(o.items.length > 1 ? 'cart.items' : 'cart.item')}
+                </Typography>
+                <Typography className={classes.secondaryHeading}>
+                    {total} {'€'}
+                </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+                <List className={classes.container}>
+                    {o.items.map((p, i) => (
+                        <div key={i}>
+                            <ListItem className={classes.product}>
+                                <div className={classes.imageContainer}>
+                                    <Paper className={classes.image}>
+                                        <ButtonBase
+                                            onClick={gotoProduct(p.product.id)}
+                                        >
+                                            <ProductImg
+                                                url={p.product.mainImage}
+                                                resources={resources}
+                                            />
+                                        </ButtonBase>
+                                    </Paper>
+                                </div>
+                                <div className={classes.data}>
+                                    <div className={classes.title}>
+                                        <Typography
+                                            variant="body2"
+                                            component="span"
+                                            color="textSecondary"
+                                        >
+                                            {'x'}
+                                            {p.amount}
+                                        </Typography>
+                                        <Typography
+                                            onClick={gotoProduct(p.product.id)}
+                                        >
+                                            {p.product.name}
+                                        </Typography>
+                                    </div>
+                                    <Typography className={classes.price}>
+                                        {p.amount * p.unitPrice} {'€'}
+                                    </Typography>
+                                </div>
+                            </ListItem>
+                            {i !== o.items.length - 1 && <Divider />}
+                        </div>
+                    ))}
+                </List>
+            </AccordionDetails>
+        </Accordion>
+    )
+}
+
+export default OrderHolder

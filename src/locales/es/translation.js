@@ -4,6 +4,7 @@ const es = {
         header: 'Tienda',
         favorites: 'Favoritos',
         upload: 'Publicar producto',
+        history: 'Mis pedidos',
         logout: 'Salir',
         login: 'Iniciar sesión',
         login_info: 'Entra con tu cuenta',
@@ -44,11 +45,18 @@ const es = {
         title: 'Carrito',
         buy: 'Proceder',
         total: 'Total',
-        items: 'Items',
+        items: 'Ítems',
+        item: 'Ítem',
         unit: 'Unidad',
         unavailable: 'No disponible ya',
         no_stock: 'Stock insuficiente',
         favorites: 'Tus favoritos',
+        content: {
+            invalid:
+                'Por favor revisa los siguientes items del carrito, ya no están disponibles o no hay suficiente stock: ',
+            title: 'Productos inválidos',
+            button: 'Entendido',
+        },
     },
     favorites: {
         title: 'Mis favoritos',
@@ -100,6 +108,27 @@ const es = {
         product: 'Producto',
         date: 'Fecha',
         reason: 'Motivo',
+    },
+    checkout: {
+        title: 'Pago',
+        finish: 'Completar',
+        success: '¡El pedido #{0} se ha completado correctamente!',
+        empty: 'Por favor revisa el carrito de compra, porque está vacío.',
+        invalid:
+            'Por favor revisa el carrito de compra, hay problemas con la disponibilidad de alguno de los ítems.',
+    },
+    address: {
+        recipient: 'Nombre y apellidos',
+        city: 'Ciudad',
+        region: 'Región',
+        code: 'Código postal',
+        country: 'País',
+        address: 'Dirección',
+        phone: 'Teléfono',
+    },
+    history: {
+        title: 'Historial de compras',
+        empty: 'No hay productos',
     },
     validation: {
         min_length: 'Longitud mínima de {0}',

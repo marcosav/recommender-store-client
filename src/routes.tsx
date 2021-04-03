@@ -15,6 +15,8 @@ import {
     CartPage,
     VendorProfile,
     ReportsPage,
+    CheckoutPage,
+    OrderHistoryPage,
 } from './containers'
 
 import { BaseLayout } from './layout'
@@ -106,6 +108,18 @@ const routes: NavRoute[] = [
         path: '/reports/:id?',
         component: ReportsPage,
         admin: true,
+    },
+    {
+        id: 'checkout',
+        path: '/checkout',
+        component: CheckoutPage,
+        identified: true,
+    },
+    {
+        id: 'history',
+        path: '/history/:id?',
+        component: OrderHistoryPage,
+        identified: true,
     },
     {
         id: '404',

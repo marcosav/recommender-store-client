@@ -9,6 +9,7 @@ import {
 import * as HttpStatusCode from './HttpStatusCodes'
 import * as Constants from './Constants'
 import * as ValidationTools from './ValidationTools'
+import * as DateUtils from './DateUtils'
 
 export {
     AuthRequestInterceptor,
@@ -18,6 +19,7 @@ export {
     serverErrorHandler,
     Constants,
     ValidationTools,
+    DateUtils,
 }
 
 export type { ServerErrorHandlerEmitter, ServerErrorHandlerListener }

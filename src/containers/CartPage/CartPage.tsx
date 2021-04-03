@@ -23,7 +23,7 @@ import { useStyles } from './CartPage.style'
 import { useTranslation } from 'react-i18next'
 import { RouteComponentProps } from 'react-router'
 
-import CartProductHolder from './components'
+import { CartProductHolder, InvalidCartDialog } from './components'
 
 const round = (n: number) => Math.round(n * 100) / 100
 
@@ -34,6 +34,8 @@ const CartPage: React.FC<RouteComponentProps> = ({ history }) => {
 
     const { t } = useTranslation()
     const classes = useStyles()
+
+    const [content, setContent] = React.useState<string>()
 
     const [products, setProducts] = React.useState<CartProductPreview[]>()
 
@@ -79,6 +81,30 @@ const CartPage: React.FC<RouteComponentProps> = ({ history }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [products])
 
+    const checkValidCart = () => {
+        if (size === 0) return false
+
+        const errors = products
+            ?.map((p) =>
+                !p.removed &&
+                (p.amount > p.product.stock || p.product.stock === 0)
+                    ? p.product.name
+                    : null
+            )
+            .filter((p) => p)
+
+        const valid = errors?.length === 0
+        if (!valid)
+            setContent(
+                t('cart.invalid.content') + (errors as string[]).join(', ')
+            )
+        return valid
+    }
+
+    const goCheckout = () => {
+        if (checkValidCart()) history.push('/checkout', { total, size })
+    }
+
     const EmptyCart = () => (
         <ContentWarn>
             <ShoppingCart />
@@ -102,7 +128,7 @@ const CartPage: React.FC<RouteComponentProps> = ({ history }) => {
                         variant="h5"
                         component="h2"
                     >
-                        {size} {t('cart.items')}
+                        {size} {t(size > 1 ? 'cart.items' : 'cart.item')}
                     </Typography>
                 </div>
                 <Paper variant="outlined" className={classes.buyHolder}>
@@ -111,7 +137,9 @@ const CartPage: React.FC<RouteComponentProps> = ({ history }) => {
                         {`: ${total} €`}
                     </Typography>
                     <Button
+                        onClick={goCheckout}
                         variant="outlined"
+                        disabled={size === 0}
                         color="secondary"
                         endIcon={<PaymentIcon />}
                     >
@@ -144,6 +172,7 @@ const CartPage: React.FC<RouteComponentProps> = ({ history }) => {
                     <Loading />
                 )}
             </div>
+            <InvalidCartDialog {...{ content, setContent }} />
         </>
     )
 }

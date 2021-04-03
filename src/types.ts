@@ -68,6 +68,16 @@ interface UserDetails {
 
 type DetailedUser = User & UserDetails
 
+interface UserAddress {
+    recipient: string
+    code: string
+    city: string
+    region: string
+    country: string
+    address: string
+    phone: string
+}
+
 interface CartProduct {
     id: number
     amount: number
@@ -78,11 +88,26 @@ interface CartProductPreview {
     amount: number
 
     removed?: boolean
+    unavailable?: boolean
 }
 
 interface Date {
     seconds: number
     nanos: number
+}
+
+interface Order {
+    id: number
+    userId: number
+    address: UserAddress
+    items: OrderedProduct[]
+    date: Date
+}
+
+interface OrderedProduct {
+    amount: number
+    unitPrice: number
+    product: PreviewProduct
 }
 
 export type {
@@ -91,7 +116,10 @@ export type {
     ProductCategory,
     ProductReport,
     User,
+    UserAddress,
     DetailedUser,
     CartProduct,
     CartProductPreview,
+    Order,
+    OrderedProduct,
 }

@@ -10,6 +10,8 @@ import Favorites from './Favorites'
 import CartPage from './CartPage'
 import VendorProfile from './VendorProfile'
 import ReportsPage from './ReportsPage'
+import CheckoutPage from './CheckoutPage'
+import OrderHistoryPage from './OrderHistoryPage'
 
 export {
     Login,
@@ -24,4 +26,6 @@ export {
     CartPage,
     VendorProfile,
     ReportsPage,
+    CheckoutPage,
+    OrderHistoryPage,
 }
