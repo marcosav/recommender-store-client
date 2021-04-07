@@ -100,6 +100,7 @@ const es = {
         },
     },
     home: {
+        title: '¿Qué vas a comprar?',
         popular: 'Populares',
         recommended: 'Recomendados',
     },
@@ -148,9 +149,9 @@ const es = {
         already_reported: 'Ya has reportado este producto, ¡por favor espera!',
     },
     info: {
-        title: '¿Qué vas a comprar?',
         loading: 'Cargando...',
         interesting: 'Podría interesarte...',
+        no_articles: 'No hay recomendaciones',
     },
     error: {
         500: {

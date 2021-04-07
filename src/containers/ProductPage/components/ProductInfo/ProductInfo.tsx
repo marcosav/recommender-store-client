@@ -180,8 +180,8 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
                             {product.price} {'€'}
                         </Typography>
                         <Rating
-                            name="read-only"
                             value={product.rating}
+                            precision={0.1}
                             readOnly
                         />
                     </div>

@@ -58,7 +58,7 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
     const { errorFor, helperFor } = ValidationTools.createValidator(t, errors)
 
     React.useEffect(() => {
-        updateData({ category: category.id })
+        if (category !== undefined) updateData({ category: category.id })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [categories])
 

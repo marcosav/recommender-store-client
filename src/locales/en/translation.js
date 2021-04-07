@@ -153,6 +153,7 @@ const en = {
     info: {
         loading: 'Loading...',
         interesting: 'May interest you...',
+        no_articles: 'No articles found',
     },
     error: {
         500: {

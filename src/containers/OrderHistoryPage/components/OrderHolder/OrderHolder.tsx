@@ -3,7 +3,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useStyles } from './OrderHolder.style'
-import { Order } from '../../../../types'
+import { Order, OrderedProduct } from '../../../../types'
 import { ProductImg } from '../../../../components'
 
 import Accordion from '@material-ui/core/Accordion'
@@ -13,8 +13,8 @@ import Typography from '@material-ui/core/Typography'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Divider from '@material-ui/core/Divider'
-import Tooltip from '@material-ui/core/Tooltip'
 import Paper from '@material-ui/core/Paper'
+import Rating from '@material-ui/lab/Rating'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
@@ -63,15 +63,9 @@ const OrderHolder: React.FC<OrderHolderProps> = ({
                     {o.items.length}{' '}
                     {t(o.items.length > 1 ? 'cart.items' : 'cart.item')}
                 </Typography>
-                <Tooltip
-                    title={`longText longTextlongText longText\n longText longText
-                longText\n longText longText
-                longText longText`}
-                >
-                    <Typography className={classes.secondaryHeading}>
-                        {total} {'€'}
-                    </Typography>
-                </Tooltip>
+                <Typography className={classes.secondaryHeading}>
+                    {total} {'€'}
+                </Typography>
             </AccordionSummary>
             <AccordionDetails>
                 <List className={classes.container}>
@@ -91,52 +85,84 @@ const OrderHolder: React.FC<OrderHolderProps> = ({
                                     <Typography>{v}</Typography>
                                 </div>
                             ) : (
-                                <></>
+                                <div key={i}></div>
                             )
                         )}
                     </div>
                     {o.items.map((p, i) => (
-                        <div key={i}>
-                            <Divider />
-                            <ListItem className={classes.product}>
-                                <div className={classes.imageContainer}>
-                                    <Paper className={classes.image}>
-                                        <ButtonBase
-                                            onClick={gotoProduct(p.product.id)}
-                                        >
-                                            <ProductImg
-                                                url={p.product.mainImage}
-                                                resources={resources}
-                                            />
-                                        </ButtonBase>
-                                    </Paper>
-                                </div>
-                                <div className={classes.data}>
-                                    <div className={classes.title}>
-                                        <Typography
-                                            variant="body2"
-                                            component="span"
-                                            color="textSecondary"
-                                        >
-                                            {'x'}
-                                            {p.amount}
-                                        </Typography>
-                                        <Typography
-                                            onClick={gotoProduct(p.product.id)}
-                                        >
-                                            {p.product.name}
-                                        </Typography>
-                                    </div>
-                                    <Typography className={classes.price}>
-                                        {p.amount * p.unitPrice} {'€'}
-                                    </Typography>
-                                </div>
-                            </ListItem>
-                        </div>
+                        <OrderedProductHolder
+                            key={i}
+                            {...{ resources, product: p, gotoProduct }}
+                        />
                     ))}
                 </List>
             </AccordionDetails>
         </Accordion>
+    )
+}
+
+interface OrderedProductHolderProps {
+    product: OrderedProduct
+    resources: ResourceService
+    gotoProduct: any
+}
+
+const OrderedProductHolder: React.FC<OrderedProductHolderProps> = ({
+    product: p,
+    resources,
+    gotoProduct,
+}) => {
+    const classes = useStyles()
+
+    const [rating, setRating] = React.useState<number | null>(
+        p.userRating ?? null
+    )
+
+    const handleRating = (e: any, v: number | null) => {
+        setRating(v)
+        console.log(v)
+    }
+
+    return (
+        <div>
+            <Divider />
+            <ListItem className={classes.product}>
+                <div className={classes.imageContainer}>
+                    <Paper className={classes.image}>
+                        <ButtonBase onClick={gotoProduct(p.product.id)}>
+                            <ProductImg
+                                url={p.product.mainImage}
+                                resources={resources}
+                            />
+                        </ButtonBase>
+                    </Paper>
+                </div>
+                <div className={classes.data}>
+                    <div className={classes.title}>
+                        <Typography
+                            variant="body2"
+                            component="span"
+                            color="textSecondary"
+                        >
+                            {'x'}
+                            {p.amount}
+                        </Typography>
+                        <Typography onClick={gotoProduct(p.product.id)}>
+                            {p.product.name}
+                        </Typography>
+                    </div>
+                    <Rating
+                        name="product-rating"
+                        precision={0.5}
+                        value={rating}
+                        onChange={handleRating}
+                    />
+                    <Typography className={classes.price}>
+                        {p.amount * p.unitPrice} {'€'}
+                    </Typography>
+                </div>
+            </ListItem>
+        </div>
     )
 }
 

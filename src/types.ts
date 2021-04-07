@@ -108,6 +108,8 @@ interface OrderedProduct {
     amount: number
     unitPrice: number
     product: PreviewProduct
+
+    userRating?: number
 }
 
 export type {

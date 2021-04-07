@@ -57,6 +57,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             '& > span': {
                 marginRight: theme.spacing(0.5),
             },
+            marginRight: theme.spacing(1),
         },
         price: {
             marginLeft: 'auto',
