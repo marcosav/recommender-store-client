@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 
 import { HttpStatusCode, serverErrorHandler } from '../utils'
 
-const API_URL = `${process.env.REACT_APP_API_URL}/api/v${process.env.REACT_APP_API_VERSION}`
+const API_URL = `${process.env.REACT_APP_API_URL}/v${process.env.REACT_APP_API_VERSION}`
 
 const url = (path: string) => `${API_URL}${path}`
 
