@@ -4,23 +4,27 @@ export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         form: {
             margin: 'auto',
+            padding: theme.spacing(1),
             display: 'flex',
+            maxWidth: 'calc(100% - 16px)',
+            width: '46ch',
             flexDirection: 'column',
             transform: 'translateY(-35%)',
             [theme.breakpoints.down('sm')]: {
                 transform: 'translateY(-20%)',
-            }
+            },
         },
         buttons: {
-            '& > button': {
-                margin: theme.spacing(1),
+            marginTop: theme.spacing(1),
+            '& > button:last-child': {
+                marginLeft: theme.spacing(1),
             },
             gridTemplateColumns: '1fr 1fr',
             display: 'grid',
         },
         input: {
-            margin: theme.spacing(1),
-            width: '42ch',
+            margin: theme.spacing(1, 0),
+            width: '100%',
         },
         header: {
             margin: theme.spacing(4),

@@ -21,6 +21,8 @@ import Link from '@material-ui/core/Link'
 import VisibilityIcon from '@material-ui/icons/VisibilityOutlined'
 import AssessmentIcon from '@material-ui/icons/AssessmentOutlined'
 
+import clsx from 'clsx'
+
 import { useStyles } from './ProductInfo.style'
 
 import { Product } from '../../../../types'
@@ -32,6 +34,7 @@ import {
 } from '../../../../services'
 import { Constants, HttpStatusCode } from '../../../../utils'
 import { ProductImg, ReportDialog } from '../../../../components'
+import { Hidden } from '@material-ui/core'
 
 interface ProductInfoParams {
     product: Product
@@ -120,71 +123,116 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
         }
     }, [product])
 
+    const InfoHeader = (
+        <>
+            <div className={classes.infoPair}>
+                <Typography variant="h5" component="h1">
+                    {product.name}
+                </Typography>
+                <div className={classes.buttons}>
+                    {admin && (
+                        <IconButton size="small" onClick={reports}>
+                            <AssessmentIcon />
+                        </IconButton>
+                    )}
+                    {editable && (
+                        <IconButton size="small" onClick={edit}>
+                            <EditOutlined />
+                        </IconButton>
+                    )}
+                    {logged && (
+                        <IconButton size="small" onClick={report}>
+                            <ReportOutlined />
+                        </IconButton>
+                    )}
+                    {!owner && (
+                        <IconButton size="small" onClick={addToFav}>
+                            {favorite ? (
+                                <Favorite
+                                    htmlColor={theme.palette.error.main}
+                                />
+                            ) : (
+                                <FavoriteBorder />
+                            )}
+                        </IconButton>
+                    )}
+                </div>
+            </div>
+            <div className={classes.catVendorVisits}>
+                <div>
+                    <Typography variant="button">
+                        {t(`category.${product.category.name}`)}
+                    </Typography>
+                    {' – '}
+                    <Link
+                        href={`/vendor/${product.userId}`}
+                        onClick={checkVendor}
+                        variant="subtitle1"
+                    >
+                        {product.vendorNick}
+                    </Link>
+                </div>
+                <div className={classes.visits}>
+                    <VisibilityIcon color="disabled" />
+                    <Typography variant="button" color="textSecondary">
+                        {product.visits}
+                    </Typography>
+                </div>
+            </div>
+            <div className={classes.infoPair}>
+                <Typography variant="h6">
+                    {product.price} {'€'}
+                </Typography>
+                <Rating value={product.rating} precision={0.1} readOnly />
+            </div>
+        </>
+    )
+
     return (
         <>
             <div className={classes.root}>
+                <Hidden mdUp>{InfoHeader}</Hidden>
                 <div className={classes.image}>
-                    <Paper className={classes.holder}>
-                        <ProductImg
-                            className={classes.mainImage}
-                            src={selectedImg ?? Constants.FALLBACK_IMAGE}
-                            alt={product.name}
-                        />
-                    </Paper>
+                    <div className={classes.holder}>
+                        <Paper
+                            className={clsx(
+                                classes.subholder,
+                                classes.mainImage
+                            )}
+                        >
+                            <ProductImg
+                                src={selectedImg ?? Constants.FALLBACK_IMAGE}
+                                alt={product.name}
+                            />
+                        </Paper>
+                    </div>
                     <div className={classes.images}>
                         {product.images.map((im) => (
-                            <Paper
+                            <div
                                 key={im.i}
-                                className={classes.holder}
-                                onClick={() => setSelectedImgUrl(im.u)}
+                                className={clsx(
+                                    classes.holder,
+                                    classes.imagePreview
+                                )}
                             >
-                                <ProductImg
-                                    className={classes.imagePreview}
-                                    url={im.u}
-                                    resources={resources}
-                                    selectedImgUrl={selectedImgUrl}
-                                    setSelectedImg={setSelectedImg}
-                                    alt={`I${im.i}`}
-                                />
-                            </Paper>
+                                <Paper
+                                    className={classes.subholder}
+                                    onClick={() => setSelectedImgUrl(im.u)}
+                                >
+                                    <ProductImg
+                                        url={im.u}
+                                        resources={resources}
+                                        selectedImgUrl={selectedImgUrl}
+                                        setSelectedImg={setSelectedImg}
+                                        alt={`I${im.i}`}
+                                    />
+                                </Paper>
+                            </div>
                         ))}
                     </div>
                 </div>
                 <div className={classes.details}>
-                    <Typography variant="h5" component="h1">
-                        {product.name}
-                    </Typography>
-                    <div className={classes.catVendorVisits}>
-                        <div>
-                            <Typography variant="button">
-                                {t(`category.${product.category.name}`)}
-                            </Typography>
-                            {' – '}
-                            <Link
-                                href={`/vendor/${product.userId}`}
-                                onClick={checkVendor}
-                                variant="subtitle1"
-                            >
-                                {product.vendorNick}
-                            </Link>
-                        </div>
-                        <div className={classes.visits}>
-                            <VisibilityIcon color="disabled" />
-                            <Typography variant="button" color="textSecondary">
-                                {product.visits}
-                            </Typography>
-                        </div>
-                    </div>
-                    <div className={classes.priceRating}>
-                        <Typography variant="h6">
-                            {product.price} {'€'}
-                        </Typography>
-                        <Rating
-                            value={product.rating}
-                            precision={0.1}
-                            readOnly
-                        />
-                    </div>
+                    <Hidden smDown>{InfoHeader}</Hidden>
                     <div className={classes.descriptionBuy}>
                         <Typography
                             variant="body2"
@@ -193,37 +241,6 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
                             {product.description}
                         </Typography>
                         <div>
-                            {' '}
-                            <div className={classes.buttons}>
-                                {admin && (
-                                    <IconButton size="small" onClick={reports}>
-                                        <AssessmentIcon />
-                                    </IconButton>
-                                )}
-                                {editable && (
-                                    <IconButton size="small" onClick={edit}>
-                                        <EditOutlined />
-                                    </IconButton>
-                                )}
-                                {logged && (
-                                    <IconButton size="small" onClick={report}>
-                                        <ReportOutlined />
-                                    </IconButton>
-                                )}
-                                {!owner && (
-                                    <IconButton size="small" onClick={addToFav}>
-                                        {favorite ? (
-                                            <Favorite
-                                                htmlColor={
-                                                    theme.palette.error.main
-                                                }
-                                            />
-                                        ) : (
-                                            <FavoriteBorder />
-                                        )}
-                                    </IconButton>
-                                )}
-                            </div>
                             <Paper className={classes.buyHolder}>
                                 <Autocomplete
                                     options={amounts}

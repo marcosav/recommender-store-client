@@ -43,8 +43,13 @@ const Signup: React.FC<RouteComponentProps<UserEditParams>> = ({
 
     const { id } = match.params
     const edit = match.path.includes('edit')
-
     const session = sessionService.current()
+
+    const _id = parseInt(id ?? '')
+    const userId =
+        isNaN(_id) || (session?.userId !== _id && !session?.admin)
+            ? undefined
+            : _id
 
     const classes = useStyles()
 
@@ -162,14 +167,14 @@ const Signup: React.FC<RouteComponentProps<UserEditParams>> = ({
         const handleNotFound = () => history.push('/404')
         const handleNotPermission = () => history.goBack()
 
-        const fetchUser = async (userId: number) => {
+        const fetchUser = async () => {
             const session = sessionService.current()
             if (userId !== session?.userId && !session?.admin) {
                 handleNotPermission()
                 return
             }
 
-            const r = await userService.getDetailedUser(userId)
+            const r = await userService.getDetailedUser(userId!!)
 
             switch (r.status) {
                 case HttpStatusCode.OK:
@@ -192,11 +197,8 @@ const Signup: React.FC<RouteComponentProps<UserEditParams>> = ({
             }
         }
 
-        if (edit) {
-            let userId = parseInt(id!!)
-            fetchUser(userId)
-        }
-    }, [edit, userService, id, history, sessionService])
+        if (edit) fetchUser()
+    }, [edit, userService, userId, history, sessionService])
 
     React.useEffect(() => {
         const loadImage = async () => {
@@ -211,6 +213,7 @@ const Signup: React.FC<RouteComponentProps<UserEditParams>> = ({
     }, [editImageUri, resources])
 
     if (!edit && sessionService.isLogged()) return <Redirect to="/" />
+    if (edit && userId === undefined) return <Redirect to={`/vendor/${id}`} />
 
     return (
         <>

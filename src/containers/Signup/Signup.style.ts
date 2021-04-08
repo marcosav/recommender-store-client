@@ -8,6 +8,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             [theme.breakpoints.down('xs')]: {
                 flexDirection: 'column',
             },
+            marginBottom: theme.spacing(1),
         },
         buttons: {
             margin: theme.spacing(1),
@@ -37,7 +38,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             position: 'absolute',
             top: 0,
             right: 0,
-            zIndex: 2
+            zIndex: 2,
         },
         avatar: {
             height: theme.spacing(20),

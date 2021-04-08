@@ -5,12 +5,16 @@ export const useStyles = makeStyles((theme: Theme) =>
         root: {
             margin: theme.spacing(2),
             display: 'grid',
-            gridTemplateColumns: '1fr 1.5fr',
+            [theme.breakpoints.up('md')]: {
+                gridTemplateColumns: '1fr 1.5fr',
+            },
         },
         image: {
-            margin: theme.spacing(1, 1, 0, 0),
-            maxWidth: 450,
-            maxHeight: 450,
+            margin: 'auto',
+            [theme.breakpoints.up('md')]: {
+                padding: theme.spacing(2, 2, 2, 1),
+            },
+            padding: theme.spacing(1, 1, 0, 0),
             display: 'flex',
             flexDirection: 'column',
             '& img': {
@@ -24,14 +28,26 @@ export const useStyles = makeStyles((theme: Theme) =>
             gridTemplateColumns: 'repeat(4, 1fr)',
             alignItems: 'center',
         },
-        mainImage: {},
-        imagePreview: {},
+        mainImage: {
+            backgroundColor: theme.palette.grey[100],
+            '& img': {
+                maxHeight: 350,
+                maxWidth: 450,
+            },
+        },
+        imagePreview: {
+            '& img': {
+                maxHeight: 100,
+                maxWidth: 110,
+            },
+        },
         holder: {
             margin: theme.spacing(0, 0, 1, 1),
-            backgroundColor: theme.palette.grey[100],
-            justifyItems: 'center',
             alignItems: 'center',
             display: 'flex',
+        },
+        subholder: {
+            margin: 'auto',
         },
         details: {
             margin: theme.spacing(1, 1, 0, 0),
@@ -57,22 +73,42 @@ export const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'row',
             justifyContent: 'space-between',
             height: '100%',
+            [theme.breakpoints.down('sm')]: {
+                marginLeft: theme.spacing(2),
+                flexWrap: 'wrap',
+                '& > *': {
+                    flexBasis: '100%',
+                },
+            },
         },
         description: {
-            flexBasis: '75%',
+            [theme.breakpoints.up('md')]: {
+                flexBasis: '75%',
+            },
+            color: theme.palette.grey[700],
             marginTop: theme.spacing(2),
+            paddingBottom: theme.spacing(2),
+            wordBreak: 'break-word',
+            whiteSpace: 'pre-wrap',
         },
-        priceRating: {
+        infoPair: {
             display: 'flex',
             justifyContent: 'space-between',
             width: '100%',
+            '& > h1': {
+                wordBreak: 'break-word',
+            },
         },
         buttons: {
             display: 'flex',
             justifyContent: 'end',
             marginBottom: theme.spacing(2),
+            flexWrap: 'wrap',
+            marginLeft: 'auto',
         },
         buyHolder: {
+            maxWidth: 200,
+            margin: 'auto',
             marginTop: 'auto',
             marginBottom: 'auto',
             display: 'flex',

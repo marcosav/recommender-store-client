@@ -3,13 +3,15 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         header: {
-            margin: theme.spacing(4),
+            margin: theme.spacing(2, 4),
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
+            flexWrap: 'wrap',
         },
         title: {
             userSelect: 'none',
+            marginRight: theme.spacing(1),
         },
         contentHolder: {
             display: 'flex',
@@ -21,7 +23,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             margin: 'auto',
         },
         buyHolder: {
-            marginLeft: 'auto',
+            margin: theme.spacing(2, 0, 0, 'auto'),
             display: 'flex',
             flexDirection: 'column',
             width: 200,

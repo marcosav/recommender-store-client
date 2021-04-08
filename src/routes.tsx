@@ -95,7 +95,7 @@ const routes: NavRoute[] = [
         id: 'profileEdit',
         path: '/profile/edit/:id?',
         component: Signup,
-        admin: true,
+        identified: true,
     },
     {
         id: 'favorites',
