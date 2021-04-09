@@ -52,7 +52,10 @@ const OrderHolder: React.FC<OrderHolderProps> = ({
 
     return (
         <Accordion expanded={expanded} onChange={handleChange}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                className={classes.summary}
+            >
                 <Typography variant="body2" className={classes.id}>
                     #{o.id}
                 </Typography>

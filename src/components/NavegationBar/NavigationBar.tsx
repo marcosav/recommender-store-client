@@ -25,6 +25,7 @@ import ArrowForward from '@material-ui/icons/ArrowForward'
 import GavelIcon from '@material-ui/icons/Gavel'
 import ReportIcon from '@material-ui/icons/Report'
 import HistoryIcon from '@material-ui/icons/History'
+import HomeIcon from '@material-ui/icons/Home'
 
 import { useStyles } from './NavigationBar.style'
 import { useHistory } from 'react-router'
@@ -130,9 +131,12 @@ const NavigationBar = () => {
                 {t('nav.history')}
             </MenuItem>
 
-            <MenuItem onClick={() => redirect('/product/publish')}>
+            <MenuItem
+                onClick={() => redirect('/product/publish')}
+                className={classes.add}
+            >
                 <ListItemIcon color="inherit">
-                    <Add />
+                    <Add className={classes.add} />
                 </ListItemIcon>
                 {t('nav.upload')}
             </MenuItem>
@@ -182,9 +186,9 @@ const NavigationBar = () => {
     )
 
     return (
-        <div className={classes.grow}>
+        <div>
             <AppBar position="static">
-                <Toolbar variant={'dense'}>
+                <Toolbar variant={'dense'} className={classes.toolbar}>
                     <Typography
                         className={classes.title}
                         variant="h5"
@@ -192,6 +196,14 @@ const NavigationBar = () => {
                     >
                         {t('nav.header')}
                     </Typography>
+
+                    <IconButton
+                        color="inherit"
+                        className={classes.home}
+                        onClick={() => redirect('/')}
+                    >
+                        <HomeIcon />
+                    </IconButton>
 
                     <div className={classes.searchContainer}>
                         <Paper
@@ -222,7 +234,7 @@ const NavigationBar = () => {
                         </Paper>
                     </div>
 
-                    <div className={classes.grow} />
+                    <div />
 
                     {session?.admin && (
                         <IconButton

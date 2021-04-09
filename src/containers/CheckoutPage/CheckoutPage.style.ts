@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            margin: '0 auto',
+            margin: theme.spacing(1, 'auto', 2),
             display: 'flex',
             flexDirection: 'row',
             flexWrap: 'wrap',
@@ -36,11 +36,14 @@ export const useStyles = makeStyles((theme: Theme) =>
             margin: theme.spacing(0, 2, 2, 0),
         },
         header: {
+            display: 'flex',
+            flexDirection: 'row',
             margin: theme.spacing(4),
+            alignItems: 'center',
             userSelect: 'none',
         },
         title: {
-            fontWeight: 'bold',
+            marginLeft: theme.spacing(1),
         },
         addressesTitle: {
             margin: theme.spacing(0, 0, 1, 2),

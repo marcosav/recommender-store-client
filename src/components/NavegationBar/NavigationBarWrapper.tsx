@@ -23,8 +23,6 @@ export default class NavigationBarWrapper extends React.Component<
 
     componentDidMount() {
         const getSession = async () => {
-            //if (!this.props.sessionService.isAuth())
-            //await this.props.sessionService.auth()
             this.setState({
                 ...this.state,
                 session: this.props.sessionService.current(),

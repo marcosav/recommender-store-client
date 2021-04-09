@@ -57,7 +57,7 @@ const Favorites: React.FC<RouteComponentProps> = ({ history, location }) => {
     return (
         <>
             <div className={classes.top}>
-                <Typography variant="h4" component="h1" color="textSecondary">
+                <Typography variant="h4" component="h1">
                     {t('favorites.title')}
                 </Typography>
                 <ToggleButtonGroup

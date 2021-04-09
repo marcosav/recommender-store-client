@@ -2,7 +2,11 @@ import { fade, makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        grow: {},
+        toolbar: {
+            [theme.breakpoints.down('xs')]: {
+                padding: theme.spacing(0, 1, 0, 0.5),
+            },
+        },
         title: {
             display: 'none',
             cursor: 'pointer',
@@ -15,6 +19,18 @@ export const useStyles = makeStyles((theme: Theme) =>
             '&:hover': {
                 textShadow: '1px 1px 5px #00000088',
             },
+        },
+        home: {
+            display: 'block',
+            [theme.breakpoints.up('sm')]: {
+                display: 'none',
+            },
+            userSelect: 'none',
+            transitionDuration: '.3s',
+            '&:hover': {
+                textShadow: '1px 1px 5px #00000088',
+            },
+            marginRight: theme.spacing(0.5),
         },
         searchContainer: {
             width: '100%',
@@ -72,6 +88,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         divider: {
             margin: theme.spacing(1, 0, 1, 0),
+        },
+        add: {
+            color: theme.palette.secondary.dark,
         },
     })
 )

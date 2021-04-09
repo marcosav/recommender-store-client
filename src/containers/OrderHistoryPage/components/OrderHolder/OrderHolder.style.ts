@@ -3,8 +3,13 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         id: {
-            flexBasis: '14%',
+            flexBasis: '17%',
             alignSelf: 'center',
+        },
+        summary: {
+            [theme.breakpoints.down('xs')]: {
+                padding: theme.spacing(1),
+            },
         },
         heading: {
             flexBasis: '33.33%',
@@ -21,11 +26,22 @@ export const useStyles = makeStyles((theme: Theme) =>
         product: {
             display: 'flex',
             padding: 0,
+            maxHeight: 200,
+            [theme.breakpoints.down(500)]: {
+                maxHeight: 400,
+                display: 'grid',
+                justifyContent: 'center',
+                justifyItems: 'center',
+                '& > div': {
+                    margin: theme.spacing(1),
+                },
+            },
         },
         imageContainer: {
             margin: theme.spacing(1, 1, 1, 0),
             alignSelf: 'center',
             minWidth: 200,
+            maxWidth: 200,
             display: 'flex',
             '& img': {
                 maxWidth: 190,
@@ -42,6 +58,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             },
         },
         data: {
+            maxHeight: 200,
             display: 'flex',
             width: '100%',
             flexWrap: 'wrap',

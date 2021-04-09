@@ -131,8 +131,8 @@ const en = {
         address: 'Address',
         phone: 'Phone number',
     },
-    history: {
-        title: 'Order history',
+    orders: {
+        title: 'Orders',
         empty: 'No products',
     },
     validation: {

@@ -19,7 +19,7 @@ export interface ProductService {
         images: File[],
         onUploadProgress: any,
         update: boolean
-    ) => RPromise
+    ) => RPromise<number>
     deleteProduct: (id: number) => RPromise
     findCategories: () => RPromise<ProductCategory[]>
 }
@@ -79,7 +79,7 @@ export default class ProductAPI extends BaseAPI implements ProductService {
                 )
         }
 
-        return (update ? this.putMP : this.postMP)(
+        return (update ? this.putMP : this.postMP)<number>(
             '/product',
             formData,
             [HttpStatusCode.Forbidden],

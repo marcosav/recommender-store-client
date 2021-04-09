@@ -100,7 +100,7 @@ const ProductEdit: React.FC<RouteComponentProps<ProductEditProps>> = ({
         switch (r.status) {
             case HttpStatusCode.OK:
             case HttpStatusCode.Forbidden:
-                goBack()
+                history.push(`/product/${r.data}`)
                 break
             case HttpStatusCode.BadRequest:
                 setErrors((r.data as any).error)

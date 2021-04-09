@@ -69,7 +69,7 @@ const OrderHistoryPage: React.FC<
     const NoHistory = () => (
         <ContentWarn>
             <HistoryIcon />
-            <Typography>{t('history.empty')}</Typography>
+            <Typography>{t('orders.empty')}</Typography>
         </ContentWarn>
     )
 
@@ -78,8 +78,8 @@ const OrderHistoryPage: React.FC<
     return (
         <div className={classes.root}>
             <header className={classes.header}>
-                <Typography variant="h3" component="h1">
-                    {t('history.title')}
+                <Typography variant="h4" component="h1">
+                    {t('orders.title')}
                 </Typography>
                 {userId && user && (
                     <Typography

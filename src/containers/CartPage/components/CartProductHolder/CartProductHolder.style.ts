@@ -8,6 +8,11 @@ export const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'row',
             height: 200,
+            [theme.breakpoints.down('xs')]: {
+                height: 400,
+                display: 'grid',
+                gridTemplateRows: '200px 200px',
+            },
         },
         title: {
             display: 'flex',

@@ -8,8 +8,11 @@ export const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
             '& > h1': {
                 margin: theme.spacing(0, 0, 2, 4),
-                alignSelf: 'normal'
-            }
+                [theme.breakpoints.down('xs')]: {
+                    margin: theme.spacing(0, 2, 2, 2),
+                },
+                alignSelf: 'normal',
+            },
         },
         categories: {
             margin: theme.spacing(1, 0.5),

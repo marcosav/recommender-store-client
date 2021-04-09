@@ -130,8 +130,8 @@ const es = {
         address: 'Dirección',
         phone: 'Teléfono',
     },
-    history: {
-        title: 'Historial de compras',
+    orders: {
+        title: 'Compras',
         empty: 'No hay productos',
     },
     validation: {

@@ -6,6 +6,8 @@ import ButtonBase from '@material-ui/core/ButtonBase'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import PaymentIcon from '@material-ui/icons/Payment'
+import IconButton from '@material-ui/core/IconButton'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
 import {
     useCartService,
@@ -99,9 +101,12 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
     return (
         <>
             <header className={classes.header}>
+                <IconButton onClick={() => history.goBack()}>
+                    <ArrowBackIcon />
+                </IconButton>
                 <Typography
                     className={classes.title}
-                    variant="h3"
+                    variant="h4"
                     component="h1"
                 >
                     {t('checkout.title')}
