@@ -82,6 +82,7 @@ const en = {
         amount: 'Amount',
         no_stock: 'Out of stock',
         name: 'Title',
+        brand: 'Brand',
         description: 'Description',
         price: 'Price',
         stock: 'Available stock',

@@ -1,6 +1,7 @@
 interface Product {
     id: number
     name: string
+    brand: string
     price: number
     stock: number
     category: ProductCategory
@@ -25,6 +26,7 @@ interface ProductImage {
 interface PreviewProduct {
     id: number
     name: string
+    brand: string
     price: number
     stock: number
     mainImage: string

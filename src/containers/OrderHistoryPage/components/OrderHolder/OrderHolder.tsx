@@ -123,7 +123,6 @@ const OrderedProductHolder: React.FC<OrderedProductHolderProps> = ({
 
     const handleRating = (e: any, v: number | null) => {
         setRating(v)
-        console.log(v)
     }
 
     return (

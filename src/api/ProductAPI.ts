@@ -30,6 +30,7 @@ const VENDOR_PATH = '/vendor'
 export interface ProductForm {
     id?: number
     name: string
+    brand: string
     description: string
     price: number
     stock: number

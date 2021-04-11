@@ -55,6 +55,7 @@ const ProductEdit: React.FC<RouteComponentProps<ProductEditProps>> = ({
             : {
                   id: undefined,
                   name: '',
+                  brand: '',
                   description: '',
                   price: 0,
                   stock: 1,
@@ -171,6 +172,7 @@ const ProductEdit: React.FC<RouteComponentProps<ProductEditProps>> = ({
                     setData({
                         id: p.id,
                         name: p.name,
+                        brand: p.brand,
                         description: p.description,
                         price: p.price,
                         stock: p.stock,

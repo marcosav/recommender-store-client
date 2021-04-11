@@ -158,6 +158,9 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
                     )}
                 </div>
             </div>
+            <Typography variant="subtitle2" component="h2">
+                {product.brand}
+            </Typography>
             <div className={classes.catVendorVisits}>
                 <div>
                     <Typography variant="button">

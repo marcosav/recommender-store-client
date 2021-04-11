@@ -24,6 +24,13 @@ const emptyStatusValidation = (h?: number[]) => (code: number) => {
 }
 
 export default class BaseAPI {
+    protected getImage = (path: string) =>
+        axios.get(path, {
+            headers: { amz: 'amz' },
+            validateStatus: (code: number) => true,
+            responseType: 'blob',
+        })
+
     protected get = <T = null>(
         path: string,
         params?: any,

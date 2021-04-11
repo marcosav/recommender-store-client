@@ -82,6 +82,7 @@ const es = {
         amount: 'Cantidad',
         no_stock: 'Agotado',
         name: 'Título',
+        brand: 'Marca',
         description: 'Descripción',
         price: 'Precio',
         stock: 'Stock disponible',

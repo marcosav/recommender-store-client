@@ -72,7 +72,6 @@ const NavigationBar = () => {
     const onSearch = (e: any) => {
         e.preventDefault()
         if (searched) {
-            setSearched('')
             redirect(`/search/${searched}`)
         }
     }

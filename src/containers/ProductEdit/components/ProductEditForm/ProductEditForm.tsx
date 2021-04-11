@@ -80,6 +80,17 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
                 required
             />
 
+            <TextField
+                className={classes.input}
+                label={t('product.brand')}
+                variant="outlined"
+                value={data['brand']}
+                onChange={changeData('brand')}
+                error={errorFor('brand')}
+                helperText={helperFor('brand')}
+                required
+            />
+
             <div className={classes.pair}>
                 <TextField
                     className={classes.input}

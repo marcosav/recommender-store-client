@@ -47,8 +47,8 @@ const VendorProfile: React.FC<RouteComponentProps<VendorProfileParams>> = ({
 
     const classes = useStyles()
 
-    const self = id === undefined
     const session = sessionService.current()
+    const self = id === undefined || session?.userId === parseInt(id)
     const perms = self || session?.admin
 
     const vendorId = self ? session?.userId!! : parseInt(id!!)
@@ -136,7 +136,7 @@ const VendorProfile: React.FC<RouteComponentProps<VendorProfileParams>> = ({
                                 favService,
                                 resources,
                                 noFav: self,
-                                noCart: !shown
+                                noCart: !shown,
                             }}
                         />
                     )}
