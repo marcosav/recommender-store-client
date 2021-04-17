@@ -76,6 +76,11 @@ const es = {
     search: {
         no_results: 'Sin resultados',
         found: 'Encontrados {0} resultados para "{1}"',
+        filter: {
+            date: 'Más recientes',
+            price_down: 'Precio descendente',
+            price_up: 'Precio ascendente',
+        },
     },
     product: {
         buy: 'Comprar',
@@ -169,7 +174,7 @@ const es = {
     },
     category: {
         fashion: 'Moda',
-        multimedia: 'Multimedia',
+        appliances: 'Electrodomésticos',
         phones: 'Teléfonos',
         'computers-electronic': 'Ordenadores/Electrónica',
         sports: 'Deportes',

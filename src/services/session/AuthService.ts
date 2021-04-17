@@ -19,9 +19,13 @@ export const AuthServiceImpl = (sessionStorage: SessionStorage) => {
 
     const auth = async () => {
         let token = sessionStorage.storedToken()
-        
-        if (!token) {
-            const res = await api.auth()
+        let shouldUpdateToken = sessionStorage.shouldUpdateToken(token)
+
+        if (shouldUpdateToken) {
+            let res
+            if (token && !sessionStorage.hasExpired(token))
+                res = await api.reauth(interceptor.header(token))
+            else res = await api.auth()
 
             if (res.status === 200) token = res.data
         }

@@ -6,12 +6,17 @@ export const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            '& > h1': {
-                margin: theme.spacing(0, 0, 2, 4),
-                [theme.breakpoints.down('xs')]: {
-                    margin: theme.spacing(0, 2, 2, 2),
-                },
-                alignSelf: 'normal',
+        },
+        controls: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            width: 'calc(100% - 32px)',
+            margin: theme.spacing(0, 4, 2, 4),
+            [theme.breakpoints.down('xs')]: {
+                width: 'calc(100% - 16px)',
+                margin: theme.spacing(0, 2, 2, 2),
             },
         },
         categories: {
@@ -22,6 +27,9 @@ export const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             maxWidth: '100%',
             overflowX: 'auto',
+        },
+        filterInput: {
+            width: 200,
         },
     })
 )

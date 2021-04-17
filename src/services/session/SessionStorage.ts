@@ -1,5 +1,5 @@
 import { CartProduct, User } from '../../types'
-import { SessionStorageManager } from '../../utils'
+import { Constants, SessionStorageManager } from '../../utils'
 
 type SessionCallback = (session?: Session) => void
 
@@ -10,6 +10,8 @@ export interface SessionStorage {
     storedToken: () => string | null
     isLogged: () => boolean
     setCallback: (callback: SessionCallback) => void
+    shouldUpdateToken: (token?: string | null) => boolean
+    hasExpired: (token: string) => boolean
 }
 
 export interface Session {
@@ -58,6 +60,15 @@ export const SessionStorageImpl = () => {
 
     const storedToken = () => cookies.readToken()
 
+    const shouldUpdateToken = (token?: string | null) =>
+        token
+            ? new Date().getTime() >
+              decode(token).exp * 1000 - Constants.SESSION_EXPIRE_DELAY
+            : true
+
+    const hasExpired = (token: string) =>
+        new Date().getTime() > decode(token).exp * 1000
+
     const clear = () => {
         cookies.remove()
         session = undefined
@@ -75,5 +86,14 @@ export const SessionStorageImpl = () => {
         }
     }
 
-    return { current, update, clear, storedToken, isLogged, setCallback }
+    return {
+        current,
+        update,
+        clear,
+        storedToken,
+        isLogged,
+        setCallback,
+        shouldUpdateToken,
+        hasExpired,
+    }
 }

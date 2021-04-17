@@ -76,6 +76,11 @@ const en = {
     search: {
         no_results: 'No results',
         found: 'Found {0} results for "{1}"',
+        filter: {
+            recent: 'Most recent',
+            price_down: 'High to Low',
+            price_up: 'Low to High',
+        },
     },
     product: {
         buy: 'Buy',
@@ -171,7 +176,7 @@ const en = {
     },
     category: {
         fashion: 'Fashion',
-        multimedia: 'Multimedia',
+        appliances: 'Appliances',
         phones: 'Phones',
         'computers-electronic': 'Computers/Electronic',
         sports: 'Sports',

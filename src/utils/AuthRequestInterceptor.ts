@@ -6,6 +6,8 @@ export default class AuthRequestinterceptor {
 
     private lastToken?: string
 
+    header = (token = this.lastToken) => `Bearer ${token}`
+
     setup = (token: string, onToken: (token: string) => void) => {
         this.lastToken = token
 
@@ -18,7 +20,7 @@ export default class AuthRequestinterceptor {
                 return req
             }
 
-            req.headers.authorization = `Bearer ${this.lastToken}`
+            req.headers.authorization = this.header()
             return req
         })
 
