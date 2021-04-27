@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { PreviewProduct } from '../../types'
+import { ActionType, PreviewProduct } from '../../types'
 
 import { useStyles } from './Product.style'
 
@@ -20,6 +20,7 @@ import { useTheme } from '@material-ui/core'
 import { CartService, FavoriteService, ResourceService } from '../../api'
 import { HttpStatusCode, Constants } from '../../utils'
 import { useTranslation } from 'react-i18next'
+import { useCollectorService } from '../../services'
 
 interface ProductProps {
     Actions?: React.FC<ProductActionsProps>
@@ -109,9 +110,18 @@ const ProductHolder: React.FC<ProductProps & ProductActionsProps> = ({
 
     const classes = useStyles()
 
+    const collectorService = useCollectorService()
+
     const [img, setImg] = React.useState<any>()
 
-    const gotoProduct = () => history.push(`/product/${product.id}`, undefined)
+    const gotoProduct = () => {
+        collectorService.collect({
+            item: product.id,
+            action: ActionType.CLICK,
+        })
+
+        history.push(`/product/${product.id}`, undefined)
+    }
 
     React.useEffect(() => {
         const loadImage = async () => {

@@ -20,6 +20,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import { DateUtils } from '../../../../utils'
 import { ResourceService } from '../../../../api'
+import { useProductService } from '../../../../services'
 
 interface OrderHolderProps {
     order: Order
@@ -115,14 +116,20 @@ const OrderedProductHolder: React.FC<OrderedProductHolderProps> = ({
     resources,
     gotoProduct,
 }) => {
+    const productService = useProductService()
+
     const classes = useStyles()
 
     const [rating, setRating] = React.useState<number | null>(
         p.userRating ?? null
     )
 
+    const id = p.product.id
+
     const handleRating = (e: any, v: number | null) => {
+        if (v == null) return
         setRating(v)
+        productService.rateProduct(id, v)
     }
 
     return (
@@ -154,7 +161,7 @@ const OrderedProductHolder: React.FC<OrderedProductHolderProps> = ({
                         </Typography>
                     </div>
                     <Rating
-                        name="product-rating"
+                        name={`product-rating-${id}`}
                         precision={0.5}
                         value={rating}
                         onChange={handleRating}

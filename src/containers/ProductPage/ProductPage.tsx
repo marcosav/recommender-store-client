@@ -4,11 +4,12 @@ import { RouteComponentProps } from 'react-router'
 
 import {
     useCartService,
+    useCollectorService,
     useFavoriteService,
     useProductService,
 } from '../../services'
 
-import { PreviewProduct, Product } from '../../types'
+import { ActionType, PreviewProduct, Product } from '../../types'
 import { HttpStatusCode } from '../../utils'
 
 import { Loading, ProductSlider } from '../../components'
@@ -19,6 +20,7 @@ import Typography from '@material-ui/core/Typography'
 
 import { useStyles } from './ProductPage.style'
 import ProductInfo from './components'
+import useRecommenderService from '../../services/RecommenderService'
 
 interface ProductPageParams {
     id: string
@@ -33,6 +35,8 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
     const productService = useProductService()
     const favService = useFavoriteService()
     const cartService = useCartService()
+    const collectorService = useCollectorService()
+    const recommenderService = useRecommenderService()
 
     const { t } = useTranslation()
 
@@ -60,20 +64,24 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
         let productId = parseInt(id)
 
         if (isNaN(productId)) handleNotFound()
-        else fetchProduct(productId)
-    }, [history, productService, id])
+        else {
+            fetchProduct(productId)
+            collectorService.collect({
+                action: ActionType.VISIT,
+                item: productId,
+            })
+        }
+    }, [history, productService, collectorService, id])
 
     React.useEffect(() => {
         const fetchRecommendations = async () => {
-            // TODO
-            const r = await productService.searchProducts({ query: 'P1' })
+            const r = await recommenderService.getFor()
 
-            if (r.status === HttpStatusCode.OK)
-                setRecommended(r.data.items.slice(0, 8))
+            if (r.status === HttpStatusCode.OK) setRecommended(r.data)
         }
 
         fetchRecommendations()
-    }, [history, productService, id])
+    }, [history, recommenderService, id])
 
     return product !== undefined ? (
         <div className={classes.root}>

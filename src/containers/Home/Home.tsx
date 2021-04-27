@@ -2,7 +2,11 @@ import React from 'react'
 
 import { Loading, ProductSlider } from '../../components'
 
-import { useCartService, useFavoriteService, useProductService } from '../../services'
+import {
+    useCartService,
+    useFavoriteService,
+    useProductService,
+} from '../../services'
 import { PreviewProduct, ProductCategory } from '../../types'
 
 import { HttpStatusCode } from '../../utils'
@@ -15,11 +19,13 @@ import { useTranslation } from 'react-i18next'
 import { useStyles } from './Home.style'
 
 import { RouteComponentProps } from 'react-router'
+import useRecommenderService from '../../services/RecommenderService'
 
 const Home: React.FC<RouteComponentProps> = ({ history }) => {
     const productService = useProductService()
     const favService = useFavoriteService()
     const cartService = useCartService()
+    const recommenderService = useRecommenderService()
 
     const { t } = useTranslation()
 
@@ -32,16 +38,16 @@ const Home: React.FC<RouteComponentProps> = ({ history }) => {
 
     React.useEffect(() => {
         const fetchProducts = async () => {
-            const r = await productService.searchProducts({ query: 'P1' })
+            const r = await recommenderService.getFor()
 
             if (r.status !== HttpStatusCode.OK) return
 
-            setPopular(r.data.items.slice(0, 8))
-            setRecommended(r.data.items.slice(0, 8))
+            setPopular(r.data)
+            setRecommended(r.data)
         }
 
         fetchProducts()
-    }, [productService])
+    }, [recommenderService])
 
     React.useEffect(() => {
         const fetchCategories = async () => {
@@ -91,7 +97,12 @@ const Home: React.FC<RouteComponentProps> = ({ history }) => {
                 <Loading />
             ) : (
                 <ProductSlider
-                    {...{ products: popular, productService, cartService, favService }}
+                    {...{
+                        products: popular,
+                        productService,
+                        cartService,
+                        favService,
+                    }}
                 />
             )}
 
@@ -107,7 +118,12 @@ const Home: React.FC<RouteComponentProps> = ({ history }) => {
                 <Loading />
             ) : (
                 <ProductSlider
-                    {...{ products: recommended, productService, cartService, favService }}
+                    {...{
+                        products: recommended,
+                        productService,
+                        cartService,
+                        favService,
+                    }}
                 />
             )}
         </>

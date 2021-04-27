@@ -131,9 +131,8 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
             {addresses && addresses.length > 0 && (
                 <div className={classes.addressContainer}>
                     {addresses.map((a, i) => (
-                        <ButtonBase className={classes.addressButton}>
+                        <ButtonBase key={i} className={classes.addressButton}>
                             <Paper
-                                key={i}
                                 variant="outlined"
                                 className={classes.addressHolder}
                                 onClick={selectAddress(i)}

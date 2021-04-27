@@ -114,6 +114,11 @@ interface OrderedProduct {
     userRating?: number
 }
 
+enum ActionType {
+    CLICK = 0,
+    VISIT = 5,
+}
+
 export type {
     Product,
     PreviewProduct,
@@ -127,3 +132,5 @@ export type {
     Order,
     OrderedProduct,
 }
+
+export { ActionType }

@@ -22,6 +22,7 @@ export interface ProductService {
     ) => RPromise<number>
     deleteProduct: (id: number) => RPromise
     findCategories: () => RPromise<ProductCategory[]>
+    rateProduct: (id: number, rating: number) => RPromise
 }
 
 const PRODUCT_PATH = '/product'
@@ -98,4 +99,7 @@ export default class ProductAPI extends BaseAPI implements ProductService {
 
     findCategories = () =>
         this.get<ProductCategory[]>(`${PRODUCT_PATH}/categories`)
+
+    rateProduct = (id: number, rating: number) =>
+        this.put(`${PRODUCT_PATH}/${id}/rate`, { rating })
 }

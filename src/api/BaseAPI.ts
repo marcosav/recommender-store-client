@@ -3,8 +3,7 @@ import axios, { AxiosResponse } from 'axios'
 import { HttpStatusCode, serverErrorHandler } from '../utils'
 
 const API_URL = `${process.env.REACT_APP_API_URL}/v${process.env.REACT_APP_API_VERSION}`
-
-const url = (path: string) => `${API_URL}${path}`
+export const RECOMMENDER_API_URL = `${process.env.REACT_APP_ENGINE_API_URL}/v${process.env.REACT_APP_RECOMMENDER_API_VERSION}`
 
 export type RPromise<T = null> = Promise<AxiosResponse<T>>
 export type StatusHandler = (status: number) => boolean
@@ -24,6 +23,12 @@ const emptyStatusValidation = (h?: number[]) => (code: number) => {
 }
 
 export default class BaseAPI {
+    baseUrl: string
+
+    constructor(baseUrl: string = API_URL) {
+        this.baseUrl = baseUrl
+    }
+
     protected getImage = (path: string) =>
         axios.get(path, {
             headers: { amz: 'amz' },
@@ -37,7 +42,7 @@ export default class BaseAPI {
         handled?: number[],
         options: any = {}
     ) =>
-        axios.get<T>(url(path), {
+        axios.get<T>(this.url(path), {
             params,
             validateStatus: emptyStatusValidation(handled),
             ...options,
@@ -49,7 +54,7 @@ export default class BaseAPI {
         handled?: number[],
         options: any = {}
     ) =>
-        axios.post<T>(url(path), null, {
+        axios.post<T>(this.url(path), null, {
             params,
             validateStatus: emptyStatusValidation(handled),
             ...options,
@@ -61,7 +66,7 @@ export default class BaseAPI {
         handled?: number[],
         options: any = {}
     ) =>
-        axios.post<T>(url(path), data, {
+        axios.post<T>(this.url(path), data, {
             validateStatus: emptyStatusValidation(handled),
             ...options,
         })
@@ -72,7 +77,7 @@ export default class BaseAPI {
         handled?: number[],
         options: any = {}
     ) =>
-        axios.put<T>(url(path), null, {
+        axios.put<T>(this.url(path), null, {
             params,
             validateStatus: emptyStatusValidation(handled),
             ...options,
@@ -84,7 +89,7 @@ export default class BaseAPI {
         handled?: number[],
         options: any = {}
     ) =>
-        axios.put<T>(url(path), data, {
+        axios.put<T>(this.url(path), data, {
             validateStatus: emptyStatusValidation(handled),
             ...options,
         })
@@ -95,9 +100,11 @@ export default class BaseAPI {
         handled?: number[],
         options: any = {}
     ) =>
-        axios.delete<T>(url(path), {
+        axios.delete<T>(this.url(path), {
             params,
             validateStatus: emptyStatusValidation(handled),
             ...options,
         })
+
+    private url = (path: string) => `${this.baseUrl}${path}`
 }
