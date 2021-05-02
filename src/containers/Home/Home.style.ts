@@ -7,7 +7,9 @@ export const useStyles = makeStyles((theme: Theme) =>
             textAlign: 'center',
         },
         subtitle: {
-            margin: theme.spacing(2, 0, 0, 2),
+            margin: theme.spacing(2, 'auto', 0, 'auto'),
+            paddingLeft: theme.spacing(2),
+            maxWidth: 1800,
         },
         categories: {
             marginLeft: 'auto',
@@ -26,6 +28,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         divider: {
             margin: theme.spacing(5, 3, 2),
+        },
+        slider: {
+            margin: '0 auto auto',
         },
     })
 )

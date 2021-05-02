@@ -39,6 +39,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             '& img': {
                 maxHeight: 100,
                 maxWidth: 110,
+                cursor: 'pointer',
             },
         },
         holder: {

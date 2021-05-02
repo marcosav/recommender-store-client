@@ -25,11 +25,13 @@ const ProductImg: React.FC<
 
     React.useEffect(() => {
         const load = async () => {
-            const r = await resources.load(url)
+            try {
+                const r = await resources.load(url)
 
-            if (r.status !== HttpStatusCode.OK) return
+                if (r.status !== HttpStatusCode.OK) return
 
-            setImg(URL.createObjectURL(r.data))
+                setImg(URL.createObjectURL(r.data))
+            } catch (ex) {}
         }
 
         if (resources && url) load()

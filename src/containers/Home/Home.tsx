@@ -33,20 +33,26 @@ const Home: React.FC<RouteComponentProps> = ({ history }) => {
 
     const [categories, setCategories] = React.useState<ProductCategory[]>()
 
-    const [popular, setPopular] = React.useState<PreviewProduct[]>()
-    const [recommended, setRecommended] = React.useState<PreviewProduct[]>()
+    const [popular, setPopular] = React.useState<PreviewProduct[] | null>()
+    const [recommended, setRecommended] = React.useState<
+        PreviewProduct[] | null
+    >()
 
     React.useEffect(() => {
-        const fetchProducts = async () => {
+        const fetchRecommended = async () => {
             const r = await recommenderService.getFor()
-
-            if (r.status !== HttpStatusCode.OK) return
-
-            setPopular(r.data)
-            setRecommended(r.data)
+            if (r.status === HttpStatusCode.OK) setRecommended(r.data)
+            else setRecommended(null)
         }
 
-        fetchProducts()
+        const fetchPopular = async () => {
+            const r = await recommenderService.getPopular()
+            if (r.status === HttpStatusCode.OK) setPopular(r.data)
+            else setPopular(null)
+        }
+
+        fetchRecommended()
+        fetchPopular()
     }, [recommenderService])
 
     React.useEffect(() => {
@@ -85,47 +91,59 @@ const Home: React.FC<RouteComponentProps> = ({ history }) => {
             </div>
             <Divider className={classes.divider} />
 
-            <Typography
-                className={classes.subtitle}
-                variant="h5"
-                component="h2"
-                color="textSecondary"
-            >
-                {t('home.popular')}
-            </Typography>
-            {popular === undefined ? (
-                <Loading />
-            ) : (
-                <ProductSlider
-                    {...{
-                        products: popular,
-                        productService,
-                        cartService,
-                        favService,
-                    }}
-                />
-            )}
+            <div className={classes.slider}>
+                {popular ? (
+                    <>
+                        <Typography
+                            className={classes.subtitle}
+                            variant="h5"
+                            component="h2"
+                            color="textSecondary"
+                        >
+                            {t('home.popular')}
+                        </Typography>
+                        <ProductSlider
+                            {...{
+                                products: popular,
+                                productService,
+                                cartService,
+                                favService,
+                            }}
+                        />
+                    </>
+                ) : popular === undefined ? (
+                    <Loading />
+                ) : (
+                    <></>
+                )}
+            </div>
 
-            <Typography
-                className={classes.subtitle}
-                variant="h5"
-                component="h2"
-                color="textSecondary"
-            >
-                {t('home.recommended')}
-            </Typography>
-            {recommended === undefined ? (
-                <Loading />
-            ) : (
-                <ProductSlider
-                    {...{
-                        products: recommended,
-                        productService,
-                        cartService,
-                        favService,
-                    }}
-                />
-            )}
+            <div className={classes.slider}>
+                {recommended ? (
+                    <>
+                        <Typography
+                            className={classes.subtitle}
+                            variant="h5"
+                            component="h2"
+                            color="textSecondary"
+                        >
+                            {t('home.recommended')}
+                        </Typography>
+                        <ProductSlider
+                            {...{
+                                products: recommended,
+                                productService,
+                                cartService,
+                                favService,
+                            }}
+                        />
+                    </>
+                ) : recommended === undefined ? (
+                    <Loading />
+                ) : (
+                    <></>
+                )}
+            </div>
         </>
     )
 }

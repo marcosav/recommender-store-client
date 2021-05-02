@@ -125,13 +125,15 @@ const ProductHolder: React.FC<ProductProps & ProductActionsProps> = ({
 
     React.useEffect(() => {
         const loadImage = async () => {
-            const r = await resources!!.load(product.mainImage)
+            try {
+                const r = await resources!!.load(product.mainImage)
 
-            if (r.status !== HttpStatusCode.OK) return
+                if (r.status !== HttpStatusCode.OK) return
 
-            const reader = new FileReader()
-            reader.readAsDataURL(r.data)
-            reader.onload = () => setImg(reader.result)
+                const reader = new FileReader()
+                reader.readAsDataURL(r.data)
+                reader.onload = () => setImg(reader.result)
+            } catch (ex) {}
         }
 
         if (product.mainImage) loadImage()

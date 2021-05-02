@@ -74,20 +74,26 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
     }, [history, productService, collectorService, id])
 
     React.useEffect(() => {
-        const fetchRecommendations = async () => {
-            const r = await recommenderService.getFor()
+        const fetchRecommendations = async (p: number) => {
+            const r = await recommenderService.getFor(p)
 
             if (r.status === HttpStatusCode.OK) setRecommended(r.data)
         }
 
-        fetchRecommendations()
+        let productId = parseInt(id)
+        if (productId) fetchRecommendations(productId)
     }, [history, recommenderService, id])
 
     return product !== undefined ? (
         <div className={classes.root}>
             <ProductInfo {...{ product }} />
             <div className={classes.bottom}>
-                <Typography variant="h5" component="h2" color="textSecondary">
+                <Typography
+                    variant="h5"
+                    component="h2"
+                    color="textSecondary"
+                    className={classes.subtitle}
+                >
                     {t('info.interesting')}
                 </Typography>
                 {recommended && (

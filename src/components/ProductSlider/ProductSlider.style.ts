@@ -7,8 +7,10 @@ export const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'row',
             flexWrap: 'nowrap',
             overflowX: 'auto',
-            marginTop: theme.spacing(2),
+            margin: theme.spacing(2, 'auto', 0, 'auto'),
             padding: theme.spacing(0, 0, 0, 2),
+            maxWidth: 1800,
+            minHeight: 220,
         },
         endGap: {
             minWidth: 1,
