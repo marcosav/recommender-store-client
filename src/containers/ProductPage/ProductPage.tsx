@@ -44,7 +44,9 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
 
     const [product, setProduct] = React.useState<Product>()
 
-    const [recommended, setRecommended] = React.useState<PreviewProduct[]>()
+    const [recommended, setRecommended] = React.useState<
+        PreviewProduct[] | null
+    >()
 
     React.useEffect(() => {
         const handleNotFound = () => history.push('/404')
@@ -78,6 +80,7 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
             const r = await recommenderService.getFor(p)
 
             if (r.status === HttpStatusCode.OK) setRecommended(r.data)
+            else setRecommended(null)
         }
 
         let productId = parseInt(id)
@@ -96,7 +99,8 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
                 >
                     {t('info.interesting')}
                 </Typography>
-                {recommended && (
+                
+                {recommended ? (
                     <ProductSlider
                         {...{
                             products: recommended,
@@ -105,6 +109,10 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
                             favService,
                         }}
                     />
+                ) : recommended === undefined ? (
+                    <Loading />
+                ) : (
+                    <></>
                 )}
             </div>
         </div>

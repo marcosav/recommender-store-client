@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios'
 import { HttpStatusCode, serverErrorHandler } from '../utils'
 
 const API_URL = `${process.env.REACT_APP_API_URL}/v${process.env.REACT_APP_API_VERSION}`
-export const RECOMMENDER_API_URL = `${process.env.REACT_APP_ENGINE_API_URL}/v${process.env.REACT_APP_RECOMMENDER_API_VERSION}`
+export const COLLECTOR_API_URL = `${process.env.REACT_APP_COLLECTOR_API_URL}/v${process.env.REACT_APP_COLLECTOR_API_VERSION}`
 
 export type RPromise<T = null> = Promise<AxiosResponse<T>>
 export type StatusHandler = (status: number) => boolean

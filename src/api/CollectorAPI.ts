@@ -1,4 +1,4 @@
-import BaseAPI, { RPromise, RECOMMENDER_API_URL } from './BaseAPI'
+import BaseAPI, { RPromise, COLLECTOR_API_URL } from './BaseAPI'
 
 import { HttpStatusCode } from '../utils'
 import { ActionType } from '../types'
@@ -15,7 +15,7 @@ interface UserAction {
 
 export default class CollectorAPI extends BaseAPI implements CollectorService {
     constructor() {
-        super(RECOMMENDER_API_URL)
+        super(COLLECTOR_API_URL)
     }
 
     collect = (action: UserAction) =>
