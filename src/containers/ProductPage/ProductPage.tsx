@@ -44,12 +44,13 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
 
     const [product, setProduct] = React.useState<Product>()
 
-    const [recommended, setRecommended] = React.useState<
-        PreviewProduct[] | null
-    >()
+    const [recommended, setRecommended] =
+        React.useState<PreviewProduct[] | null>()
 
     React.useEffect(() => {
-        const handleNotFound = () => history.push('/404')
+        const handleNotFound = () => {
+            history.replace('/404')
+        }
 
         const fetchProduct = async (productId: number) => {
             const r = await productService.getProduct(productId)
@@ -99,7 +100,7 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
                 >
                     {t('info.interesting')}
                 </Typography>
-                
+
                 {recommended ? (
                     <ProductSlider
                         {...{

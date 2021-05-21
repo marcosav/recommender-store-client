@@ -46,9 +46,8 @@ const NavigationBar = () => {
     const logged = username !== undefined
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-    const [anchorAdmin, setAnchorAdmin] = React.useState<null | HTMLElement>(
-        null
-    )
+    const [anchorAdmin, setAnchorAdmin] =
+        React.useState<null | HTMLElement>(null)
     const [searched, setSearched] = React.useState('')
 
     const handleMenuClose = () => setAnchorEl(null)
@@ -71,9 +70,7 @@ const NavigationBar = () => {
 
     const onSearch = (e: any) => {
         e.preventDefault()
-        if (searched) {
-            redirect(`/search/${searched}`)
-        }
+        if (searched.trim()) redirect(`/search/${searched}`)
     }
 
     const menuId = 'nav-account-menu'
@@ -84,7 +81,7 @@ const NavigationBar = () => {
             <Typography color={'textSecondary'} className={classes.menuText}>
                 {t('nav.login_info')}
             </Typography>
-            <MenuItem onClick={() => redirect('/login')}>
+            <MenuItem id="login-nav-bt" onClick={() => redirect('/login')}>
                 <ListItemIcon color="inherit">
                     <Person />
                 </ListItemIcon>
@@ -94,7 +91,7 @@ const NavigationBar = () => {
             <Typography color={'textSecondary'} className={classes.menuText}>
                 {t('nav.signup_info')}
             </Typography>
-            <MenuItem onClick={() => redirect('/signup')}>
+            <MenuItem id="signup-nav-bt" onClick={() => redirect('/signup')}>
                 <ListItemIcon color="inherit">
                     <SignUp />
                 </ListItemIcon>
@@ -105,7 +102,7 @@ const NavigationBar = () => {
 
     const menuContentLogged = (
         <div>
-            <MenuItem onClick={() => redirect('/profile')}>
+            <MenuItem id="profile-nav-bt" onClick={() => redirect('/profile')}>
                 <ListItemIcon aria-controls={menuId} color="inherit">
                     <AccountCircle fontSize="large" />
                 </ListItemIcon>
@@ -116,14 +113,14 @@ const NavigationBar = () => {
 
             <Divider className={classes.divider} color={'transparent'} />
 
-            <MenuItem onClick={() => redirect('/favorites')}>
+            <MenuItem id="fav-nav-bt" onClick={() => redirect('/favorites')}>
                 <ListItemIcon color="inherit">
                     <Favorite />
                 </ListItemIcon>
                 {t('nav.favorites')}
             </MenuItem>
 
-            <MenuItem onClick={() => redirect('/history')}>
+            <MenuItem id="history-nav-bt" onClick={() => redirect('/history')}>
                 <ListItemIcon color="inherit">
                     <HistoryIcon />
                 </ListItemIcon>
@@ -131,6 +128,7 @@ const NavigationBar = () => {
             </MenuItem>
 
             <MenuItem
+                id="upload-nav-bt"
                 onClick={() => redirect('/product/publish')}
                 className={classes.add}
             >
@@ -142,7 +140,7 @@ const NavigationBar = () => {
 
             <Divider className={classes.divider} light />
 
-            <MenuItem onClick={() => redirect('/logout')}>
+            <MenuItem id="logout-nav-bt" onClick={() => redirect('/logout')}>
                 <ListItemIcon color="inherit">
                     <ExitToApp />
                 </ListItemIcon>
@@ -214,6 +212,7 @@ const NavigationBar = () => {
                                 <SearchIcon />
                             </div>
                             <InputBase
+                                id="search-input"
                                 placeholder={t('nav.search')}
                                 classes={{
                                     root: classes.inputRoot,
@@ -245,6 +244,7 @@ const NavigationBar = () => {
                     )}
 
                     <IconButton
+                        id="cart-nav-bt"
                         onClick={() => redirect('/cart')}
                         color="inherit"
                     >
@@ -255,6 +255,7 @@ const NavigationBar = () => {
 
                     <IconButton
                         edge="end"
+                        id="user-nav"
                         onClick={handleMenuOpen}
                         color="inherit"
                     >

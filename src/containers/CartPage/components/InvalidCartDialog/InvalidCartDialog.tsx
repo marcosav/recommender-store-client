@@ -40,7 +40,12 @@ const InvalidCartDialog: React.FC<InvalidCartDialogProps> = ({
                 )}
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="primary" autoFocus>
+                <Button
+                    id="got-it-bt"
+                    onClick={handleClose}
+                    color="primary"
+                    autoFocus
+                >
                     {t('cart.invalid.button')}
                 </Button>
             </DialogActions>

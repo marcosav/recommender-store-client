@@ -156,6 +156,7 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
             )}
 
             <form
+                id="address-form"
                 className={classes.root}
                 onSubmitCapture={checkout}
                 noValidate
@@ -173,6 +174,7 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
                         className={classes.input}
                         label={t('address.recipient')}
                         variant="outlined"
+                        name="recipient"
                         value={data['recipient']}
                         onChange={changeData('recipient')}
                         error={errorFor('recipient')}
@@ -184,6 +186,7 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
                             className={classes.input}
                             label={t('address.city')}
                             variant="outlined"
+                            name="city"
                             value={data['city']}
                             onChange={changeData('city')}
                             error={errorFor('city')}
@@ -194,6 +197,7 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
                             className={classes.input}
                             label={t('address.region')}
                             variant="outlined"
+                            name="region"
                             value={data['region']}
                             onChange={changeData('region')}
                             error={errorFor('region')}
@@ -206,6 +210,7 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
                             className={classes.input}
                             label={t('address.code')}
                             variant="outlined"
+                            name="code"
                             value={data['code']}
                             onChange={changeData('code')}
                             error={errorFor('code')}
@@ -216,6 +221,7 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
                             className={classes.input}
                             label={t('address.country')}
                             variant="outlined"
+                            name="country"
                             value={data['country']}
                             onChange={changeData('country')}
                             error={errorFor('country')}
@@ -227,6 +233,7 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
                         className={classes.input}
                         label={t('address.address')}
                         variant="outlined"
+                        name="address"
                         value={data['address']}
                         onChange={changeData('address')}
                         error={errorFor('address')}
@@ -237,6 +244,7 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
                         className={classes.input}
                         label={t('address.phone')}
                         variant="outlined"
+                        name="phone"
                         value={data['phone']}
                         onChange={changeData('phone')}
                         error={errorFor('phone')}
@@ -259,6 +267,7 @@ const CheckoutPage: React.FC<RouteComponentProps> = ({ history, location }) => {
                     </Typography>
 
                     <Button
+                        id="finish-bt"
                         onClick={undefined}
                         color="secondary"
                         variant="contained"

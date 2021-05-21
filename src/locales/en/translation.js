@@ -107,7 +107,7 @@ const en = {
     },
     home: {
         title: 'What are you buying?',
-        popular: 'Popular',
+        weekly_popular: 'Weekly popular',
         recommended: 'Recommended',
     },
     reports: {

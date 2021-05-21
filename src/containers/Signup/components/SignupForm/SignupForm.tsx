@@ -47,6 +47,7 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
 
     return (
         <form
+            id="signup-form"
             className={classes.form}
             onSubmitCapture={doForm}
             noValidate
@@ -56,6 +57,7 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
                 className={classes.input}
                 label={t('signup.field.name')}
                 variant="outlined"
+                name="name"
                 value={data['name']}
                 onChange={changeData('name')}
                 error={errorFor('name')}
@@ -67,6 +69,7 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
                 className={classes.input}
                 label={t('signup.field.surname')}
                 variant="outlined"
+                name="surname"
                 value={data['surname']}
                 onChange={changeData('surname')}
                 error={errorFor('surname')}
@@ -78,6 +81,7 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
                 className={classes.input}
                 label={t('signup.field.email')}
                 variant="outlined"
+                name="email"
                 value={data['email']}
                 onChange={changeData('email')}
                 error={errorFor('email')}
@@ -91,6 +95,7 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
                     className={classes.input}
                     label={t('signup.field.repeatedEmail')}
                     variant="outlined"
+                    name="repeatedEmail"
                     value={data['repeatedEmail']}
                     onChange={changeData('repeatedEmail')}
                     error={errorFor('repeatedEmail')}
@@ -104,6 +109,7 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
                 label={t('signup.field.nickname')}
                 variant="outlined"
                 value={data['nickname']}
+                name="nickname"
                 onChange={changeData('nickname')}
                 error={errorFor('nickname')}
                 helperText={helperFor('nickname')}
@@ -114,6 +120,7 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
                 className={classes.input}
                 label={t('signup.field.password')}
                 error={errorFor('password')}
+                name="password"
                 helperText={helperFor('password')}
                 {...{
                     password: data.password,
@@ -124,6 +131,7 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
 
             <PasswordField
                 className={classes.input}
+                name="repeatedPassword"
                 label={t('signup.field.repeatedPassword')}
                 error={errorFor('repeatedPassword')}
                 helperText={helperFor('repeatedPassword')}
@@ -138,6 +146,7 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
                 className={classes.input}
                 label={t('signup.field.description')}
                 variant="outlined"
+                name="description"
                 value={data['description']}
                 onChange={changeData('description')}
                 error={errorFor('description')}
@@ -171,6 +180,7 @@ const SignupFormComponent: React.FC<SignupFormProps> = ({
                     color="primary"
                     type="submit"
                     size="large"
+                    id="signup-bt"
                 >
                     {t('signup.continue')}
                 </Button>

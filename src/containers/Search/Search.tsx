@@ -51,6 +51,7 @@ const Search: React.FC<RouteComponentProps<SearchParams>> = ({
     match,
 }) => {
     const { query } = match.params
+
     const state = location?.state as SearchLocationState
 
     const { t } = useTranslation()
@@ -133,7 +134,7 @@ const Search: React.FC<RouteComponentProps<SearchParams>> = ({
                         >
                             {t('search.found')
                                 .replace('{0}', `${shownItems.total}`)
-                                .replace('{1}', query)}
+                                .replace('{1}', () => query)}
                         </Typography>
                         <Autocomplete
                             className={classes.filterInput}

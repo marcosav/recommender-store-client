@@ -1,16 +1,15 @@
-import BaseAPI, { RPromise, COLLECTOR_API_URL } from './BaseAPI'
+import BaseAPI, { COLLECTOR_API_URL } from './BaseAPI'
 
 import { HttpStatusCode } from '../utils'
 import { ActionType } from '../types'
 
 export interface CollectorService {
-    collect: (action: UserAction) => RPromise
+    collect: (action: UserAction) => void
 }
 
 interface UserAction {
     item: number
     action: ActionType
-    value?: number
 }
 
 export default class CollectorAPI extends BaseAPI implements CollectorService {
@@ -18,9 +17,12 @@ export default class CollectorAPI extends BaseAPI implements CollectorService {
         super(COLLECTOR_API_URL)
     }
 
-    collect = (action: UserAction) =>
-        this.post(`/record`, action, [
-            HttpStatusCode.ServerError,
-            HttpStatusCode.Unauthorized,
-        ])
+    collect = async (action: UserAction) => {
+        try {
+            await this.post(`/record`, action, [
+                HttpStatusCode.ServerError,
+                HttpStatusCode.Unauthorized,
+            ])
+        } catch (ex) {}
+    }
 }

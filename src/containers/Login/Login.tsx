@@ -68,10 +68,12 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
                 className={classes.form}
                 onSubmitCapture={doLogin}
                 noValidate
+                id="login-form"
                 autoComplete="off"
             >
                 <TextField
                     className={classes.input}
+                    name="username"
                     label={t('login.field.username')}
                     variant="outlined"
                     value={username}
@@ -80,6 +82,7 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
                 />
                 <PasswordField
                     className={classes.input}
+                    name="password"
                     label={t('login.field.password')}
                     error={error}
                     helperText={error ? t('login.field.incorrect') : ''}
@@ -92,6 +95,7 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
                         color="primary"
                         type="submit"
                         size="large"
+                        id="login-bt"
                     >
                         {t('login.title')}
                     </Button>

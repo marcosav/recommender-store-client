@@ -117,7 +117,7 @@ const ProductEdit: React.FC<RouteComponentProps<ProductEditProps>> = ({
 
         switch (r.status) {
             case HttpStatusCode.OK:
-                history.push('/')
+                history.push('/profile')
                 break
             case HttpStatusCode.Forbidden:
                 goBack()

@@ -137,6 +137,7 @@ const CartPage: React.FC<RouteComponentProps> = ({ history }) => {
                         {`: ${total} €`}
                     </Typography>
                     <Button
+                        id="proceed-bt"
                         onClick={goCheckout}
                         variant="outlined"
                         disabled={size === 0}

@@ -24,8 +24,7 @@
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject",
+        "test": "jest --detectOpenHandles -c e2e/jest.config.js",
         "predeploy": "yarn build",
         "deploy": "gh-pages -d build"
     },
@@ -55,6 +54,8 @@
         "@types/node": "^14.14.32",
         "@types/react": "^17.0.3",
         "@types/react-dom": "^17.0.1",
-        "@types/react-router-dom": "^5.1.7"
+        "@types/react-router-dom": "^5.1.7",
+        "jest-puppeteer": "^5.0.3",
+        "puppeteer": "^9.1.1"
     }
 }

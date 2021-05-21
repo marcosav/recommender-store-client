@@ -14,6 +14,7 @@ interface PasswordFieldProps {
     setPassword: (password: string) => any
     label: string
     helperText?: string
+    name?: string
 }
 
 const PasswordField: React.FC<PasswordFieldProps & FormControlProps> = ({
@@ -21,6 +22,7 @@ const PasswordField: React.FC<PasswordFieldProps & FormControlProps> = ({
     setPassword,
     label,
     helperText,
+    name,
     ...rest
 }) => {
     const [showPassword, setShowPassword] = React.useState(false)
@@ -30,13 +32,16 @@ const PasswordField: React.FC<PasswordFieldProps & FormControlProps> = ({
     const handleMouseDownPassword = (e: React.MouseEvent<HTMLButtonElement>) =>
         e.preventDefault()
 
+    const i = Math.floor(Math.random() * 100000)
+
     return (
         <FormControl variant="outlined" {...rest}>
-            <InputLabel htmlFor="password-field">{label}</InputLabel>
+            <InputLabel htmlFor={`password-field-${i}`}>{label}</InputLabel>
             <OutlinedInput
-                id="password-field"
+                id={`password-field-${i}`}
                 type={showPassword ? 'text' : 'password'}
                 value={password}
+                name={name}
                 onChange={(e) => setPassword(e.target.value)}
                 endAdornment={
                     <InputAdornment position="end">

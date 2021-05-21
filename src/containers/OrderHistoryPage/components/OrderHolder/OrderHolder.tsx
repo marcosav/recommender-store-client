@@ -52,9 +52,13 @@ const OrderHolder: React.FC<OrderHolderProps> = ({
     )
 
     return (
-        <Accordion expanded={expanded} onChange={handleChange}>
+        <Accordion
+            className="order-holder"
+            expanded={expanded}
+            onChange={handleChange}
+        >
             <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
+                expandIcon={<ExpandMoreIcon className="accordion-expander" />}
                 className={classes.summary}
             >
                 <Typography variant="body2" className={classes.id}>
@@ -161,6 +165,7 @@ const OrderedProductHolder: React.FC<OrderedProductHolderProps> = ({
                         </Typography>
                     </div>
                     <Rating
+                        className="rater"
                         name={`product-rating-${id}`}
                         precision={0.5}
                         value={rating}

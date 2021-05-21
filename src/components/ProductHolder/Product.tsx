@@ -71,7 +71,11 @@ const DefaultActions: React.FC<ProductActionsProps> = ({
     return (
         <>
             {!noFav && (
-                <IconButton size={'small'} onClick={addToFav}>
+                <IconButton
+                    className={'holder-fav-bt'}
+                    size={'small'}
+                    onClick={addToFav}
+                >
                     {favorite ? (
                         <Favorite htmlColor={theme.palette.error.main} />
                     ) : (
@@ -141,7 +145,7 @@ const ProductHolder: React.FC<ProductProps & ProductActionsProps> = ({
 
     return (
         <Card className={classes.container}>
-            <CardActionArea onClick={gotoProduct}>
+            <CardActionArea className="product" onClick={gotoProduct}>
                 <CardMedia
                     className={classes.media}
                     image={img ?? Constants.FALLBACK_IMAGE}

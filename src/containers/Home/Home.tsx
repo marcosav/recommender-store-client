@@ -100,7 +100,7 @@ const Home: React.FC<RouteComponentProps> = ({ history }) => {
                             component="h2"
                             color="textSecondary"
                         >
-                            {t('home.popular')}
+                            {t('home.weekly_popular')}
                         </Typography>
                         <ProductSlider
                             {...{

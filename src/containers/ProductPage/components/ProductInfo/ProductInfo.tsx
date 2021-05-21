@@ -136,7 +136,7 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
                         </IconButton>
                     )}
                     {editable && (
-                        <IconButton size="small" onClick={edit}>
+                        <IconButton id="edit-bt" size="small" onClick={edit}>
                             <EditOutlined />
                         </IconButton>
                     )}
@@ -146,7 +146,16 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
                         </IconButton>
                     )}
                     {!owner && (
-                        <IconButton size="small" onClick={addToFav}>
+                        <IconButton
+                            id="fav-bt"
+                            className={
+                                favorite
+                                    ? 'favorite-selected'
+                                    : 'favorite-not-selected'
+                            }
+                            size="small"
+                            onClick={addToFav}
+                        >
                             {favorite ? (
                                 <Favorite
                                     htmlColor={theme.palette.error.main}
@@ -256,6 +265,7 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
+                                            name="amount"
                                             label={t('product.amount')}
                                             variant="outlined"
                                             margin="dense"
@@ -264,6 +274,7 @@ const ProductInfo: React.FC<ProductInfoParams> = ({ product }) => {
                                 />
                                 <div>
                                     <Button
+                                        id="buy-bt"
                                         variant="outlined"
                                         size="small"
                                         color="secondary"

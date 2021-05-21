@@ -197,7 +197,6 @@ const CartProductHolder: React.FC<{
                                 onChange={(e) => setAmountField(e.target.value)}
                                 onBlur={changeUnits}
                                 error={amountError !== undefined}
-                                //disabled={removed}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -225,7 +224,11 @@ const CartProductHolder: React.FC<{
                 )}
 
                 <div className={classes.actions}>
-                    <IconButton size={'small'} onClick={handleCart}>
+                    <IconButton
+                        id="remove-cart-bt"
+                        size={'small'}
+                        onClick={handleCart}
+                    >
                         {removed ? (
                             !unavailable && <UndoIcon />
                         ) : (

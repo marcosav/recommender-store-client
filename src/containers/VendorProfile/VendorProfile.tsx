@@ -70,7 +70,7 @@ const VendorProfile: React.FC<RouteComponentProps<VendorProfileParams>> = ({
     }
 
     React.useEffect(() => {
-        const handleNotFound = () => history.push('/404')
+        const handleNotFound = () => history.replace('/404')
 
         const fetchVendor = async () => {
             const r = await userService.getUser(vendorId)

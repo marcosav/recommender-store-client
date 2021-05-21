@@ -107,7 +107,7 @@ const es = {
     },
     home: {
         title: '¿Qué vas a comprar?',
-        popular: 'Populares',
+        weekly_popular: 'Populares en la semana',
         recommended: 'Recomendados',
     },
     reports: {

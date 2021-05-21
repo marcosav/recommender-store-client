@@ -64,6 +64,7 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
 
     return (
         <form
+            id="product-form"
             className={classes.form}
             onSubmitCapture={updateProduct}
             noValidate
@@ -71,6 +72,7 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
         >
             <TextField
                 className={classes.input}
+                name="name"
                 label={t('product.name')}
                 variant="outlined"
                 value={data['name']}
@@ -82,6 +84,7 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
 
             <TextField
                 className={classes.input}
+                name="brand"
                 label={t('product.brand')}
                 variant="outlined"
                 value={data['brand']}
@@ -94,6 +97,7 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
             <div className={classes.pair}>
                 <TextField
                     className={classes.input}
+                    name="price"
                     label={t('product.price')}
                     variant="outlined"
                     value={data['price']}
@@ -137,6 +141,7 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
                     renderInput={(params) => (
                         <TextField
                             {...params}
+                            name="category"
                             label={t('product.category')}
                             variant="outlined"
                             error={errorFor('category')}
@@ -147,6 +152,7 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
 
                 <TextField
                     className={clsx(classes.input, classes.stock)}
+                    name="stock"
                     label={t('product.stock')}
                     variant="outlined"
                     type="number"
@@ -163,6 +169,7 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
 
             <TextField
                 className={classes.input}
+                name="description"
                 label={t('product.description')}
                 variant="outlined"
                 value={data['description']}
@@ -178,6 +185,7 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
                     <Button
                         className={classes.buttons}
                         disableElevation
+                        id="delete-bt"
                         onClick={deleteProduct}
                         variant="contained"
                         color="secondary"
@@ -192,6 +200,7 @@ const ProductEditForm: React.FC<ProductEditFormProps> = ({
 
                 <Button
                     className={classes.buttons}
+                    id="publish-bt"
                     variant="contained"
                     color="primary"
                     type="submit"
