@@ -1,4 +1,24 @@
 const en = {
+    routes: {
+        base: 'Shop - ',
+        home: 'Home',
+        search: 'Search',
+        vendor: 'Vendor',
+        cart: 'Cart',
+        product_publish: 'Publish product',
+        product: 'Loading...',
+        product_edit: 'Edit product',
+        login: 'Log in',
+        logout: 'Logging out...',
+        signup: 'Sign up',
+        profile: 'My profile',
+        profile_edit: 'Edit profile',
+        favorites: 'Favorites',
+        reports: 'Reports',
+        checkout: 'Checkout',
+        history: 'My orders',
+        404: 'Not found',
+    },
     cancel: 'Cancel',
     nav: {
         header: 'Shop',
@@ -99,8 +119,7 @@ const en = {
         delete: 'Delete',
         report: {
             title: 'Report product',
-            body:
-                'If you think that the content of this product may be inappropriate, please report it to an administrator for review.',
+            body: 'If you think that the content of this product may be inappropriate, please report it to an administrator for review.',
             placeholder: 'Message',
             button: 'Report',
         },
@@ -163,8 +182,7 @@ const en = {
     },
     error: {
         500: {
-            text:
-                'Sorry, an error has ocurred, please refresh the page and try again!',
+            text: 'Sorry, an error has ocurred, please refresh the page and try again!',
         },
         401: {
             text: 'Please log in to do that!',

@@ -5,11 +5,13 @@ export const useStyles = makeStyles((theme: Theme) =>
         title: {
             margin: theme.spacing(3),
             textAlign: 'center',
+            fontWeight: 400,
         },
         subtitle: {
             margin: theme.spacing(2, 'auto', 0, 'auto'),
             paddingLeft: theme.spacing(2),
             maxWidth: 1800,
+            fontWeight: 100,
         },
         categories: {
             marginLeft: 'auto',

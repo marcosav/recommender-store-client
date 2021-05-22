@@ -1,4 +1,24 @@
 const es = {
+    routes: {
+        base: 'Shop - ',
+        home: 'Inicio',
+        search: 'Buscar',
+        vendor: 'Vendedor',
+        cart: 'Carrito',
+        product_publish: 'Nuevo producto',
+        product: 'Cargando...',
+        product_edit: 'Editar producto',
+        login: 'Iniciar sesión',
+        logout: 'Saliendo...',
+        signup: 'Registrarse',
+        profile: 'Mi perfil',
+        profile_edit: 'Editar perfil',
+        favorites: 'Favoritos',
+        reports: 'Reportes',
+        checkout: 'Proceso de compra',
+        history: 'Mis pedidos',
+        404: 'No encontrado',
+    },
     cancel: 'Cancelar',
     nav: {
         header: 'Tienda',
@@ -99,8 +119,7 @@ const es = {
         delete: 'Borrar',
         report: {
             title: 'Reportar producto',
-            body:
-                'Si consideras que el contenido de este producto puede ser inadeacuado, repórtalo para que lo revise un administrador.',
+            body: 'Si consideras que el contenido de este producto puede ser inadeacuado, repórtalo para que lo revise un administrador.',
             placeholder: 'Mensaje',
             button: 'Reportar',
         },
@@ -161,8 +180,7 @@ const es = {
     },
     error: {
         500: {
-            text:
-                'Lo sentimos, ha ocurrido un error, ¡por favor recarga la página e inténtalo de nuevo!',
+            text: 'Lo sentimos, ha ocurrido un error, ¡por favor recarga la página e inténtalo de nuevo!',
         },
         401: {
             text: '¡Inicia sesión para hacer esto!',

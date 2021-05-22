@@ -20,7 +20,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             },
         },
         categories: {
-            margin: theme.spacing(1, 0.5),
+            margin: theme.spacing(1.5, 0.5, 0.5),
             '& > div': {
                 margin: theme.spacing(0.5),
             },

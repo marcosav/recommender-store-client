@@ -40,12 +40,13 @@ export const useStyles = makeStyles((theme: Theme) =>
             zIndex: 1,
             borderRadius: '100px',
             padding: theme.spacing(0.5),
+            background: theme.palette.background.default,
         },
         title: {
             position: 'absolute',
             bottom: theme.spacing(-4 - 2),
             padding: theme.spacing(0, 2),
-            background: theme.palette.background.paper,
+            background: theme.palette.background.default,
             userSelect: 'none',
         },
     })

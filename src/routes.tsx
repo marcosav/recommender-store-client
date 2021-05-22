@@ -53,7 +53,7 @@ const routes: NavRoute[] = [
         component: CartPage,
     },
     {
-        id: 'productPublish',
+        id: 'product_publish',
         path: '/product/publish',
         component: ProductEdit,
         identified: true,
@@ -64,7 +64,7 @@ const routes: NavRoute[] = [
         component: ProductPage,
     },
     {
-        id: 'productEdit',
+        id: 'product_edit',
         path: '/product/:id/edit',
         component: ProductEdit,
         identified: true,
@@ -92,7 +92,7 @@ const routes: NavRoute[] = [
         identified: true,
     },
     {
-        id: 'profileEdit',
+        id: 'profile_edit',
         path: '/profile/edit/:id?',
         component: Signup,
         identified: true,

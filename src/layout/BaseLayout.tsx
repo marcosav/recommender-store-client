@@ -6,10 +6,11 @@ import { ErrorWrapperClass, NavigationBarWrapper } from '../components'
 import { NavRoute } from '../routes'
 import { SessionService } from '../services'
 
-import { makeStyles, createStyles } from '@material-ui/core'
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { ServerErrorHandlerListener } from '../utils'
+import { useTranslation } from 'react-i18next'
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         base: {
             display: 'flex',
@@ -17,6 +18,7 @@ const useStyles = makeStyles(() =>
             position: 'relative',
             overflow: 'hidden',
             minHeight: '100vh',
+            backgroundColor: theme.palette.background.default,
         },
     })
 )
@@ -45,6 +47,8 @@ const RouteCheck: React.FC<RouteCheckProps> = ({
     route,
     sessionService,
 }) => {
+    const { t } = useTranslation()
+
     const RouteComponent = route.component
     const admin = route.admin
     const identified = route.identified || admin
@@ -69,6 +73,8 @@ const RouteCheck: React.FC<RouteCheckProps> = ({
 
     if (identified === true && !logged)
         return <CheckRedirect path="/login" {...{ props }} />
+
+    document.title = t('routes.base') + t('routes.' + route.id)
 
     return <RouteComponent {...props} />
 }

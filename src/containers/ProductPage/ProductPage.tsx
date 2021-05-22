@@ -48,6 +48,10 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
         React.useState<PreviewProduct[] | null>()
 
     React.useEffect(() => {
+        if (product) document.title = product.name
+    }, [product])
+
+    React.useEffect(() => {
         const handleNotFound = () => {
             history.replace('/404')
         }
