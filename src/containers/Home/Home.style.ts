@@ -33,6 +33,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         slider: {
             margin: '0 auto auto',
+            maxWidth: '100%',
         },
     })
 )

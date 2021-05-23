@@ -11,6 +11,10 @@ export const useStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(0, 0, 0, 2),
             maxWidth: 1800,
             minHeight: 220,
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         endGap: {
             minWidth: 1,

@@ -7,17 +7,12 @@ export const useStyles = makeStyles((theme: Theme) =>
                 padding: theme.spacing(0, 1, 0, 0.5),
             },
         },
-        title: {
+        logo: {
             display: 'none',
             cursor: 'pointer',
             userSelect: 'none',
             [theme.breakpoints.up('sm')]: {
                 display: 'block',
-            },
-            transitionDuration: '.3s',
-            fontWeight: 'lighter',
-            '&:hover': {
-                textShadow: '1px 1px 5px #00000088',
             },
         },
         home: {

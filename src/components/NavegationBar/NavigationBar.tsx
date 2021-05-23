@@ -33,6 +33,8 @@ import { useHistory } from 'react-router'
 import { useSessionService } from '../../services'
 import { useTranslation } from 'react-i18next'
 
+import LogoIcon from './Logo'
+
 const NavigationBar = () => {
     const sessionService = useSessionService()
     const session = sessionService.current()
@@ -186,13 +188,11 @@ const NavigationBar = () => {
         <div>
             <AppBar position="static">
                 <Toolbar variant={'dense'} className={classes.toolbar}>
-                    <Typography
-                        className={classes.title}
-                        variant="h5"
+                    <LogoIcon
+                        fontSize="large"
+                        className={classes.logo}
                         onClick={() => redirect('/')}
-                    >
-                        {t('nav.header')}
-                    </Typography>
+                    />
 
                     <IconButton
                         color="inherit"
