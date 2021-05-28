@@ -20,7 +20,7 @@ import { useTheme } from '@material-ui/core'
 import { CartService, FavoriteService, ResourceService } from '../../api'
 import { HttpStatusCode, Constants } from '../../utils'
 import { useTranslation } from 'react-i18next'
-import { useCollectorService } from '../../services'
+import { useFeedbackService } from '../../services'
 
 interface ProductProps {
     Actions?: React.FC<ProductActionsProps>
@@ -114,12 +114,12 @@ const ProductHolder: React.FC<ProductProps & ProductActionsProps> = ({
 
     const classes = useStyles()
 
-    const collectorService = useCollectorService()
+    const feedbackService = useFeedbackService()
 
     const [img, setImg] = React.useState<any>()
 
     const gotoProduct = () => {
-        collectorService.collect({
+        feedbackService.collect({
             item: product.id,
             action: ActionType.CLICK,
         })

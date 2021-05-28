@@ -34,9 +34,8 @@ const Home: React.FC<RouteComponentProps> = ({ history }) => {
     const [categories, setCategories] = React.useState<ProductCategory[]>()
 
     const [popular, setPopular] = React.useState<PreviewProduct[] | null>()
-    const [recommended, setRecommended] = React.useState<
-        PreviewProduct[] | null
-    >()
+    const [recommended, setRecommended] =
+        React.useState<PreviewProduct[] | null>()
 
     React.useEffect(() => {
         const fetchRecommended = async () => {

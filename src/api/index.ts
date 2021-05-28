@@ -6,7 +6,7 @@ import FavoriteAPI from './FavoriteAPI'
 import ResourceAPI from './ResourceAPI'
 import ProductReportAPI from './ProductReportAPI'
 import OrdersAPI from './OrdersAPI'
-import CollectorAPI from './CollectorAPI'
+import FeedbackAPI from './FeedbackAPI'
 import RecommenderAPI from './RecommenderAPI'
 
 import { ProductService } from './ProductAPI'
@@ -16,7 +16,7 @@ import { CartService } from './CartAPI'
 import { ResourceService } from './ResourceAPI'
 import { ProductReportService } from './ProductReportAPI'
 import { OrdersService } from './OrdersAPI'
-import { CollectorService } from './CollectorAPI'
+import { FeedbackService } from './FeedbackAPI'
 import { RecommenderService } from './RecommenderAPI'
 
 export {
@@ -28,7 +28,7 @@ export {
     ResourceAPI,
     ProductReportAPI,
     OrdersAPI,
-    CollectorAPI,
+    FeedbackAPI,
     RecommenderAPI,
 }
 
@@ -40,6 +40,6 @@ export type {
     ResourceService,
     ProductReportService,
     OrdersService,
-    CollectorService,
+    FeedbackService,
     RecommenderService,
 }

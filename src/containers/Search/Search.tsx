@@ -146,6 +146,7 @@ const Search: React.FC<RouteComponentProps<SearchParams>> = ({
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
+                                    className={classes.filterField}
                                     variant="outlined"
                                     margin="dense"
                                 />

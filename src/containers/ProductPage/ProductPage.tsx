@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router'
 
 import {
     useCartService,
-    useCollectorService,
+    useFeedbackService,
     useFavoriteService,
     useProductService,
 } from '../../services'
@@ -35,7 +35,7 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
     const productService = useProductService()
     const favService = useFavoriteService()
     const cartService = useCartService()
-    const collectorService = useCollectorService()
+    const feedbackService = useFeedbackService()
     const recommenderService = useRecommenderService()
 
     const { t } = useTranslation()
@@ -73,12 +73,12 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
         if (isNaN(productId)) handleNotFound()
         else {
             fetchProduct(productId)
-            collectorService.collect({
+            feedbackService.collect({
                 action: ActionType.VISIT,
                 item: productId,
             })
         }
-    }, [history, productService, collectorService, id])
+    }, [history, productService, feedbackService, id])
 
     React.useEffect(() => {
         const fetchRecommendations = async (p: number) => {

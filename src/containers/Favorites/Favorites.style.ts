@@ -13,6 +13,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         toggler: {
             margin: theme.spacing(1, 0, 'auto', 'auto'),
             maxHeight: theme.spacing(5),
+            backgroundColor: theme.palette.background.paper,
         },
     })
 )

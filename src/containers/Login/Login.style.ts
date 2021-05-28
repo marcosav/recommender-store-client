@@ -25,6 +25,8 @@ export const useStyles = makeStyles((theme: Theme) =>
         input: {
             margin: theme.spacing(1, 0),
             width: '100%',
+            backgroundColor: theme.palette.background.paper,
+            borderRadius: 4,
         },
         header: {
             margin: theme.spacing(4),

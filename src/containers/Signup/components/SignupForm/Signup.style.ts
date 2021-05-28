@@ -22,6 +22,8 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         input: {
             margin: theme.spacing(1),
+            backgroundColor: theme.palette.background.paper,
+            borderRadius: 4,
         },
         bottom: {
             marginLeft: 'auto',

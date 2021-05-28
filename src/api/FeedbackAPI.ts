@@ -1,9 +1,9 @@
-import BaseAPI, { COLLECTOR_API_URL } from './BaseAPI'
+import BaseAPI, { FEEDBACK_API_URL } from './BaseAPI'
 
 import { HttpStatusCode } from '../utils'
 import { ActionType } from '../types'
 
-export interface CollectorService {
+export interface FeedbackService {
     collect: (action: UserAction) => void
 }
 
@@ -12,9 +12,9 @@ interface UserAction {
     action: ActionType
 }
 
-export default class CollectorAPI extends BaseAPI implements CollectorService {
+export default class FeedbackAPI extends BaseAPI implements FeedbackService {
     constructor() {
-        super(COLLECTOR_API_URL)
+        super(FEEDBACK_API_URL)
     }
 
     collect = async (action: UserAction) => {

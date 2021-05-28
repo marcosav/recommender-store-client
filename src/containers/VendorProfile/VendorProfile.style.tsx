@@ -7,7 +7,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             marginRight: theme.spacing(3),
             maxHeight: theme.spacing(5),
             transform: 'translateY(-50%)',
-            background: 'white',
+            backgroundColor: theme.palette.background.paper,
             [theme.breakpoints.down(520)]: {
                 margin: theme.spacing(3, 2, 3),
                 marginLeft: 'auto',
@@ -16,7 +16,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
         container: {
             marginTop: theme.spacing(4),
-            margin: 'auto'
+            margin: 'auto',
         },
     })
 )

@@ -31,5 +31,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         filterInput: {
             width: 200,
         },
+        filterField: {
+            backgroundColor: theme.palette.background.paper,
+            borderRadius: 4,
+        },
     })
 )
