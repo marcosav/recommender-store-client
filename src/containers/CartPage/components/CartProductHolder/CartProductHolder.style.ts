@@ -7,7 +7,8 @@ export const useStyles = makeStyles((theme: Theme) =>
             marginBottom: theme.spacing(1),
             display: 'flex',
             flexDirection: 'row',
-            height: 200,
+            minHeight: 200,
+            maxHeight: 250,
             [theme.breakpoints.down('xs')]: {
                 height: 400,
                 display: 'grid',
