@@ -44,8 +44,9 @@ const ProductPage: React.FC<RouteComponentProps<ProductPageParams>> = ({
 
     const [product, setProduct] = React.useState<Product>()
 
-    const [recommended, setRecommended] =
-        React.useState<PreviewProduct[] | null>()
+    const [recommended, setRecommended] = React.useState<
+        PreviewProduct[] | null
+    >()
 
     React.useEffect(() => {
         if (product) document.title = product.name

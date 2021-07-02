@@ -34,8 +34,11 @@ import { useSessionService } from '../../services'
 import { useTranslation } from 'react-i18next'
 
 import LogoIcon from './Logo'
+import { useLocation } from 'react-router-dom'
 
 const NavigationBar = () => {
+    const r = useLocation()
+
     const sessionService = useSessionService()
     const session = sessionService.current()
 
@@ -48,9 +51,16 @@ const NavigationBar = () => {
     const logged = username !== undefined
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-    const [anchorAdmin, setAnchorAdmin] =
-        React.useState<null | HTMLElement>(null)
+    const [anchorAdmin, setAnchorAdmin] = React.useState<null | HTMLElement>(
+        null
+    )
     const [searched, setSearched] = React.useState('')
+
+    const [over, setOver] = React.useState(true)
+
+    React.useEffect(() => {
+        setOver(r.pathname === '/')
+    }, [r.pathname])
 
     const handleMenuClose = () => setAnchorEl(null)
 
@@ -186,7 +196,11 @@ const NavigationBar = () => {
 
     return (
         <div>
-            <AppBar position="static">
+            <AppBar
+                position={over ? 'absolute' : 'static'}
+                elevation={0}
+                color={over ? 'transparent' : undefined}
+            >
                 <Toolbar variant={'dense'} className={classes.toolbar}>
                     <LogoIcon
                         fontSize="large"

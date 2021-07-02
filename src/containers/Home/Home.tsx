@@ -13,7 +13,6 @@ import { HttpStatusCode } from '../../utils'
 
 import Typography from '@material-ui/core/Typography'
 import Chip from '@material-ui/core/Chip'
-import Divider from '@material-ui/core/Divider'
 
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './Home.style'
@@ -34,8 +33,9 @@ const Home: React.FC<RouteComponentProps> = ({ history }) => {
     const [categories, setCategories] = React.useState<ProductCategory[]>()
 
     const [popular, setPopular] = React.useState<PreviewProduct[] | null>()
-    const [recommended, setRecommended] =
-        React.useState<PreviewProduct[] | null>()
+    const [recommended, setRecommended] = React.useState<
+        PreviewProduct[] | null
+    >()
 
     React.useEffect(() => {
         const fetchRecommended = async () => {
@@ -69,36 +69,32 @@ const Home: React.FC<RouteComponentProps> = ({ history }) => {
 
     return (
         <>
-            <Typography
-                className={classes.title}
-                variant="h2"
-                component="h1"
-                color="textSecondary"
-            >
-                {t('home.title')}
-            </Typography>
-            <div className={classes.categories}>
-                {categories &&
-                    categories.map((c) => (
-                        <Chip
-                            key={c.id}
-                            color="secondary"
-                            onClick={() => handleCategory(c.id)}
-                            label={t(`category.${c.name}`)}
-                        />
-                    ))}
+            <div className={classes.topContainer}>
+                <div className={classes.mainImgHolder} />
+                <Typography
+                    className={classes.title}
+                    variant="h2"
+                    component="h1"
+                >
+                    {t('home.title')}
+                </Typography>
+                <div className={classes.categories}>
+                    {categories &&
+                        categories.map((c) => (
+                            <Chip
+                                key={c.id}
+                                color="secondary"
+                                onClick={() => handleCategory(c.id)}
+                                label={t(`category.${c.name}`)}
+                            />
+                        ))}
+                </div>
             </div>
-            <Divider className={classes.divider} />
 
             <div className={classes.slider}>
                 {popular ? (
                     <>
-                        <Typography
-                            className={classes.subtitle}
-                            variant="h5"
-                            component="h2"
-                            color="textSecondary"
-                        >
+                        <Typography className={classes.subtitle} component="h2">
                             {t('home.weekly_popular')}
                         </Typography>
                         <ProductSlider
@@ -120,12 +116,7 @@ const Home: React.FC<RouteComponentProps> = ({ history }) => {
             <div className={classes.slider}>
                 {recommended ? (
                     <>
-                        <Typography
-                            className={classes.subtitle}
-                            variant="h5"
-                            component="h2"
-                            color="textSecondary"
-                        >
+                        <Typography className={classes.subtitle} component="h2">
                             {t('home.recommended')}
                         </Typography>
                         <ProductSlider

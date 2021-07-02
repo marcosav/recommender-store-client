@@ -38,9 +38,9 @@ export const useStyles = makeStyles((theme: Theme) =>
             borderRadius: theme.shape.borderRadius,
             color: 'white',
             transition: theme.transitions.create('background'),
-            backgroundColor: fade(theme.palette.common.white, 0.15),
+            backgroundColor: fade(theme.palette.common.black, 0.2),
             '&:hover': {
-                backgroundColor: fade(theme.palette.common.white, 0.25),
+                backgroundColor: fade(theme.palette.common.black, 0.3),
             },
             margin: 'auto',
             width: '360px',
