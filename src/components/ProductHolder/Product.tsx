@@ -6,9 +6,8 @@ import { useStyles } from './Product.style'
 
 import Card from '@material-ui/core/Card'
 import CardMedia from '@material-ui/core/CardMedia'
-import CardActions from '@material-ui/core/CardActions'
-import CardActionArea from '@material-ui/core/CardActionArea'
 import Chip from '@material-ui/core/Chip'
+import CardActionArea from '@material-ui/core/CardActionArea'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
@@ -19,7 +18,6 @@ import { useHistory } from 'react-router'
 import { useTheme } from '@material-ui/core'
 import { CartService, FavoriteService, ResourceService } from '../../api'
 import { HttpStatusCode, Constants } from '../../utils'
-import { useTranslation } from 'react-i18next'
 import { useFeedbackService } from '../../services'
 
 interface ProductProps {
@@ -43,7 +41,6 @@ const DefaultActions: React.FC<ProductActionsProps> = ({
     noCart = false,
 }) => {
     const theme = useTheme()
-    const { t } = useTranslation()
 
     const [favorite, setFavorite] = React.useState(product.fav === true)
 
@@ -79,24 +76,27 @@ const DefaultActions: React.FC<ProductActionsProps> = ({
                     {favorite ? (
                         <Favorite htmlColor={theme.palette.error.main} />
                     ) : (
-                        <FavoriteBorder />
+                        <FavoriteBorder
+                            htmlColor={theme.palette.common.white}
+                        />
                     )}
                 </IconButton>
             )}
-            {!noCart &&
-                (product.stock ? (
-                    <IconButton size={'small'} onClick={addToCart}>
-                        <ShoppingBasket />
-                    </IconButton>
-                ) : (
-                    <Typography
-                        variant="body2"
-                        color="error"
-                        style={{ marginLeft: 4 }}
-                    >
-                        {t('product.no_stock')}
-                    </Typography>
-                ))}
+            {!noCart && (
+                <IconButton
+                    size={'small'}
+                    disabled={!product.stock}
+                    onClick={addToCart}
+                >
+                    <ShoppingBasket
+                        htmlColor={
+                            product.stock
+                                ? theme.palette.common.white
+                                : theme.palette.error.light
+                        }
+                    />
+                </IconButton>
+            )}
         </>
     )
 }
@@ -145,27 +145,36 @@ const ProductHolder: React.FC<ProductProps & ProductActionsProps> = ({
 
     return (
         <Card className={classes.container}>
-            <CardActionArea className="product" onClick={gotoProduct}>
+            <div className={classes.topActions}>
+                <Actions
+                    {...{
+                        product,
+                        favService,
+                        cartService,
+                        noFav,
+                        noCart,
+                    }}
+                />
+            </div>
+
+            <Chip
+                style={{ backgroundColor: '#00000044' }}
+                label={`${product.price}€`}
+                className={classes.chip}
+            />
+
+            <CardActionArea className={classes.product} onClick={gotoProduct}>
                 <CardMedia
                     className={classes.media}
                     image={img ?? Constants.FALLBACK_IMAGE}
-                >
-                    <Chip
-                        style={{ backgroundColor: '#00000033' }}
-                        label={product.name}
-                        className={classes.titleChip}
-                    />
-                </CardMedia>
-            </CardActionArea>
-            <CardActions disableSpacing className={classes.actions}>
-                <Actions
-                    {...{ product, favService, cartService, noFav, noCart }}
                 />
+            </CardActionArea>
 
-                <Typography className={classes.price}>
-                    {`${product.price}€`}
+            <div className={classes.actions}>
+                <Typography className={classes.title}>
+                    {product.name}
                 </Typography>
-            </CardActions>
+            </div>
         </Card>
     )
 }

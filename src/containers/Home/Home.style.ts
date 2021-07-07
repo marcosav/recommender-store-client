@@ -41,7 +41,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         topContainer: {
             display: 'flex',
             flexDirection: 'column',
-            overflowY: 'clip',
+            overflow: 'hidden',
             padding: theme.spacing(4, 1, 8, 1),
             margin: theme.spacing(0, 0, 2),
             position: 'relative',
@@ -52,7 +52,7 @@ export const useStyles = makeStyles((theme: Theme) =>
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             filter: 'blur(3px)',
-            transform: 'scale(1.06) translateY(-30px)',
+            transform: 'scale(1.06) translateY(-7%)',
             width: '100%',
             height: '100%',
             position: 'absolute',
